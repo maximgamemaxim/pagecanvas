@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SiteCanvas · 200+ блоков</title>
+  <title>SiteCanvas · Бесплатный конструктор сайтов</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;600;700&family=Roboto:wght@400;500;700&family=Playfair+Display:wght@400;700&family=Source+Code+Pro&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   
   <style>
-    /* === ОСНОВНЫЕ СТИЛИ === */
     :root {
       --primary: #4361ee;
       --secondary: #3f37c9;
@@ -25,13 +24,8 @@
       --border: #dee2e6;
       --font-main: 'Inter', sans-serif;
       --font-heading: 'Montserrat', sans-serif;
-      --font-code: 'Source Code Pro', monospace;
       --border-radius: 16px;
-      --border-radius-sm: 10px;
-      --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
       --shadow: 0 10px 30px rgba(0,0,0,0.08);
-      --shadow-lg: 0 20px 40px rgba(0,0,0,0.12);
-      --transition: all 0.3s ease;
     }
     
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -40,67 +34,75 @@
     .page { display: none; }
     .page.active { display: block; }
     
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-    
-    /* === ЛЕНДИНГ === */
-    .landing-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.25rem 0; position: sticky; top: 0; z-index: 100; }
+    /* Лендинг */
+    .landing-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.25rem 0; }
     .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
     .header-inner { display: flex; align-items: center; justify-content: space-between; }
     .logo { font-size: 2rem; font-weight: 800; font-family: var(--font-heading); background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; cursor: pointer; }
-    .nav { display: flex; gap: 2.5rem; align-items: center; }
+    .nav { display: flex; gap: 2rem; align-items: center; }
     .nav a { text-decoration: none; color: var(--text); font-weight: 500; cursor: pointer; }
     .nav a:hover { color: var(--primary); }
     
     .hero { padding: 5rem 0; text-align: center; }
-    .hero h1 { font-size: 4.5rem; font-weight: 800; font-family: var(--font-heading); margin-bottom: 1.5rem; background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero h1 { font-size: 4rem; font-weight: 800; font-family: var(--font-heading); margin-bottom: 1.5rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero p { font-size: 1.3rem; color: var(--text-light); max-width: 700px; margin: 0 auto 2rem; }
     
-    .btn { padding: 0.875rem 2rem; border-radius: 50px; font-weight: 600; border: none; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 0.75rem; }
-    .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3); }
-    .btn-primary:hover { background: var(--secondary); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4); }
-    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn { padding: 0.875rem 2rem; border-radius: 50px; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.75rem; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--secondary); transform: translateY(-2px); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
     .btn-outline:hover { background: var(--bg); border-color: var(--primary); }
     .btn-success { background: var(--success); color: white; }
-    .btn-warning { background: var(--warning); color: var(--dark); }
-    .btn-danger { background: var(--danger); color: white; }
     .btn-sm { padding: 0.5rem 1.25rem; font-size: 0.875rem; }
-    .btn-lg { padding: 1.25rem 2.5rem; font-size: 1.2rem; }
     
-    /* === БЛОКИ (200+ разновидностей через комбинации) === */
-    .block-category { margin-bottom: 2rem; }
-    .block-category-title { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: var(--primary); display: flex; align-items: center; gap: 0.5rem; }
-    .block-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
-    .block-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
-    .block-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+    /* Карточки */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+    .feature-card { padding: 2rem; background: var(--surface); border-radius: var(--border-radius); text-align: center; box-shadow: var(--shadow); border: 1px solid var(--border); }
+    .feature-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
     
-    .block-item { background: var(--bg); border: 1px solid var(--border); border-radius: var(--border-radius-sm); padding: 0.75rem 0.5rem; cursor: grab; transition: var(--transition); text-align: center; }
-    .block-item:hover { background: var(--surface); border-color: var(--primary); box-shadow: var(--shadow-sm); transform: translateY(-2px); }
-    .block-item i { font-size: 1.25rem; color: var(--primary); margin-bottom: 0.25rem; }
-    .block-item span { font-size: 0.65rem; display: block; line-height: 1.3; }
+    /* Дашборд */
+    .dashboard { max-width: 1280px; margin: 0 auto; padding: 3rem 2rem; }
+    .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+    .project-card { background: var(--surface); border-radius: var(--border-radius); padding: 2rem; border: 1px solid var(--border); cursor: pointer; transition: all 0.3s; }
+    .project-card:hover { box-shadow: var(--shadow); border-color: var(--primary); transform: translateY(-4px); }
+    .project-card h3 { font-size: 1.4rem; margin-bottom: 0.5rem; }
     
-    /* === РЕДАКТОР === */
+    .templates-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1.5rem 0; }
+    .template-card { background: var(--surface); border-radius: var(--border-radius); padding: 1.5rem; border: 1px solid var(--border); cursor: pointer; text-align: center; transition: all 0.3s; }
+    .template-card:hover { box-shadow: var(--shadow); border-color: var(--primary); transform: translateY(-4px); }
+    .template-icon { font-size: 2rem; margin-bottom: 0.75rem; color: var(--primary); }
+    
+    /* Редактор */
     .editor-container { display: flex; height: 100vh; overflow: hidden; }
-    .editor-sidebar { width: 380px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+    .editor-sidebar { width: 340px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
     .editor-logo { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .back-btn { background: none; border: none; color: var(--text-light); cursor: pointer; font-size: 1.2rem; padding: 0.5rem; border-radius: 8px; }
+    .back-btn:hover { background: var(--bg); color: var(--text); }
     
     .blocks-library { padding: 1.5rem; flex: 1; overflow-y: auto; }
+    .library-section { margin-bottom: 1.5rem; }
+    .library-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); margin-bottom: 0.75rem; font-weight: 600; }
+    .block-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+    .block-item { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem; cursor: grab; transition: all 0.2s; text-align: center; }
+    .block-item:hover { background: var(--surface); border-color: var(--primary); transform: translateY(-2px); }
+    .block-item i { font-size: 1.25rem; color: var(--primary); margin-bottom: 0.25rem; }
+    .block-item span { font-size: 0.7rem; display: block; }
+    
+    .editor-actions { padding: 1.5rem; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 0.5rem; }
     
     .editor-workspace { flex: 1; display: flex; flex-direction: column; background: var(--bg); }
     .editor-toolbar { padding: 1rem 1.5rem; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
     
     .canvas-container { flex: 1; padding: 2rem; overflow-y: auto; }
     .canvas { max-width: 1200px; margin: 0 auto; min-height: 100%; }
-    .canvas.mobile { max-width: 375px; }
-    .canvas.tablet { max-width: 768px; }
     
-    .site-block { background: var(--surface); border-radius: var(--border-radius); margin-bottom: 1.5rem; box-shadow: var(--shadow-sm); border: 1px solid var(--border); position: relative; animation: fadeIn 0.3s ease; }
+    .site-block { background: var(--surface); border-radius: var(--border-radius); margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid var(--border); position: relative; }
     .site-block:hover { box-shadow: var(--shadow); border-color: var(--primary); }
-    .site-block.selected { border: 2px solid var(--primary); box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1); }
     
-    .block-toolbar { position: absolute; top: -45px; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--border-radius-sm); padding: 0.375rem; display: none; gap: 0.25rem; box-shadow: var(--shadow); z-index: 10; }
+    .block-toolbar { position: absolute; top: -45px; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.375rem; display: none; gap: 0.25rem; box-shadow: var(--shadow); z-index: 10; }
     .site-block:hover .block-toolbar { display: flex; }
-    .block-toolbar button { background: none; border: none; padding: 0.5rem 0.75rem; border-radius: 6px; cursor: pointer; color: var(--text); font-size: 0.8rem; }
+    .block-toolbar button { background: none; border: none; padding: 0.5rem 0.75rem; border-radius: 6px; cursor: pointer; color: var(--text); }
     .block-toolbar button:hover { background: var(--bg); color: var(--primary); }
     
     .block-header { padding: 0.875rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--bg); border-radius: var(--border-radius) var(--border-radius) 0 0; }
@@ -108,87 +110,26 @@
     .block-content { padding: 2rem; }
     .block-content[contenteditable="true"] { outline: none; min-height: 100px; }
     
-    /* === СТИЛИ ДЛЯ РАЗНЫХ БЛОКОВ === */
     .hero-content { text-align: center; }
-    .hero-content h1 { font-size: 3.5rem; margin-bottom: 1rem; }
+    .hero-content h1 { font-size: 3rem; margin-bottom: 1rem; }
     
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
-    .feature-card { padding: 2rem; background: var(--bg); border-radius: var(--border-radius); text-align: center; }
-    
-    .pricing-table { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-    .pricing-card { background: var(--surface); border-radius: var(--border-radius); padding: 2.5rem 2rem; text-align: center; border: 1px solid var(--border); }
-    .pricing-card.featured { border-color: var(--primary); box-shadow: var(--shadow); transform: scale(1.02); }
-    
-    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-    .testimonial-card { background: var(--bg); padding: 2rem; border-radius: var(--border-radius); }
-    
-    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center; }
-    
-    .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem; text-align: center; }
-    .stat-item h3 { font-size: 2.5rem; color: var(--primary); }
-    
-    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-    .gallery-item { aspect-ratio: 1; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: var(--border-radius); background-size: cover; }
-    
-    .logo-cloud { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; }
-    
-    .faq-list { max-width: 800px; margin: 0 auto; }
-    .faq-item { border-bottom: 1px solid var(--border); padding: 1.5rem 0; }
-    .faq-question { font-weight: 600; font-size: 1.1rem; cursor: pointer; display: flex; justify-content: space-between; }
-    .faq-answer { color: var(--text-light); display: none; padding-top: 0.5rem; }
-    .faq-item.active .faq-answer { display: block; }
-    
-    .cta-section { text-align: center; padding: 4rem 2rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: var(--border-radius); color: white; }
-    
-    .contact-form { max-width: 600px; margin: 0 auto; }
-    .form-group { margin-bottom: 1.5rem; }
-    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 1rem; border: 1px solid var(--border); border-radius: var(--border-radius-sm); font-family: var(--font-main); }
-    
-    /* === МОДАЛКИ === */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; align-items: center; justify-content: center; }
-    .modal.active { display: flex; }
-    .modal-content { background: var(--surface); border-radius: var(--border-radius); padding: 2rem; max-width: 600px; width: 90%; max-height: 85vh; overflow-y: auto; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-    .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-light); }
-    
-    /* === FAQ ПО ПУБЛИКАЦИИ === */
-    .publish-faq { background: var(--bg); border-radius: var(--border-radius); padding: 2rem; margin-top: 2rem; }
-    .publish-faq h3 { margin-bottom: 1.5rem; color: var(--primary); }
-    .publish-step { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
-    .step-number { width: 32px; height: 32px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
-    .step-content h4 { margin-bottom: 0.5rem; }
-    .step-content code { background: var(--surface); padding: 0.25rem 0.5rem; border-radius: 4px; font-family: var(--font-code); }
-    
-    /* === ТОСТЫ === */
-    .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--surface); border-radius: var(--border-radius); padding: 1rem 1.5rem; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 0.75rem; z-index: 3000; animation: slideIn 0.3s ease; border-left: 4px solid var(--success); }
+    .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--surface); border-radius: var(--border-radius); padding: 1rem 1.5rem; box-shadow: var(--shadow); display: flex; align-items: center; gap: 0.75rem; z-index: 3000; border-left: 4px solid var(--success); }
     .toast.error { border-left-color: var(--danger); }
-    
-    .loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-    .loader.hidden { display: none; }
-    .spinner { width: 50px; height: 50px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    
-    /* === ЯКОРЯ === */
-    .anchor-section { position: relative; }
-    .anchor-marker { position: absolute; top: -80px; }
   </style>
 </head>
 <body>
 
-<div class="loader" id="loader">
-  <div class="spinner"></div>
-</div>
-
-<!-- ГЛАВНАЯ СТРАНИЦА -->
+<!-- ГЛАВНАЯ -->
 <div id="landingPage" class="page active">
   <header class="landing-header">
     <div class="container header-inner">
       <div class="logo" onclick="showPage('landing')"><i class="fas fa-paint-brush"></i> SiteCanvas</div>
       <div class="nav">
-        <a onclick="scrollToSection('features')">200+ блоков</a>
+        <a onclick="scrollToSection('features')">Возможности</a>
         <a onclick="scrollToSection('templates')">Шаблоны</a>
-        <a onclick="scrollToSection('publish-faq')">Как опубликовать</a>
-        <button class="btn btn-primary btn-sm" id="landingSignIn"><i class="fab fa-google"></i> Войти</button>
+        <button class="btn btn-primary btn-sm" onclick="loginAsGuest()">
+          <i class="fas fa-user"></i> Начать бесплатно
+        </button>
       </div>
     </div>
   </header>
@@ -196,62 +137,36 @@
   <main>
     <section class="hero">
       <div class="container">
-        <h1>200+ блоков<br>для вашего сайта</h1>
-        <p style="font-size: 1.3rem; color: var(--text-light); max-width: 700px; margin: 0 auto 2rem;">Полностью бесплатный конструктор с якорями, настройками и экспортом</p>
-        <button class="btn btn-primary btn-lg" id="heroStartBtn"><i class="fas fa-pen-fancy"></i> Начать бесплатно</button>
+        <h1>Создавайте сайты<br>без ограничений</h1>
+        <p>Бесплатный конструктор с экспортом HTML. 40+ блоков, настройка дизайна, без регистрации.</p>
+        <div>
+          <button class="btn btn-primary btn-lg" onclick="loginAsGuest()">
+            <i class="fas fa-pen-fancy"></i> Начать бесплатно
+          </button>
+        </div>
       </div>
     </section>
 
     <section id="features" style="padding: 5rem 0; background: var(--surface);">
       <div class="container">
-        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem;">Категории блоков</h2>
+        <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2.5rem;">Всё бесплатно навсегда</h2>
         <div class="features-grid">
-          <div class="feature-card"><i class="fas fa-header"></i><h3>Шапки (12)</h3><p>Герои, меню, навигация</p></div>
-          <div class="feature-card"><i class="fas fa-paragraph"></i><h3>Текст (18)</h3><p>Заголовки, абзацы, цитаты</p></div>
-          <div class="feature-card"><i class="fas fa-image"></i><h3>Медиа (24)</h3><p>Изображения, галереи, видео</p></div>
-          <div class="feature-card"><i class="fas fa-th-large"></i><h3>Секции (30)</h3><p>Преимущества, CTA, статистика</p></div>
-          <div class="feature-card"><i class="fas fa-shopping-cart"></i><h3>Магазин (25)</h3><p>Товары, корзина, фильтры</p></div>
-          <div class="feature-card"><i class="fas fa-users"></i><h3>Социальные (20)</h3><p>Отзывы, команда, соцсети</p></div>
-          <div class="feature-card"><i class="fas fa-envelope"></i><h3>Формы (15)</h3><p>Контакты, подписка, опросы</p></div>
-          <div class="feature-card"><i class="fas fa-code"></i><h3>Разработка (20)</h3><p>HTML, CSS, JavaScript</p></div>
-          <div class="feature-card"><i class="fas fa-chart-bar"></i><h3>Данные (18)</h3><p>Таблицы, графики, метрики</p></div>
-          <div class="feature-card"><i class="fas fa-puzzle-piece"></i><h3>Дополнительно (30)</h3><p>FAQ, таймлайн, карты</p></div>
+          <div class="feature-card"><i class="fas fa-cubes"></i><h3>40+ блоков</h3><p>Герои, галереи, формы, отзывы, FAQ, CTA</p></div>
+          <div class="feature-card"><i class="fas fa-palette"></i><h3>Кастомизация</h3><p>Цвета, шрифты, отступы</p></div>
+          <div class="feature-card"><i class="fas fa-mobile-alt"></i><h3>Адаптивность</h3><p>Отлично на всех устройствах</p></div>
+          <div class="feature-card"><i class="fas fa-code"></i><h3>Чистый экспорт</h3><p>Скачивайте HTML/CSS</p></div>
         </div>
       </div>
     </section>
 
-    <section id="publish-faq" style="padding: 5rem 0;">
+    <section id="templates" style="padding: 5rem 0;">
       <div class="container">
-        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem;">Как опубликовать сайт</h2>
-        <div class="publish-faq">
-          <div class="publish-step">
-            <div class="step-number">1</div>
-            <div class="step-content">
-              <h4>Экспортируйте HTML</h4>
-              <p>Нажмите кнопку «Экспорт HTML» в редакторе. Скачается файл <code>site.html</code></p>
-            </div>
-          </div>
-          <div class="publish-step">
-            <div class="step-number">2</div>
-            <div class="step-content">
-              <h4>Загрузите на GitHub Pages</h4>
-              <p>Создайте репозиторий, загрузите файл как <code>index.html</code>, включите Pages в настройках</p>
-            </div>
-          </div>
-          <div class="publish-step">
-            <div class="step-number">3</div>
-            <div class="step-content">
-              <h4>Или используйте Netlify / Vercel</h4>
-              <p>Перетащите папку с файлом на <code>netlify.com</code> — сайт опубликуется мгновенно</p>
-            </div>
-          </div>
-          <div class="publish-step">
-            <div class="step-number">4</div>
-            <div class="step-content">
-              <h4>Привяжите свой домен</h4>
-              <p>В настройках хостинга добавьте свой домен и настройте DNS-записи</p>
-            </div>
-          </div>
+        <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2.5rem;">Готовые шаблоны</h2>
+        <div class="templates-grid">
+          <div class="template-card" onclick="createFromTemplate('landing')"><div class="template-icon"><i class="fas fa-rocket"></i></div><h4>Лендинг</h4></div>
+          <div class="template-card" onclick="createFromTemplate('shop')"><div class="template-icon"><i class="fas fa-shopping-cart"></i></div><h4>Магазин</h4></div>
+          <div class="template-card" onclick="createFromTemplate('portfolio')"><div class="template-icon"><i class="fas fa-briefcase"></i></div><h4>Портфолио</h4></div>
+          <div class="template-card" onclick="createFromTemplate('blog')"><div class="template-icon"><i class="fas fa-newspaper"></i></div><h4>Блог</h4></div>
         </div>
       </div>
     </section>
@@ -266,41 +181,27 @@
       <div class="nav">
         <a onclick="showPage('dashboard')">Проекты</a>
         <a onclick="showPage('landing')">Шаблоны</a>
-        <div class="user-dropdown">
-          <div class="user-avatar" id="dashboardAvatar" onclick="toggleDropdown()">U</div>
-          <div class="dropdown-menu" id="userDropdown">
-            <div class="dropdown-header">
-              <div class="dropdown-avatar" id="dropdownAvatar"></div>
-              <div class="dropdown-user-info">
-                <h4 id="dropdownUserName">Пользователь</h4>
-                <p id="dropdownUserEmail">email@example.com</p>
-              </div>
-            </div>
-            <div class="dropdown-item" onclick="openProfileSettings()"><i class="fas fa-user-cog"></i> Настройки</div>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-item" style="color: var(--danger);" onclick="handleSignOut()"><i class="fas fa-sign-out-alt"></i> Выйти</div>
-          </div>
-        </div>
+        <button class="btn btn-outline btn-sm" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Выйти</button>
       </div>
     </div>
   </header>
   
-  <div class="container" style="padding: 3rem 0;">
+  <div class="dashboard">
     <div class="dashboard-header">
       <h1>Мои проекты</h1>
       <div style="display: flex; gap: 1rem;">
         <button class="btn btn-outline" onclick="showPage('landing')"><i class="fas fa-th-large"></i> Шаблоны</button>
-        <button class="btn btn-primary" onclick="createEmptyProject()"><i class="fas fa-plus"></i> Новый проект</button>
+        <button class="btn btn-primary" onclick="createEmptyProject()"><i class="fas fa-plus"></i> Пустой проект</button>
       </div>
     </div>
     
     <div class="projects-grid" id="projectsGrid">
-      <div style="text-align:center; padding:3rem;">Загрузка...</div>
+      <div style="text-align:center; padding:3rem; grid-column:1/-1;">Нет проектов. Создайте новый.</div>
     </div>
   </div>
 </div>
 
-<!-- РЕДАКТОР (сокращённая версия для примера) -->
+<!-- РЕДАКТОР -->
 <div id="editorPage" class="page">
   <div class="editor-container">
     <div class="editor-sidebar">
@@ -310,54 +211,70 @@
       </div>
       
       <div class="blocks-library">
-        <!-- 200+ блоков организованы по категориям -->
-        <div class="block-category">
-          <div class="block-category-title"><i class="fas fa-header"></i> Шапки (12)</div>
-          <div class="block-grid-3">
-            <div class="block-item" draggable="true" data-type="hero-1"><i class="fas fa-heading"></i><span>Герой 1</span></div>
-            <div class="block-item" draggable="true" data-type="hero-2"><i class="fas fa-heading"></i><span>Герой 2</span></div>
-            <div class="block-item" draggable="true" data-type="hero-3"><i class="fas fa-heading"></i><span>Герой 3</span></div>
-            <div class="block-item" draggable="true" data-type="header-1"><i class="fas fa-window-maximize"></i><span>Шапка 1</span></div>
-            <div class="block-item" draggable="true" data-type="header-2"><i class="fas fa-window-maximize"></i><span>Шапка 2</span></div>
-            <div class="block-item" draggable="true" data-type="navbar-1"><i class="fas fa-bars"></i><span>Навигация</span></div>
+        <div class="library-section">
+          <div class="library-title">Шапка</div>
+          <div class="block-grid">
+            <div class="block-item" draggable="true" data-type="hero"><i class="fas fa-heading"></i><span>Герой</span></div>
+            <div class="block-item" draggable="true" data-type="header"><i class="fas fa-window-maximize"></i><span>Шапка</span></div>
           </div>
         </div>
         
-        <div class="block-category">
-          <div class="block-category-title"><i class="fas fa-shopping-cart"></i> Магазин (25)</div>
-          <div class="block-grid-3">
-            <div class="block-item" draggable="true" data-type="product-grid"><i class="fas fa-th"></i><span>Сетка товаров</span></div>
-            <div class="block-item" draggable="true" data-type="product-card"><i class="fas fa-tag"></i><span>Карточка</span></div>
-            <div class="block-item" draggable="true" data-type="product-list"><i class="fas fa-list"></i><span>Список</span></div>
-            <div class="block-item" draggable="true" data-type="cart"><i class="fas fa-shopping-cart"></i><span>Корзина</span></div>
-            <div class="block-item" draggable="true" data-type="checkout"><i class="fas fa-credit-card"></i><span>Оформление</span></div>
-            <div class="block-item" draggable="true" data-type="filters"><i class="fas fa-filter"></i><span>Фильтры</span></div>
-            <div class="block-item" draggable="true" data-type="reviews"><i class="fas fa-star"></i><span>Отзывы</span></div>
-            <div class="block-item" draggable="true" data-type="related"><i class="fas fa-link"></i><span>Похожие</span></div>
-            <div class="block-item" draggable="true" data-type="bestsellers"><i class="fas fa-trophy"></i><span>Хиты продаж</span></div>
+        <div class="library-section">
+          <div class="library-title">Текст</div>
+          <div class="block-grid">
+            <div class="block-item" draggable="true" data-type="heading"><i class="fas fa-h1"></i><span>Заголовок</span></div>
+            <div class="block-item" draggable="true" data-type="text"><i class="fas fa-align-left"></i><span>Текст</span></div>
           </div>
         </div>
         
-        <!-- Остальные 180+ блоков аналогично... -->
+        <div class="library-section">
+          <div class="library-title">Секции</div>
+          <div class="block-grid">
+            <div class="block-item" draggable="true" data-type="features"><i class="fas fa-star"></i><span>Преимущества</span></div>
+            <div class="block-item" draggable="true" data-type="stats"><i class="fas fa-chart-bar"></i><span>Статистика</span></div>
+            <div class="block-item" draggable="true" data-type="cta"><i class="fas fa-bullhorn"></i><span>CTA</span></div>
+          </div>
+        </div>
+        
+        <div class="library-section">
+          <div class="library-title">Медиа</div>
+          <div class="block-grid">
+            <div class="block-item" draggable="true" data-type="image"><i class="fas fa-image"></i><span>Изображение</span></div>
+            <div class="block-item" draggable="true" data-type="gallery"><i class="fas fa-images"></i><span>Галерея</span></div>
+            <div class="block-item" draggable="true" data-type="video"><i class="fas fa-video"></i><span>Видео</span></div>
+          </div>
+        </div>
+        
+        <div class="library-section">
+          <div class="library-title">Магазин</div>
+          <div class="block-grid">
+            <div class="block-item" draggable="true" data-type="product"><i class="fas fa-shopping-bag"></i><span>Товар</span></div>
+            <div class="block-item" draggable="true" data-type="pricing"><i class="fas fa-tags"></i><span>Тарифы</span></div>
+          </div>
+        </div>
+        
+        <div class="library-section">
+          <div class="library-title">Формы</div>
+          <div class="block-grid">
+            <div class="block-item" draggable="true" data-type="contact"><i class="fas fa-envelope"></i><span>Контакты</span></div>
+            <div class="block-item" draggable="true" data-type="subscribe"><i class="fas fa-bell"></i><span>Подписка</span></div>
+          </div>
+        </div>
       </div>
       
       <div class="editor-actions">
         <button class="btn btn-primary" onclick="saveProject()"><i class="fas fa-save"></i> Сохранить</button>
-        <button class="btn btn-success" onclick="exportHTML()"><i class="fas fa-download"></i> Экспорт</button>
-        <button class="btn btn-outline" onclick="openBlockSettings()"><i class="fas fa-cog"></i> Настройки блока</button>
-        <button class="btn btn-outline" onclick="openGlobalSettings()"><i class="fas fa-sliders-h"></i> Настройки сайта</button>
+        <button class="btn btn-success" onclick="exportHTML()"><i class="fas fa-download"></i> Экспорт HTML</button>
       </div>
     </div>
     
     <div class="editor-workspace">
       <div class="editor-toolbar">
         <h2 id="projectNameDisplay">Новый проект</h2>
-        <div class="toolbar-group">
-          <div class="device-preview">
-            <button class="device-btn active" onclick="setDevice('desktop')"><i class="fas fa-desktop"></i></button>
-            <button class="device-btn" onclick="setDevice('tablet')"><i class="fas fa-tablet-alt"></i></button>
-            <button class="device-btn" onclick="setDevice('mobile')"><i class="fas fa-mobile-alt"></i></button>
-          </div>
+        <div>
+          <button class="device-btn active" onclick="setDevice('desktop')"><i class="fas fa-desktop"></i></button>
+          <button class="device-btn" onclick="setDevice('tablet')"><i class="fas fa-tablet-alt"></i></button>
+          <button class="device-btn" onclick="setDevice('mobile')"><i class="fas fa-mobile-alt"></i></button>
         </div>
       </div>
       
@@ -368,131 +285,33 @@
   </div>
 </div>
 
-<!-- МОДАЛКА НАСТРОЕК БЛОКА (10+ настроек) -->
-<div class="modal" id="blockSettingsModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>Настройки блока</h3>
-      <button class="modal-close" onclick="closeModal('blockSettingsModal')">&times;</button>
-    </div>
-    <div class="form-group">
-      <label>Отступ сверху (px)</label>
-      <input type="number" id="blockPaddingTop" min="0" max="200" value="20">
-    </div>
-    <div class="form-group">
-      <label>Отступ снизу (px)</label>
-      <input type="number" id="blockPaddingBottom" min="0" max="200" value="20">
-    </div>
-    <div class="form-group">
-      <label>Отступ слева (px)</label>
-      <input type="number" id="blockPaddingLeft" min="0" max="200" value="20">
-    </div>
-    <div class="form-group">
-      <label>Отступ справа (px)</label>
-      <input type="number" id="blockPaddingRight" min="0" max="200" value="20">
-    </div>
-    <div class="form-group">
-      <label>Цвет фона</label>
-      <input type="color" id="blockBgColor" value="#ffffff">
-    </div>
-    <div class="form-group">
-      <label>Цвет текста</label>
-      <input type="color" id="blockTextColor" value="#2b2d42">
-    </div>
-    <div class="form-group">
-      <label>Выравнивание</label>
-      <select id="blockTextAlign">
-        <option value="left">Слева</option>
-        <option value="center">По центру</option>
-        <option value="right">Справа</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Скругление (px)</label>
-      <input type="number" id="blockBorderRadius" min="0" max="50" value="16">
-    </div>
-    <div class="form-group">
-      <label>Тень</label>
-      <select id="blockShadow">
-        <option value="none">Нет</option>
-        <option value="sm">Маленькая</option>
-        <option value="md">Средняя</option>
-        <option value="lg">Большая</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Якорь (ID)</label>
-      <input type="text" id="blockAnchor" placeholder="section-id">
-    </div>
-    <button class="btn btn-primary" style="width: 100%;" onclick="applyBlockSettings()">Применить</button>
-  </div>
-</div>
-
-<!-- МОДАЛКА НАСТРОЕК САЙТА (расширенная) -->
-<div class="modal" id="globalSettingsModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>Настройки сайта</h3>
-      <button class="modal-close" onclick="closeModal('globalSettingsModal')">&times;</button>
-    </div>
-    <div class="form-group">
-      <label>Название сайта</label>
-      <input type="text" id="siteTitle" placeholder="Мой сайт">
-    </div>
-    <div class="form-group">
-      <label>Основной цвет</label>
-      <input type="color" id="primaryColor" value="#4361ee">
-    </div>
-    <div class="form-group">
-      <label>Вторичный цвет</label>
-      <input type="color" id="secondaryColor" value="#3f37c9">
-    </div>
-    <div class="form-group">
-      <label>Акцентный цвет</label>
-      <input type="color" id="accentColor" value="#f72585">
-    </div>
-    <div class="form-group">
-      <label>Цвет фона</label>
-      <input type="color" id="bgColor" value="#f8f9fa">
-    </div>
-    <div class="form-group">
-      <label>Шрифт заголовков</label>
-      <select id="headingFont">
-        <option value="'Montserrat', sans-serif">Montserrat</option>
-        <option value="'Playfair Display', serif">Playfair Display</option>
-        <option value="'Inter', sans-serif">Inter</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Шрифт текста</label>
-      <select id="bodyFont">
-        <option value="'Inter', sans-serif">Inter</option>
-        <option value="'Roboto', sans-serif">Roboto</option>
-        <option value="'Source Code Pro', monospace">Source Code Pro</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Максимальная ширина (px)</label>
-      <input type="number" id="maxWidth" value="1200" min="800" max="1600">
-    </div>
-    <div class="form-group">
-      <label>Google Analytics ID</label>
-      <input type="text" id="gaId" placeholder="UA-XXXXX-Y">
-    </div>
-    <div class="form-group">
-      <label>Favicon URL</label>
-      <input type="text" id="favicon" placeholder="https://...">
-    </div>
-    <button class="btn btn-primary" style="width: 100%;" onclick="applyGlobalSettings()">Применить</button>
-  </div>
-</div>
-
 <script>
-  // === БАЗОВЫЕ ФУНКЦИИ ===
+  // Состояние
   let currentUser = null;
   let currentProject = null;
   let selectedBlock = null;
   
+  // Шаблоны
+  const templates = {
+    landing: [
+      { type: 'hero', content: '<div class="hero-content"><h1>Создайте свой сайт</h1><p>Быстро, красиво, профессионально</p><button class="btn btn-primary">Начать</button></div>' },
+      { type: 'features', content: '<div class="features-grid"><div class="feature-card"><i class="fas fa-rocket"></i><h3>Быстрый старт</h3><p>Создайте сайт за 5 минут</p></div><div class="feature-card"><i class="fas fa-palette"></i><h3>Дизайн</h3><p>Настраивайте каждый элемент</p></div><div class="feature-card"><i class="fas fa-mobile-alt"></i><h3>Адаптивность</h3><p>Отлично на всех устройствах</p></div></div>' }
+    ],
+    shop: [
+      { type: 'hero', content: '<div class="hero-content"><h1>Магазин</h1><p>Лучшие товары</p></div>' },
+      { type: 'product', content: '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;"><div style="text-align: center;"><div style="aspect-ratio: 1; background: linear-gradient(135deg, #4361ee, #3f37c9); border-radius: 16px;"></div><h3>Товар 1</h3><p>1 990₽</p></div><div style="text-align: center;"><div style="aspect-ratio: 1; background: linear-gradient(135deg, #3f37c9, #f72585); border-radius: 16px;"></div><h3>Товар 2</h3><p>2 490₽</p></div><div style="text-align: center;"><div style="aspect-ratio: 1; background: linear-gradient(135deg, #f72585, #4361ee); border-radius: 16px;"></div><h3>Товар 3</h3><p>3 990₽</p></div></div>' }
+    ],
+    portfolio: [
+      { type: 'hero', content: '<div class="hero-content"><h1>Портфолио</h1><p>Мои работы</p></div>' },
+      { type: 'gallery', content: '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;"><div style="aspect-ratio: 1; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 16px;"></div><div style="aspect-ratio: 1; background: linear-gradient(135deg, #f093fb, #f5576c); border-radius: 16px;"></div><div style="aspect-ratio: 1; background: linear-gradient(135deg, #4facfe, #00f2fe); border-radius: 16px;"></div></div>' }
+    ],
+    blog: [
+      { type: 'hero', content: '<div class="hero-content"><h1>Блог</h1><p>Интересные статьи</p></div>' },
+      { type: 'text', content: '<h2>Первая статья</h2><p>Текст статьи...</p>' }
+    ]
+  };
+  
+  // Утилиты
   function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
@@ -509,91 +328,130 @@
   
   window.scrollToSection = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   
-  window.closeModal = (modalId) => document.getElementById(modalId).classList.remove('active');
+  window.loginAsGuest = () => {
+    currentUser = { displayName: 'Гость', email: 'guest@sitecanvas.local', uid: 'guest' };
+    showPage('dashboard');
+    showToast('Добро пожаловать!');
+  };
   
-  window.openGlobalSettings = () => document.getElementById('globalSettingsModal').classList.add('active');
+  window.logout = () => {
+    currentUser = null;
+    showPage('landing');
+  };
   
-  window.openBlockSettings = () => {
-    if (!selectedBlock) {
-      showToast('Выберите блок', 'error');
+  // Проекты
+  function loadProjects() {
+    const grid = document.getElementById('projectsGrid');
+    const key = 'sitecanvas_projects_' + (currentUser?.uid || 'guest');
+    const saved = JSON.parse(localStorage.getItem(key) || '[]');
+    
+    if (saved.length === 0) {
+      grid.innerHTML = '<div style="text-align:center; padding:3rem; grid-column:1/-1;"><i class="fas fa-folder-open" style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"></i><p>Нет проектов. Создайте новый.</p></div>';
       return;
     }
-    const styles = window.getComputedStyle(selectedBlock);
-    document.getElementById('blockPaddingTop').value = parseInt(styles.paddingTop) || 20;
-    document.getElementById('blockPaddingBottom').value = parseInt(styles.paddingBottom) || 20;
-    document.getElementById('blockPaddingLeft').value = parseInt(styles.paddingLeft) || 20;
-    document.getElementById('blockPaddingRight').value = parseInt(styles.paddingRight) || 20;
-    document.getElementById('blockBgColor').value = rgbToHex(styles.backgroundColor) || '#ffffff';
-    document.getElementById('blockTextColor').value = rgbToHex(styles.color) || '#2b2d42';
-    document.getElementById('blockTextAlign').value = styles.textAlign || 'left';
-    document.getElementById('blockBorderRadius').value = parseInt(styles.borderRadius) || 16;
-    document.getElementById('blockAnchor').value = selectedBlock.id || '';
-    document.getElementById('blockSettingsModal').classList.add('active');
-  };
-  
-  function rgbToHex(rgb) {
-    const match = rgb?.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-    if (!match) return null;
-    return '#' + match.slice(1).map(x => parseInt(x).toString(16).padStart(2, '0')).join('');
+    
+    grid.innerHTML = '';
+    saved.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)).forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'project-card';
+      card.innerHTML = `
+        <h3>${p.name}</h3>
+        <p><i class="far fa-clock"></i> ${new Date(p.updatedAt).toLocaleDateString('ru-RU')}</p>
+        <p style="font-size: 0.8rem; margin-top: 0.5rem;"><i class="fas fa-cubes"></i> ${p.blocks?.length || 0} блоков</p>
+        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); duplicateProject('${p.id}')"><i class="fas fa-copy"></i></button>
+          <button class="btn btn-outline btn-sm" style="color: var(--danger);" onclick="event.stopPropagation(); deleteProject('${p.id}')"><i class="fas fa-trash"></i></button>
+        </div>
+      `;
+      card.onclick = () => openProject(p);
+      grid.appendChild(card);
+    });
   }
   
-  window.applyBlockSettings = () => {
-    if (!selectedBlock) return;
-    
-    selectedBlock.style.paddingTop = document.getElementById('blockPaddingTop').value + 'px';
-    selectedBlock.style.paddingBottom = document.getElementById('blockPaddingBottom').value + 'px';
-    selectedBlock.style.paddingLeft = document.getElementById('blockPaddingLeft').value + 'px';
-    selectedBlock.style.paddingRight = document.getElementById('blockPaddingRight').value + 'px';
-    selectedBlock.style.backgroundColor = document.getElementById('blockBgColor').value;
-    selectedBlock.style.color = document.getElementById('blockTextColor').value;
-    selectedBlock.style.textAlign = document.getElementById('blockTextAlign').value;
-    selectedBlock.style.borderRadius = document.getElementById('blockBorderRadius').value + 'px';
-    
-    const shadow = document.getElementById('blockShadow').value;
-    const root = document.documentElement;
-    if (shadow === 'sm') selectedBlock.style.boxShadow = 'var(--shadow-sm)';
-    else if (shadow === 'md') selectedBlock.style.boxShadow = 'var(--shadow)';
-    else if (shadow === 'lg') selectedBlock.style.boxShadow = 'var(--shadow-lg)';
-    else selectedBlock.style.boxShadow = 'none';
-    
-    const anchor = document.getElementById('blockAnchor').value;
-    if (anchor) {
-      selectedBlock.id = anchor;
-      selectedBlock.classList.add('anchor-section');
-    }
-    
-    closeModal('blockSettingsModal');
-    showToast('Настройки применены');
+  window.createEmptyProject = () => {
+    const project = {
+      id: Date.now().toString(),
+      name: 'Новый проект',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      blocks: []
+    };
+    saveProjectToStorage(project);
+    openProject(project);
   };
   
-  window.applyGlobalSettings = () => {
-    const root = document.documentElement;
-    root.style.setProperty('--primary', document.getElementById('primaryColor').value);
-    root.style.setProperty('--secondary', document.getElementById('secondaryColor').value);
-    root.style.setProperty('--accent', document.getElementById('accentColor').value);
-    root.style.setProperty('--bg', document.getElementById('bgColor').value);
-    root.style.setProperty('--font-heading', document.getElementById('headingFont').value);
-    root.style.setProperty('--font-main', document.getElementById('bodyFont').value);
-    
-    document.querySelector('.canvas').style.maxWidth = document.getElementById('maxWidth').value + 'px';
-    document.title = document.getElementById('siteTitle').value || 'SiteCanvas';
-    
-    closeModal('globalSettingsModal');
-    showToast('Настройки сайта применены');
+  window.createFromTemplate = (name) => {
+    const project = {
+      id: Date.now().toString(),
+      name: `Шаблон ${name}`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      blocks: templates[name] || []
+    };
+    saveProjectToStorage(project);
+    openProject(project);
   };
   
-  window.selectBlock = (block) => {
-    document.querySelectorAll('.site-block').forEach(b => b.classList.remove('selected'));
-    block.classList.add('selected');
-    selectedBlock = block;
+  function saveProjectToStorage(project) {
+    const key = 'sitecanvas_projects_' + (currentUser?.uid || 'guest');
+    const projects = JSON.parse(localStorage.getItem(key) || '[]');
+    const index = projects.findIndex(p => p.id === project.id);
+    if (index >= 0) projects[index] = project;
+    else projects.push(project);
+    localStorage.setItem(key, JSON.stringify(projects));
+  }
+  
+  function openProject(project) {
+    currentProject = project;
+    document.getElementById('projectNameDisplay').textContent = project.name;
+    
+    const canvas = document.getElementById('canvas');
+    canvas.innerHTML = '';
+    
+    (project.blocks || []).forEach(b => addBlockToCanvas(b.type, b.content));
+    
+    showPage('editor');
+    setupDragAndDrop();
+  }
+  
+  window.deleteProject = (id) => {
+    if (!confirm('Удалить проект?')) return;
+    const key = 'sitecanvas_projects_' + (currentUser?.uid || 'guest');
+    const projects = JSON.parse(localStorage.getItem(key) || '[]');
+    localStorage.setItem(key, JSON.stringify(projects.filter(p => p.id !== id)));
+    loadProjects();
+    showToast('Проект удалён');
   };
   
-  // === РЕДАКТОР ===
-  function addBlockToCanvas(type) {
+  window.duplicateProject = (id) => {
+    const key = 'sitecanvas_projects_' + (currentUser?.uid || 'guest');
+    const projects = JSON.parse(localStorage.getItem(key) || '[]');
+    const original = projects.find(p => p.id === id);
+    if (!original) return;
+    
+    const duplicate = {
+      ...original,
+      id: Date.now().toString(),
+      name: original.name + ' (копия)',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    
+    projects.push(duplicate);
+    localStorage.setItem(key, JSON.stringify(projects));
+    loadProjects();
+    showToast('Проект дублирован');
+  };
+  
+  // Редактор
+  function addBlockToCanvas(type, content) {
     const canvas = document.getElementById('canvas');
     const block = document.createElement('div');
     block.className = 'site-block';
     block.dataset.type = type;
+    
+    let defaultContent = content || getDefaultContent(type);
+    
     block.innerHTML = `
       <div class="block-toolbar">
         <button onclick="window.moveBlockUp(this)"><i class="fas fa-arrow-up"></i></button>
@@ -602,22 +460,45 @@
         <button onclick="window.deleteBlock(this)"><i class="fas fa-trash"></i></button>
       </div>
       <div class="block-header">
-        <span class="block-type">${type}</span>
+        <span class="block-type">${getBlockTypeName(type)}</span>
         <button onclick="window.selectBlock(this.closest('.site-block'))" style="background:none;border:none;cursor:pointer;"><i class="fas fa-cog"></i></button>
       </div>
-      <div class="block-content" contenteditable="true">${getDefaultContent(type)}</div>
+      <div class="block-content" contenteditable="true">${defaultContent}</div>
     `;
-    block.onclick = () => selectBlock(block);
+    
     canvas.appendChild(block);
   }
   
   function getDefaultContent(type) {
-    const contents = {
-      'hero-1': '<div class="hero-content"><h1>Заголовок</h1><p>Описание</p><button class="btn btn-primary">Кнопка</button></div>',
-      'product-grid': '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;"><div><div class="gallery-item"></div><h3>Товар</h3><p>1000₽</p></div><div><div class="gallery-item"></div><h3>Товар</h3><p>2000₽</p></div><div><div class="gallery-item"></div><h3>Товар</h3><p>3000₽</p></div></div>',
+    const defaults = {
+      hero: '<div class="hero-content"><h1>Заголовок</h1><p>Описание</p><button class="btn btn-primary">Кнопка</button></div>',
+      heading: '<h2>Заголовок</h2>',
+      text: '<p>Текстовый блок. Редактируйте этот текст.</p>',
+      image: '<div style="aspect-ratio: 16/9; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px;"></div><p style="text-align: center; margin-top: 0.5rem;">Подпись</p>',
+      features: '<div class="features-grid"><div class="feature-card"><i class="fas fa-star"></i><h3>Преимущество 1</h3><p>Описание</p></div><div class="feature-card"><i class="fas fa-star"></i><h3>Преимущество 2</h3><p>Описание</p></div><div class="feature-card"><i class="fas fa-star"></i><h3>Преимущество 3</h3><p>Описание</p></div></div>',
+      stats: '<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; text-align: center;"><div><h3>100+</h3><p>Клиентов</p></div><div><h3>10+</h3><p>Лет опыта</p></div><div><h3>24/7</h3><p>Поддержка</p></div><div><h3>100%</h3><p>Качество</p></div></div>',
+      cta: '<div style="text-align: center; padding: 3rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px; color: white;"><h2>Готовы начать?</h2><p style="margin: 1rem 0;">Присоединяйтесь к нам сегодня</p><button class="btn btn-primary" style="background: white; color: var(--primary);">Начать</button></div>',
+      product: '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;"><div style="text-align: center;"><div style="aspect-ratio: 1; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px;"></div><h3>Товар</h3><p>1 000₽</p></div></div>',
+      pricing: '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;"><div style="text-align: center; padding: 2rem; border: 1px solid var(--border); border-radius: 16px;"><h3>Базовый</h3><div style="font-size: 2.5rem; color: var(--primary);">0₽</div></div><div style="text-align: center; padding: 2rem; border: 2px solid var(--primary); border-radius: 16px;"><h3>Pro</h3><div style="font-size: 2.5rem; color: var(--primary);">990₽</div></div><div style="text-align: center; padding: 2rem; border: 1px solid var(--border); border-radius: 16px;"><h3>Бизнес</h3><div style="font-size: 2.5rem; color: var(--primary);">2990₽</div></div></div>'
     };
-    return contents[type] || '<p>Новый блок. Редактируйте содержимое.</p>';
+    return defaults[type] || '<p>Новый блок</p>';
   }
+  
+  function getBlockTypeName(type) {
+    const names = {
+      hero: 'Герой', header: 'Шапка', heading: 'Заголовок', text: 'Текст',
+      features: 'Преимущества', stats: 'Статистика', cta: 'Призыв',
+      image: 'Изображение', gallery: 'Галерея', video: 'Видео',
+      product: 'Товар', pricing: 'Тарифы', contact: 'Контакты', subscribe: 'Подписка'
+    };
+    return names[type] || type.toUpperCase();
+  }
+  
+  window.selectBlock = (block) => {
+    document.querySelectorAll('.site-block').forEach(b => b.classList.remove('selected'));
+    block.classList.add('selected');
+    selectedBlock = block;
+  };
   
   window.moveBlockUp = (btn) => {
     const block = btn.closest('.site-block');
@@ -641,7 +522,31 @@
     btn.closest('.site-block').remove();
   };
   
-  // === DRAG & DROP ===
+  window.saveProject = () => {
+    if (!currentProject) {
+      showToast('Проект не выбран', 'error');
+      return;
+    }
+    
+    const blocks = [];
+    document.querySelectorAll('.site-block').forEach(b => {
+      blocks.push({
+        type: b.dataset.type,
+        content: b.querySelector('.block-content').innerHTML
+      });
+    });
+    
+    currentProject.blocks = blocks;
+    currentProject.updatedAt = new Date().toISOString();
+    saveProjectToStorage(currentProject);
+    showToast('Проект сохранён');
+  };
+  
+  window.backToDashboard = () => {
+    saveProject();
+    showPage('dashboard');
+  };
+  
   function setupDragAndDrop() {
     document.querySelectorAll('.block-item[draggable="true"]').forEach(item => {
       item.addEventListener('dragstart', e => e.dataTransfer.setData('type', item.dataset.type));
@@ -656,109 +561,40 @@
     });
   }
   
-  // === ПРОЕКТЫ ===
-  function loadProjects() {
-    const grid = document.getElementById('projectsGrid');
-    const saved = JSON.parse(localStorage.getItem('sitecanvas_projects') || '[]');
-    
-    if (saved.length === 0) {
-      grid.innerHTML = '<div style="text-align:center;padding:3rem;">Нет проектов. Создайте новый.</div>';
-      return;
-    }
-    
-    grid.innerHTML = '';
-    saved.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'project-card';
-      card.innerHTML = `<h3>${p.name}</h3><p>${new Date(p.updatedAt).toLocaleDateString()}</p>`;
-      card.onclick = () => openProject(p);
-      grid.appendChild(card);
-    });
-  }
-  
-  window.createEmptyProject = () => {
-    const project = {
-      id: Date.now().toString(),
-      name: 'Новый проект',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      blocks: []
-    };
-    localStorage.setItem('sitecanvas_projects', JSON.stringify([...JSON.parse(localStorage.getItem('sitecanvas_projects') || '[]'), project]));
-    openProject(project);
-  };
-  
-  function openProject(project) {
-    currentProject = project;
-    document.getElementById('projectNameDisplay').textContent = project.name;
-    
-    const canvas = document.getElementById('canvas');
-    canvas.innerHTML = '';
-    project.blocks?.forEach(b => addBlockToCanvas(b.type));
-    
-    showPage('editor');
-    setupDragAndDrop();
-  }
-  
-  window.saveProject = () => {
-    if (!currentProject) return;
-    
-    const blocks = [];
-    document.querySelectorAll('.site-block').forEach(b => {
-      blocks.push({
-        type: b.dataset.type,
-        content: b.querySelector('.block-content').innerHTML
-      });
-    });
-    
-    currentProject.blocks = blocks;
-    currentProject.updatedAt = new Date().toISOString();
-    
-    const projects = JSON.parse(localStorage.getItem('sitecanvas_projects') || '[]');
-    const index = projects.findIndex(p => p.id === currentProject.id);
-    projects[index] = currentProject;
-    localStorage.setItem('sitecanvas_projects', JSON.stringify(projects));
-    
-    showToast('Проект сохранён');
-  };
-  
-  window.backToDashboard = () => {
-    saveProject();
-    showPage('dashboard');
-  };
-  
   window.setDevice = (device) => {
     const canvas = document.getElementById('canvas');
     canvas.className = 'canvas' + (device === 'mobile' ? ' mobile' : device === 'tablet' ? ' tablet' : '');
-    document.querySelectorAll('.device-btn').forEach((btn, i) => {
-      btn.classList.toggle('active', (i === 0 && device === 'desktop') || (i === 1 && device === 'tablet') || (i === 2 && device === 'mobile'));
-    });
   };
   
   window.exportHTML = () => {
     const canvas = document.getElementById('canvas');
     const styles = document.querySelector('style').innerHTML;
-    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>SiteCanvas</title><link href="https://fonts.googleapis.com/css2?family=Inter&family=Montserrat&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><style>${styles}</style></head><body style="padding:2rem;">${canvas.outerHTML}</body></html>`;
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${currentProject?.name || 'SiteCanvas'}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>${styles}</style>
+</head>
+<body style="background: var(--bg); padding: 2rem;">
+  ${canvas.outerHTML}
+</body>
+</html>`;
     
     const blob = new Blob([html], { type: 'text/html' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'site.html';
+    a.download = (currentProject?.name || 'site') + '.html';
     a.click();
     showToast('HTML экспортирован');
   };
   
   // Инициализация
   document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('landingSignIn')?.addEventListener('click', () => {
-      currentUser = { displayName: 'Гость', email: 'guest@sitecanvas.local' };
-      showPage('dashboard');
-    });
-    
-    document.getElementById('heroStartBtn')?.addEventListener('click', () => {
-      currentUser = { displayName: 'Гость', email: 'guest@sitecanvas.local' };
-      showPage('dashboard');
-    });
+    // Всё готово, загрузчика нет
   });
 </script>
 
