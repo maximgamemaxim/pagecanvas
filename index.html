@@ -48,6 +48,7 @@
     .btn-google { background: white; border: 1px solid var(--border); color: var(--text); }
     .btn-google i { color: #ea4335; }
     .btn-success { background: var(--success); color: white; }
+    .btn-sm { padding: 0.5rem 1.25rem; font-size: 0.875rem; }
     
     .dashboard { max-width: 1280px; margin: 0 auto; padding: 3rem 2rem; }
     .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
@@ -62,13 +63,14 @@
     .editor-sidebar { width: 340px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
     .editor-logo { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
     .back-btn { background: none; border: none; color: var(--text-light); cursor: pointer; font-size: 1.2rem; padding: 0.5rem; border-radius: 8px; }
+    .back-btn:hover { background: var(--bg); color: var(--text); }
     
     .blocks-library { padding: 1.5rem; flex: 1; overflow-y: auto; }
     .library-section { margin-bottom: 1.5rem; }
     .library-title { font-size: 0.8rem; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.75rem; font-weight: 600; }
     .block-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
-    .block-item { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem; cursor: grab; text-align: center; }
-    .block-item:hover { background: var(--surface); border-color: var(--primary); }
+    .block-item { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem; cursor: grab; text-align: center; transition: all 0.2s; }
+    .block-item:hover { background: var(--surface); border-color: var(--primary); transform: translateY(-2px); }
     .block-item i { font-size: 1.25rem; color: var(--primary); margin-bottom: 0.25rem; }
     .block-item span { font-size: 0.7rem; display: block; }
     
@@ -80,24 +82,30 @@
     .canvas-container { flex: 1; padding: 2rem; overflow-y: auto; }
     .canvas { max-width: 1200px; margin: 0 auto; min-height: 100%; }
     
-    .site-block { background: var(--surface); border-radius: var(--border-radius); margin-bottom: 1.5rem; border: 1px solid var(--border); position: relative; }
+    .site-block { background: var(--surface); border-radius: var(--border-radius); margin-bottom: 1.5rem; border: 1px solid var(--border); position: relative; transition: all 0.2s; }
     .site-block:hover { box-shadow: var(--shadow); border-color: var(--primary); }
+    .site-block.dragging { opacity: 0.5; cursor: grabbing; }
     
     .block-toolbar { position: absolute; top: -45px; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.375rem; display: none; gap: 0.25rem; box-shadow: var(--shadow); z-index: 10; }
     .site-block:hover .block-toolbar { display: flex; }
-    .block-toolbar button { background: none; border: none; padding: 0.5rem 0.75rem; border-radius: 6px; cursor: pointer; }
+    .block-toolbar button { background: none; border: none; padding: 0.5rem 0.75rem; border-radius: 6px; cursor: pointer; color: var(--text); font-size: 0.8rem; transition: all 0.2s; }
+    .block-toolbar button:hover { background: var(--bg); color: var(--primary); }
     
     .block-header { padding: 0.875rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; background: var(--bg); border-radius: var(--border-radius) var(--border-radius) 0 0; }
     .block-type { font-size: 0.7rem; text-transform: uppercase; color: var(--primary); font-weight: 600; }
     .block-content { padding: 2rem; }
     .block-content[contenteditable="true"] { outline: none; min-height: 100px; }
+    .block-content[contenteditable="true"]:focus { background: rgba(67, 97, 238, 0.05); }
     
     .hero-content { text-align: center; }
+    .hero-content h1 { font-size: 3rem; margin-bottom: 1rem; }
     .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
     .feature-card { padding: 2rem; background: var(--bg); border-radius: var(--border-radius); text-align: center; }
+    .feature-card i { font-size: 2rem; color: var(--primary); margin-bottom: 1rem; }
     
-    .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--surface); border-radius: var(--border-radius); padding: 1rem 1.5rem; box-shadow: var(--shadow); z-index: 3000; border-left: 4px solid var(--success); }
+    .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--surface); border-radius: var(--border-radius); padding: 1rem 1.5rem; box-shadow: var(--shadow); z-index: 3000; border-left: 4px solid var(--success); animation: slideIn 0.3s ease; }
     .toast.error { border-left-color: var(--danger); }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
     
     .loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; z-index: 9999; }
     .loader.hidden { display: none; }
@@ -140,9 +148,9 @@
       <div class="container">
         <h2 style="text-align: center; margin-bottom: 3rem;">Всё бесплатно навсегда</h2>
         <div class="features-grid">
-          <div class="feature-card"><i class="fas fa-cubes"></i><h3>40+ блоков</h3></div>
-          <div class="feature-card"><i class="fas fa-palette"></i><h3>Кастомизация</h3></div>
-          <div class="feature-card"><i class="fas fa-code"></i><h3>Чистый экспорт</h3></div>
+          <div class="feature-card"><i class="fas fa-cubes"></i><h3>40+ блоков</h3><p>Герои, галереи, формы, отзывы</p></div>
+          <div class="feature-card"><i class="fas fa-palette"></i><h3>Кастомизация</h3><p>Цвета, шрифты, отступы</p></div>
+          <div class="feature-card"><i class="fas fa-code"></i><h3>Чистый экспорт</h3><p>Скачивайте HTML/CSS</p></div>
         </div>
       </div>
     </section>
@@ -228,6 +236,11 @@
     <div class="editor-workspace">
       <div class="editor-toolbar">
         <h2 id="projectNameDisplay">Новый проект</h2>
+        <div>
+          <button class="btn btn-outline btn-sm" onclick="setDevice('desktop')"><i class="fas fa-desktop"></i></button>
+          <button class="btn btn-outline btn-sm" onclick="setDevice('tablet')"><i class="fas fa-tablet-alt"></i></button>
+          <button class="btn btn-outline btn-sm" onclick="setDevice('mobile')"><i class="fas fa-mobile-alt"></i></button>
+        </div>
       </div>
       
       <div class="canvas-container">
@@ -258,11 +271,6 @@
   // Глобальные переменные
   let currentUser = null;
   let currentProject = null;
-  
-  // Делаем функции доступными глобально
-  window.signInWithPopup = signInWithPopup;
-  window.auth = auth;
-  window.provider = provider;
   
   // Утилиты
   function showToast(message, type = 'success') {
@@ -402,6 +410,7 @@
     const block = document.createElement('div');
     block.className = 'site-block';
     block.dataset.type = type;
+    block.draggable = true;
     
     const defaults = {
       hero: '<div class="hero-content"><h1>Заголовок</h1><p>Описание</p><button class="btn btn-primary">Кнопка</button></div>',
@@ -409,17 +418,18 @@
       text: '<p>Текстовый блок. Редактируйте этот текст.</p>',
       image: '<div style="aspect-ratio: 16/9; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px;"></div>',
       features: '<div class="features-grid"><div class="feature-card"><i class="fas fa-star"></i><h3>Преимущество 1</h3></div><div class="feature-card"><i class="fas fa-star"></i><h3>Преимущество 2</h3></div><div class="feature-card"><i class="fas fa-star"></i><h3>Преимущество 3</h3></div></div>',
-      cta: '<div style="text-align: center; padding: 3rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px; color: white;"><h2>Готовы начать?</h2><button class="btn btn-primary" style="background: white; color: var(--primary);">Начать</button></div>'
+      cta: '<div style="text-align: center; padding: 3rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px; color: white;"><h2>Готовы начать?</h2><button class="btn btn-primary" style="background: white; color: var(--primary);">Начать</button></div>',
+      gallery: '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;"><div style="aspect-ratio: 1; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 16px;"></div><div style="aspect-ratio: 1; background: linear-gradient(135deg, #f093fb, #f5576c); border-radius: 16px;"></div><div style="aspect-ratio: 1; background: linear-gradient(135deg, #4facfe, #00f2fe); border-radius: 16px;"></div></div>'
     };
     
     let defaultContent = content || defaults[type] || '<p>Новый блок</p>';
     
     block.innerHTML = `
       <div class="block-toolbar">
-        <button onclick="window.moveBlockUp(this)"><i class="fas fa-arrow-up"></i></button>
-        <button onclick="window.moveBlockDown(this)"><i class="fas fa-arrow-down"></i></button>
-        <button onclick="window.duplicateBlock(this)"><i class="fas fa-copy"></i></button>
-        <button onclick="window.deleteBlock(this)"><i class="fas fa-trash"></i></button>
+        <button onclick="window.moveBlockUp(this)" title="Вверх"><i class="fas fa-arrow-up"></i></button>
+        <button onclick="window.moveBlockDown(this)" title="Вниз"><i class="fas fa-arrow-down"></i></button>
+        <button onclick="window.duplicateBlock(this)" title="Дублировать"><i class="fas fa-copy"></i></button>
+        <button onclick="window.deleteBlock(this)" title="Удалить"><i class="fas fa-trash"></i></button>
       </div>
       <div class="block-header">
         <span class="block-type">${type}</span>
@@ -428,28 +438,57 @@
     `;
     
     canvas.appendChild(block);
+    
+    // Добавляем обработчики drag & drop для перемещения блоков
+    block.addEventListener('dragstart', (e) => {
+      block.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', '');
+    });
+    
+    block.addEventListener('dragend', () => {
+      block.classList.remove('dragging');
+    });
   }
   
+  // Функции для работы с блоками
   window.moveBlockUp = (btn) => {
     const block = btn.closest('.site-block');
     const prev = block.previousElementSibling;
-    if (prev) block.parentNode.insertBefore(block, prev);
+    if (prev && prev.classList.contains('site-block')) {
+      block.parentNode.insertBefore(block, prev);
+    }
   };
   
   window.moveBlockDown = (btn) => {
     const block = btn.closest('.site-block');
     const next = block.nextElementSibling;
-    if (next) block.parentNode.insertBefore(next, block);
+    if (next && next.classList.contains('site-block')) {
+      block.parentNode.insertBefore(next, block);
+    }
   };
   
   window.duplicateBlock = (btn) => {
     const block = btn.closest('.site-block');
     const clone = block.cloneNode(true);
+    
+    // Восстанавливаем обработчики для клона
+    clone.addEventListener('dragstart', (e) => {
+      clone.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', '');
+    });
+    
+    clone.addEventListener('dragend', () => {
+      clone.classList.remove('dragging');
+    });
+    
     block.parentNode.insertBefore(clone, block.nextSibling);
+    showToast('Блок дублирован');
   };
   
   window.deleteBlock = (btn) => {
-    btn.closest('.site-block').remove();
+    const block = btn.closest('.site-block');
+    block.remove();
+    showToast('Блок удалён');
   };
   
   window.saveProject = () => {
@@ -478,18 +517,50 @@
   };
   
   function setupDragAndDrop() {
+    // Для блоков из библиотеки
     document.querySelectorAll('.block-item[draggable="true"]').forEach(item => {
-      item.addEventListener('dragstart', e => e.dataTransfer.setData('type', item.dataset.type));
+      item.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('type', item.dataset.type);
+      });
     });
     
     const canvas = document.getElementById('canvas');
-    canvas.addEventListener('dragover', e => e.preventDefault());
+    
+    canvas.addEventListener('dragover', e => {
+      e.preventDefault();
+    });
+    
     canvas.addEventListener('drop', e => {
       e.preventDefault();
+      
       const type = e.dataTransfer.getData('type');
-      if (type) addBlockToCanvas(type);
+      if (type) {
+        addBlockToCanvas(type);
+        return;
+      }
+      
+      // Перемещение существующих блоков
+      const dragging = document.querySelector('.dragging');
+      const target = e.target.closest('.site-block');
+      
+      if (dragging && target && dragging !== target) {
+        const blocks = [...canvas.querySelectorAll('.site-block')];
+        const dragIndex = blocks.indexOf(dragging);
+        const targetIndex = blocks.indexOf(target);
+        
+        if (dragIndex < targetIndex) {
+          target.parentNode.insertBefore(dragging, target.nextSibling);
+        } else {
+          target.parentNode.insertBefore(dragging, target);
+        }
+      }
     });
   }
+  
+  window.setDevice = (device) => {
+    const canvas = document.getElementById('canvas');
+    canvas.className = 'canvas' + (device === 'mobile' ? ' mobile' : device === 'tablet' ? ' tablet' : '');
+  };
   
   window.exportHTML = () => {
     const canvas = document.getElementById('canvas');
@@ -512,7 +583,7 @@
     showToast('HTML экспортирован');
   };
   
-  // Привязываем обработчики
+  // Инициализация
   document.addEventListener('DOMContentLoaded', () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
