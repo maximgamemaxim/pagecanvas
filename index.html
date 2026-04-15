@@ -3,138 +3,200 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PageCanvas · Конструктор сайтов</title>
+  <title>SiteCanvas · Визуальный конструктор сайтов</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   
   <style>
+    /* Глобальные настройки сайта */
+    :root {
+      --primary: #4361ee;
+      --secondary: #3f37c9;
+      --accent: #f72585;
+      --text: #2b2d42;
+      --bg: #f8f9fa;
+      --surface: #ffffff;
+      --border: #dee2e6;
+      --success: #4cc9f0;
+      --warning: #f8961e;
+      --danger: #ef233c;
+      --font-main: 'Inter', sans-serif;
+      --font-heading: 'Montserrat', sans-serif;
+      --spacing: 1rem;
+      --border-radius: 12px;
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+    
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #f5f7fb; color: #1e293b; line-height: 1.5; }
+    body { font-family: var(--font-main); background: var(--bg); color: var(--text); line-height: 1.6; }
     
     /* Страницы */
     .page { display: none; }
     .page.active { display: block; }
     
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 26px; }
-    
-    /* Главная страница (без регистрации) */
-    .landing-header { background: white; border-bottom: 1px solid #e2e8f0; padding: 18px 0; }
+    /* Лендинг */
+    .landing-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.5rem 0; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
     .header-inner { display: flex; align-items: center; justify-content: space-between; }
-    .logo { font-weight: 800; font-size: 2rem; background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .landing-nav { display: flex; gap: 34px; align-items: center; }
-    .landing-nav a { text-decoration: none; color: #475569; font-weight: 500; cursor: pointer; }
-    .landing-nav a:hover { color: #2563eb; }
+    .logo { font-size: 2rem; font-weight: 800; font-family: var(--font-heading); background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .nav { display: flex; gap: 2.5rem; align-items: center; }
+    .nav a { text-decoration: none; color: var(--text); font-weight: 500; cursor: pointer; transition: color 0.2s; }
+    .nav a:hover { color: var(--primary); }
     
-    .hero { padding: 82px 0; }
-    .hero h1 { font-size: 4rem; font-weight: 800; letter-spacing: -1.5px; line-height: 1.2; margin-bottom: 26px; background: linear-gradient(135deg, #1e293b, #3b82f6); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .hero p { font-size: 1.3rem; color: #64748b; max-width: 700px; margin-bottom: 34px; }
-    .cta-buttons { display: flex; gap: 18px; flex-wrap: wrap; }
-    .btn { padding: 16px 34px; border-radius: 62px; font-weight: 600; font-size: 1.1rem; border: none; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
-    .btn-primary { background: #1e293b; color: white; box-shadow: 0 6px 16px rgba(30,41,59,0.2); }
-    .btn-primary:hover { background: #0f172a; transform: translateY(-2px); }
-    .btn-outline { background: white; color: #1e293b; border: 1px solid #e2e8f0; }
-    .btn-outline:hover { background: #f8fafc; }
-    .btn-google { background: white; border: 1px solid #e2e8f0; }
-    .btn-google i { color: #ea4335; }
+    .hero { padding: 5rem 0; text-align: center; }
+    .hero h1 { font-size: 4rem; font-weight: 800; font-family: var(--font-heading); margin-bottom: 1.5rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero p { font-size: 1.3rem; color: #6c757d; max-width: 700px; margin: 0 auto 2.5rem; }
     
-    .features { padding: 62px 0; background: white; border-radius: 42px; margin: 42px 0; }
-    .section-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 42px; text-align: center; }
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 34px; }
-    .feature-card { padding: 34px; background: #fafcff; border-radius: 26px; border: 1px solid #eef2f6; }
-    .feature-card i { font-size: 2.5rem; color: #2563eb; margin-bottom: 22px; }
-    .feature-card h3 { font-size: 1.4rem; margin-bottom: 14px; }
+    .btn { padding: 1rem 2rem; border-radius: 50px; font-weight: 600; font-size: 1.1rem; border: none; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.75rem; }
+    .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3); }
+    .btn-primary:hover { background: var(--secondary); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4); }
+    .btn-outline { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .btn-outline:hover { background: var(--bg); border-color: var(--primary); }
     
-    .demo-section { padding: 42px 0 82px; }
-    .demo-preview { background: white; border-radius: 34px; padding: 34px; border: 1px solid #e2e8f0; }
+    /* Дашборд */
+    .dashboard { max-width: 1280px; margin: 0 auto; padding: 3rem 2rem; }
+    .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
+    .dashboard-header h1 { font-size: 2.5rem; font-family: var(--font-heading); }
     
-    /* Дашборд (после входа) */
-    .dashboard-header { background: white; border-bottom: 1px solid #e2e8f0; padding: 16px 0; }
-    .user-menu { display: flex; align-items: center; gap: 16px; }
-    .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #7c3aed); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; cursor: pointer; background-size: cover; }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
+    .project-card { background: var(--surface); border-radius: var(--border-radius); padding: 2rem; border: 1px solid var(--border); transition: all 0.3s; cursor: pointer; position: relative; }
+    .project-card:hover { box-shadow: var(--shadow); border-color: var(--primary); transform: translateY(-4px); }
+    .project-card h3 { font-size: 1.5rem; margin-bottom: 0.5rem; font-family: var(--font-heading); }
+    .project-card p { color: #6c757d; margin-bottom: 1.5rem; }
+    .project-badge { position: absolute; top: 1rem; right: 1rem; background: var(--primary); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .project-badge.free { background: #6c757d; }
     
-    .dashboard { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
-    .dashboard-header-content { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-    .dashboard-header-content h1 { font-size: 2rem; }
+    .create-card { background: var(--bg); border: 2px dashed var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 220px; }
+    .create-card:hover { background: var(--surface); border-color: var(--primary); }
+    .create-card i { font-size: 3rem; color: var(--primary); margin-bottom: 1rem; }
     
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
-    .project-card { background: white; border-radius: 20px; padding: 24px; border: 1px solid #e2e8f0; transition: all 0.2s; cursor: pointer; }
-    .project-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-color: #cbd5e1; }
-    .project-card h3 { font-size: 1.3rem; margin-bottom: 8px; }
-    .project-card p { color: #64748b; font-size: 0.9rem; margin-bottom: 16px; }
-    .project-actions { display: flex; gap: 8px; }
-    .project-actions button { background: none; border: none; color: #64748b; cursor: pointer; padding: 8px; border-radius: 8px; }
-    .project-actions button:hover { background: #f1f5f9; color: #ef4444; }
-    
-    .create-card { background: #f8fafc; border: 2px dashed #cbd5e1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 200px; }
-    .create-card:hover { background: #f1f5f9; }
-    .create-card i { font-size: 2.5rem; color: #64748b; margin-bottom: 16px; }
-    
-    /* Подписки */
-    .subscription-container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
-    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 40px; }
-    .pricing-card { background: white; border-radius: 32px; padding: 40px 32px; border: 1px solid #e2e8f0; position: relative; }
-    .pricing-card.pro { border: 2px solid #7c3aed; }
-    .pricing-badge { position: absolute; top: -12px; right: 32px; background: linear-gradient(135deg, #2563eb, #7c3aed); color: white; padding: 6px 18px; border-radius: 30px; font-size: 0.9rem; font-weight: 600; }
-    .pricing-name { font-size: 1.8rem; font-weight: 700; margin-bottom: 12px; }
-    .pricing-price { font-size: 3rem; font-weight: 800; margin-bottom: 8px; }
-    .pricing-price small { font-size: 1rem; font-weight: 400; color: #64748b; }
-    .pricing-features { list-style: none; margin: 32px 0; }
-    .pricing-features li { padding: 10px 0; display: flex; align-items: center; gap: 12px; }
-    .pricing-features i.fa-check { color: #22c55e; }
-    .pricing-features i.fa-times { color: #ef4444; }
-    
-    .current-plan { background: #f0fdf4; border-radius: 20px; padding: 24px; margin-top: 30px; border: 1px solid #bbf7d0; }
-    .current-plan h3 { color: #166534; margin-bottom: 16px; }
-    .plan-info { display: flex; justify-content: space-between; align-items: center; }
-    .plan-days { font-size: 2rem; font-weight: 700; color: #166534; }
+    /* Шаблоны */
+    .templates-section { margin: 3rem 0; }
+    .templates-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
+    .template-card { background: var(--surface); border-radius: var(--border-radius); padding: 2rem; border: 1px solid var(--border); cursor: pointer; transition: all 0.3s; text-align: center; }
+    .template-card:hover { box-shadow: var(--shadow); border-color: var(--primary); transform: translateY(-4px); }
+    .template-icon { font-size: 3rem; margin-bottom: 1rem; color: var(--primary); }
+    .template-card h4 { font-size: 1.2rem; margin-bottom: 0.5rem; font-family: var(--font-heading); }
+    .template-card p { color: #6c757d; font-size: 0.9rem; }
     
     /* Редактор */
-    .editor-container { display: flex; height: 100vh; overflow: hidden; }
-    .editor-sidebar { width: 320px; background: white; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; }
-    .editor-logo { padding: 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; }
-    .back-btn { background: none; border: none; color: #64748b; cursor: pointer; font-size: 1.2rem; padding: 8px; border-radius: 8px; }
-    .back-btn:hover { background: #f1f5f9; }
+    .editor-container { display: flex; height: 100vh; overflow: hidden; background: var(--bg); }
     
-    .blocks-section { padding: 20px; flex: 1; overflow-y: auto; }
-    .section-label { font-size: 0.75rem; text-transform: uppercase; color: #64748b; margin: 20px 0 12px; font-weight: 600; }
-    .block-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; margin-bottom: 12px; cursor: grab; }
-    .block-card:hover { background: white; border-color: #cbd5e1; }
-    .block-card i { font-size: 1.3rem; color: #2563eb; margin-bottom: 8px; }
+    /* Левая панель - блоки */
+    .editor-sidebar { width: 360px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+    .editor-logo { padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .back-btn { background: none; border: none; color: #6c757d; cursor: pointer; font-size: 1.2rem; padding: 0.5rem; border-radius: 8px; transition: all 0.2s; }
+    .back-btn:hover { background: var(--bg); color: var(--text); }
     
-    .editor-actions { padding: 20px; border-top: 1px solid #e2e8f0; }
+    .blocks-library { padding: 1.5rem; flex: 1; overflow-y: auto; }
+    .library-section { margin-bottom: 2rem; }
+    .library-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #6c757d; margin-bottom: 1rem; font-weight: 600; }
+    .block-item { background: var(--bg); border: 1px solid var(--border); border-radius: var(--border-radius); padding: 1rem; margin-bottom: 0.75rem; cursor: grab; transition: all 0.2s; display: flex; align-items: center; gap: 1rem; }
+    .block-item:hover { background: var(--surface); border-color: var(--primary); box-shadow: var(--shadow); transform: translateX(4px); }
+    .block-item i { font-size: 1.5rem; color: var(--primary); width: 30px; text-align: center; }
+    .block-info h4 { font-size: 0.95rem; margin-bottom: 0.25rem; }
+    .block-info p { font-size: 0.75rem; color: #6c757d; }
     
-    .editor-workspace { flex: 1; display: flex; flex-direction: column; background: #f1f5f9; }
-    .editor-toolbar { padding: 16px 24px; background: white; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+    .editor-actions { padding: 1.5rem; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 0.75rem; }
     
-    .canvas-container { flex: 1; padding: 30px; overflow-y: auto; }
-    .canvas { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+    /* Правая панель - настройки */
+    .editor-settings { width: 320px; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; }
+    .settings-header { padding: 1.5rem; border-bottom: 1px solid var(--border); }
+    .settings-header h3 { font-size: 1.2rem; font-family: var(--font-heading); margin-bottom: 0.25rem; }
+    .settings-header p { font-size: 0.8rem; color: #6c757d; }
     
-    .canvas-block { background: white; border-radius: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eef2f6; }
-    .block-header { padding: 12px 20px; background: #fafcff; border-bottom: 1px solid #edf2f7; border-radius: 24px 24px 0 0; display: flex; justify-content: space-between; }
-    .block-badge { font-size: 0.7rem; background: #e6edfb; padding: 4px 12px; border-radius: 30px; color: #2563eb; font-weight: 600; }
-    .block-controls { display: flex; gap: 4px; }
-    .block-controls button { background: none; border: none; color: #64748b; cursor: pointer; padding: 6px 8px; border-radius: 6px; }
-    .block-controls button:hover { background: #e2e8f0; }
-    .block-content { padding: 24px; }
-    .text-editable { outline: none; }
-    .text-editable:focus { background: #fffbeb; border-radius: 8px; padding: 4px 8px; }
+    .settings-content { padding: 1.5rem; flex: 1; overflow-y: auto; }
+    .setting-group { margin-bottom: 2rem; }
+    .setting-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text); }
+    .setting-input { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; margin-bottom: 1rem; }
+    .setting-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1); }
+    .color-input { width: 100%; height: 40px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; margin-bottom: 1rem; }
+    .select-input { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; background: white; margin-bottom: 1rem; }
     
-    .empty-message { text-align: center; color: #94a3b8; padding: 60px; }
+    /* Холст */
+    .editor-workspace { flex: 1; display: flex; flex-direction: column; background: var(--bg); }
+    .editor-toolbar { padding: 1rem 1.5rem; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .device-preview { display: flex; gap: 0.5rem; }
+    .device-btn { padding: 0.5rem 1rem; border: 1px solid var(--border); border-radius: 6px; background: white; cursor: pointer; transition: all 0.2s; }
+    .device-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
     
-    .dragging { opacity: 0.5; }
+    .canvas-container { flex: 1; padding: 2rem; overflow-y: auto; }
+    .canvas { max-width: 1200px; margin: 0 auto; min-height: 100%; }
+    .canvas.mobile { max-width: 375px; }
+    .canvas.tablet { max-width: 768px; }
     
-    /* Модалки */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; }
+    /* Блоки на холсте */
+    .site-block { background: var(--surface); border-radius: var(--border-radius); margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid var(--border); position: relative; transition: all 0.2s; }
+    .site-block:hover { box-shadow: var(--shadow); border-color: var(--primary); }
+    .site-block.selected { border: 2px solid var(--primary); box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1); }
+    
+    .block-toolbar { position: absolute; top: -40px; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--border-radius); padding: 0.5rem; display: none; gap: 0.25rem; box-shadow: var(--shadow); z-index: 10; }
+    .site-block:hover .block-toolbar { display: flex; }
+    .block-toolbar button { background: none; border: none; padding: 0.5rem 0.75rem; border-radius: 6px; cursor: pointer; color: var(--text); font-size: 0.85rem; transition: all 0.2s; }
+    .block-toolbar button:hover { background: var(--bg); color: var(--primary); }
+    
+    .block-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--bg); border-radius: var(--border-radius) var(--border-radius) 0 0; }
+    .block-type { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); font-weight: 600; }
+    .block-controls { display: flex; gap: 0.25rem; }
+    .block-controls button { background: none; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; color: #6c757d; font-size: 0.8rem; }
+    .block-controls button:hover { background: var(--surface); color: var(--danger); }
+    
+    .block-content { padding: 2rem; }
+    
+    /* Фирменный блок (неудаляемый на фри тарифе) */
+    .branding-block { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; text-align: center; padding: 1rem; border-radius: 0 0 var(--border-radius) var(--border-radius); font-size: 0.9rem; }
+    .branding-block a { color: white; text-decoration: underline; font-weight: 600; }
+    .branding-block i { margin: 0 0.25rem; }
+    
+    /* Стили для разных типов блоков */
+    .hero-block { text-align: center; padding: 3rem 1rem; }
+    .hero-block h1 { font-size: 3.5rem; margin-bottom: 1rem; }
+    .hero-block p { font-size: 1.2rem; color: #6c757d; margin-bottom: 2rem; }
+    
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+    .feature-item { text-align: center; padding: 1.5rem; }
+    .feature-item i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
+    
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .gallery-item { aspect-ratio: 1; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: var(--border-radius); background-size: cover; background-position: center; }
+    
+    .pricing-table { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+    .pricing-item { text-align: center; padding: 2rem; border: 1px solid var(--border); border-radius: var(--border-radius); }
+    .pricing-item.featured { border-color: var(--primary); box-shadow: var(--shadow); }
+    .price { font-size: 3rem; font-weight: 800; color: var(--primary); margin: 1rem 0; }
+    
+    .contact-form { max-width: 600px; margin: 0 auto; }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group input, .form-group textarea { width: 100%; padding: 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; }
+    
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center; }
+    .team-member img { width: 120px; height: 120px; border-radius: 50%; margin-bottom: 1rem; background: var(--bg); }
+    
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem; text-align: center; }
+    .stat-number { font-size: 3rem; font-weight: 800; color: var(--primary); }
+    
+    /* Модальные окна */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; }
     .modal.active { display: flex; }
-    .modal-content { background: white; border-radius: 24px; padding: 32px; max-width: 500px; width: 90%; }
-    .modal-content input { width: 100%; padding: 14px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 1rem; margin: 20px 0; }
-    .modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
+    .modal-content { background: var(--surface); border-radius: var(--border-radius); padding: 2rem; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
+    .modal-content h3 { margin-bottom: 1.5rem; font-family: var(--font-heading); }
     
     /* Загрузчик */
     .loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; z-index: 9999; }
     .loader.hidden { display: none; }
-    .spinner { width: 50px; height: 50px; border: 4px solid #e2e8f0; border-top-color: #2563eb; border-radius: 50%; animation: spin 1s linear infinite; }
+    .spinner { width: 50px; height: 50px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    
+    /* Адаптивность */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.5rem; }
+      .templates-grid { grid-template-columns: repeat(2, 1fr); }
+      .editor-sidebar, .editor-settings { position: fixed; top: 0; height: 100vh; z-index: 100; transition: transform 0.3s; }
+      .editor-sidebar { left: 0; transform: translateX(-100%); }
+      .editor-sidebar.open { transform: translateX(0); }
+      .editor-settings { right: 0; transform: translateX(100%); }
+      .editor-settings.open { transform: translateX(0); }
+    }
   </style>
 </head>
 <body>
@@ -144,15 +206,16 @@
   <div class="spinner"></div>
 </div>
 
-<!-- ГЛАВНАЯ СТРАНИЦА (БЕЗ РЕГИСТРАЦИИ) -->
+<!-- Главная страница -->
 <div id="landingPage" class="page active">
   <header class="landing-header">
     <div class="container header-inner">
-      <div class="logo"><i class="fas fa-paint-brush"></i> PageCanvas</div>
-      <div class="landing-nav">
-        <a onclick="scrollToFeatures()">Возможности</a>
-        <a onclick="showPage('subscription')">Тарифы</a>
-        <button class="btn btn-google" id="landingGoogleSignIn" style="padding: 12px 24px;">
+      <div class="logo"><i class="fas fa-paint-brush"></i> SiteCanvas</div>
+      <div class="nav">
+        <a onclick="scrollToSection('features')">Возможности</a>
+        <a onclick="scrollToSection('templates')">Шаблоны</a>
+        <a onclick="showPage('pricing')">Тарифы</a>
+        <button class="btn btn-outline" id="landingSignIn" style="padding: 0.75rem 1.5rem;">
           <i class="fab fa-google"></i> Войти
         </button>
       </div>
@@ -162,56 +225,56 @@
   <main>
     <section class="hero">
       <div class="container">
-        <h1>Создавайте сайты<br>на чистом холсте</h1>
-        <p>PageCanvas — визуальный конструктор с экспортом HTML. Перетаскивайте блоки, редактируйте текст и скачивайте результат.</p>
+        <h1>Создавайте сайты<br>визуально и быстро</h1>
+        <p>SiteCanvas — конструктор с полным контролем над дизайном. Настраивайте каждый элемент, выбирайте шаблоны и публикуйте одним кликом.</p>
         <div class="cta-buttons">
-          <button class="btn btn-primary" onclick="handleStartBuilding()">
-            <i class="fas fa-pen-fancy"></i> Начать создавать
+          <button class="btn btn-primary" onclick="startBuilding()">
+            <i class="fas fa-pen-fancy"></i> Начать бесплатно
           </button>
-          <button class="btn btn-outline" onclick="showPage('subscription')">
+          <button class="btn btn-outline" onclick="showPage('pricing')">
             <i class="fas fa-crown"></i> Тарифы
           </button>
         </div>
       </div>
     </section>
 
-    <section id="features" class="features">
+    <section id="features" class="features" style="padding: 5rem 0; background: var(--surface);">
       <div class="container">
-        <h2 class="section-title">Всё для создания сайта</h2>
+        <h2 class="section-title" style="text-align: center; margin-bottom: 3rem;">Всё для профессиональной работы</h2>
         <div class="features-grid">
-          <div class="feature-card">
-            <i class="fas fa-cubes"></i>
-            <h3>Библиотека блоков</h3>
-            <p>Hero, галереи, текст, видео, кнопки, якоря и произвольный HTML</p>
-          </div>
-          <div class="feature-card">
-            <i class="fas fa-edit"></i>
-            <h3>Визуальный редактор</h3>
-            <p>Редактируйте текст прямо на странице, перетаскивайте блоки</p>
-          </div>
-          <div class="feature-card">
-            <i class="fas fa-download"></i>
-            <h3>Скачивание HTML</h3>
-            <p>Экспортируйте готовый сайт одним кликом</p>
-          </div>
+          <div class="feature-card"><i class="fas fa-cubes"></i><h3>50+ блоков</h3><p>Герои, галереи, формы, таблицы, отзывы и многое другое</p></div>
+          <div class="feature-card"><i class="fas fa-palette"></i><h3>Полная кастомизация</h3><p>Цвета, шрифты, отступы, анимации — всё настраивается</p></div>
+          <div class="feature-card"><i class="fas fa-mobile-alt"></i><h3>Адаптивный дизайн</h3><p>Сайты отлично выглядят на всех устройствах</p></div>
+          <div class="feature-card"><i class="fas fa-code"></i><h3>Чистый код</h3><p>Экспорт в HTML/CSS без лишнего</p></div>
+          <div class="feature-card"><i class="fas fa-database"></i><h3>Сохранение в облаке</h3><p>Все проекты автоматически сохраняются</p></div>
+          <div class="feature-card"><i class="fas fa-globe"></i><h3>Бесплатный хостинг</h3><p>Публикация на GitHub Pages в один клик</p></div>
         </div>
       </div>
     </section>
 
-    <section class="demo-section">
+    <section id="templates" style="padding: 5rem 0;">
       <div class="container">
-        <div class="demo-preview">
-          <div style="display: flex; align-items: center; gap: 22px; margin-bottom: 22px;">
-            <i class="fas fa-arrow-right" style="color: #2563eb;"></i>
-            <span style="font-weight: 600;">Так выглядит редактор — перетаскивайте блоки и редактируйте</span>
+        <h2 class="section-title" style="text-align: center; margin-bottom: 3rem;">Готовые шаблоны для быстрого старта</h2>
+        <div class="templates-grid">
+          <div class="template-card" onclick="useTemplate('landing')">
+            <div class="template-icon"><i class="fas fa-rocket"></i></div>
+            <h4>Лендинг</h4>
+            <p>Для презентации продукта или услуги</p>
           </div>
-          <div style="background: #f1f5f9; border-radius: 22px; padding: 26px;">
-            <div style="background: white; border-radius: 20px; padding: 24px;">
-              <span style="background: #e6edfb; padding: 6px 14px; border-radius: 30px; font-size: 0.8rem;">HERO</span>
-              <h3 style="margin-top: 18px; font-size: 2rem;">Ваш заголовок</h3>
-              <p style="color: #64748b;">Описание, которое можно редактировать</p>
-              <button style="margin-top: 18px; padding: 12px 28px; background: #1e293b; color: white; border: none; border-radius: 40px;">Кнопка</button>
-            </div>
+          <div class="template-card" onclick="useTemplate('shop')">
+            <div class="template-icon"><i class="fas fa-shopping-cart"></i></div>
+            <h4>Интернет-магазин</h4>
+            <p>Каталог товаров с карточками</p>
+          </div>
+          <div class="template-card" onclick="useTemplate('portfolio')">
+            <div class="template-icon"><i class="fas fa-briefcase"></i></div>
+            <h4>Портфолио</h4>
+            <p>Для дизайнеров и фотографов</p>
+          </div>
+          <div class="template-card" onclick="useTemplate('blog')">
+            <div class="template-icon"><i class="fas fa-newspaper"></i></div>
+            <h4>Блог</h4>
+            <p>Статьи, новости, контент</p>
           </div>
         </div>
       </div>
@@ -219,55 +282,24 @@
   </main>
 </div>
 
-<!-- ДАШБОРД (ПОСЛЕ ВХОДА) -->
-<div id="dashboardPage" class="page">
-  <header class="dashboard-header">
+<!-- Страница тарифов -->
+<div id="pricingPage" class="page">
+  <header class="landing-header">
     <div class="container header-inner">
-      <div class="logo" onclick="showPage('dashboard')" style="cursor: pointer;"><i class="fas fa-paint-brush"></i> PageCanvas</div>
-      <div class="landing-nav">
-        <a onclick="showPage('dashboard')">Мои проекты</a>
-        <a onclick="showPage('subscription')">Подписка</a>
-        <div class="user-menu">
-          <div class="user-avatar" id="dashboardAvatar" onclick="signOut()" style="cursor: pointer;">U</div>
-        </div>
+      <div class="logo" onclick="showPage('landing')" style="cursor: pointer;"><i class="fas fa-paint-brush"></i> SiteCanvas</div>
+      <div class="nav">
+        <a onclick="showPage('landing')">Главная</a>
+        <a onclick="showPage('pricing')">Тарифы</a>
+        <button class="btn btn-outline" id="pricingSignIn" style="padding: 0.75rem 1.5rem;">
+          <i class="fab fa-google"></i> Войти
+        </button>
       </div>
     </div>
   </header>
-  
-  <div class="dashboard">
-    <div class="dashboard-header-content">
-      <h1>Мои проекты</h1>
-      <button class="btn btn-primary" onclick="openCreateProjectModal()">
-        <i class="fas fa-plus"></i> Новый проект
-      </button>
-    </div>
-    
-    <div class="projects-grid" id="projectsGrid">
-      <div style="text-align:center; padding:40px; grid-column:1/-1;">Загрузка проектов...</div>
-    </div>
-  </div>
-</div>
 
-<!-- СТРАНИЦА ПОДПИСОК -->
-<div id="subscriptionPage" class="page">
-  <header class="dashboard-header">
-    <div class="container header-inner">
-      <div class="logo" onclick="showPage('dashboard')" style="cursor: pointer;"><i class="fas fa-paint-brush"></i> PageCanvas</div>
-      <div class="landing-nav">
-        <a onclick="showPage('dashboard')">Мои проекты</a>
-        <a onclick="showPage('subscription')">Подписка</a>
-        <div class="user-menu" id="subUserMenu">
-          <button class="btn btn-google" onclick="handleGoogleSignIn()" style="padding: 12px 24px;">
-            <i class="fab fa-google"></i> Войти
-          </button>
-        </div>
-      </div>
-    </div>
-  </header>
-  
   <div class="subscription-container">
-    <h1 style="text-align: center; margin-bottom: 20px;">Выберите тариф</h1>
-    <p style="text-align: center; color: #64748b;">Pro-тариф доступен бесплатно на 30 дней</p>
+    <h1 style="text-align: center; font-size: 3rem; margin: 3rem 0 1rem;">Выберите тариф</h1>
+    <p style="text-align: center; color: #6c757d; margin-bottom: 3rem;">Начните бесплатно, улучшайте когда нужно</p>
     
     <div class="pricing-grid">
       <div class="pricing-card">
@@ -277,113 +309,265 @@
           <li><i class="fas fa-check"></i> До 3 проектов</li>
           <li><i class="fas fa-check"></i> Базовые блоки</li>
           <li><i class="fas fa-check"></i> Экспорт HTML</li>
-          <li><i class="fas fa-times"></i> Произвольный HTML</li>
-          <li><i class="fas fa-times"></i> Видео и галереи</li>
+          <li><i class="fas fa-check"></i> Фирменный блок SiteCanvas</li>
+          <li><i class="fas fa-times"></i> Удаление брендирования</li>
+          <li><i class="fas fa-times"></i> Расширенные блоки</li>
         </ul>
-        <button class="btn btn-outline" style="width: 100%; justify-content: center;" onclick="handleStartBuilding()">
-          Текущий тариф
-        </button>
+        <button class="btn btn-primary" style="width: 100%;" onclick="startBuilding()">Начать бесплатно</button>
       </div>
       
       <div class="pricing-card pro">
-        <div class="pricing-badge">ПОПУЛЯРНЫЙ</div>
+        <div class="pricing-badge">Популярный</div>
         <div class="pricing-name">Pro</div>
-        <div class="pricing-price">0₽ <small>30 дней</small></div>
+        <div class="pricing-price">490₽ <small>/мес</small></div>
         <ul class="pricing-features">
           <li><i class="fas fa-check"></i> Неограниченные проекты</li>
           <li><i class="fas fa-check"></i> Все блоки и шаблоны</li>
-          <li><i class="fas fa-check"></i> Экспорт HTML</li>
-          <li><i class="fas fa-check"></i> Произвольный HTML</li>
-          <li><i class="fas fa-check"></i> Видео, галереи, якоря</li>
+          <li><i class="fas fa-check"></i> Удаление брендирования</li>
+          <li><i class="fas fa-check"></i> Свой домен</li>
+          <li><i class="fas fa-check"></i> Приоритетная поддержка</li>
+          <li><i class="fas fa-check"></i> Аналитика</li>
         </ul>
-        <button class="btn btn-primary" style="width: 100%; justify-content: center; background: linear-gradient(135deg, #2563eb, #7c3aed);" id="activateProBtn" onclick="activatePro()">
-          <i class="fas fa-gift"></i> Активировать Pro
-        </button>
-      </div>
-    </div>
-    
-    <div class="current-plan" id="currentPlanInfo" style="display: none;">
-      <h3><i class="fas fa-crown" style="color: #eab308;"></i> Активный тариф: Pro</h3>
-      <div class="plan-info">
-        <div>
-          <p style="color: #166534; margin-bottom: 4px;">Осталось дней:</p>
-          <div class="plan-days" id="daysLeft">30</div>
-        </div>
-        <button class="btn btn-primary" onclick="renewPro()">
-          <i class="fas fa-sync-alt"></i> Продлить подписку
+        <button class="btn btn-outline" style="width: 100%; border-color: var(--primary); color: var(--primary);" onclick="upgradeToPro()">
+          <i class="fas fa-crown"></i> Попробовать 14 дней
         </button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- РЕДАКТОР -->
+<!-- Дашборд -->
+<div id="dashboardPage" class="page">
+  <header class="dashboard-header">
+    <div class="container header-inner">
+      <div class="logo" onclick="showPage('dashboard')" style="cursor: pointer;"><i class="fas fa-paint-brush"></i> SiteCanvas</div>
+      <div class="nav">
+        <a onclick="showPage('dashboard')">Мои проекты</a>
+        <a onclick="showPage('pricing')">Тарифы</a>
+        <div class="user-menu">
+          <div class="user-avatar" id="dashboardAvatar" onclick="signOut()" style="cursor: pointer;">U</div>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  <div class="dashboard">
+    <div class="templates-section">
+      <h3 style="margin-bottom: 1.5rem;">Быстрый старт с шаблоном</h3>
+      <div class="templates-grid">
+        <div class="template-card" onclick="createFromTemplate('landing')">
+          <div class="template-icon"><i class="fas fa-rocket"></i></div>
+          <h4>Лендинг</h4>
+          <p>Презентация продукта</p>
+        </div>
+        <div class="template-card" onclick="createFromTemplate('shop')">
+          <div class="template-icon"><i class="fas fa-shopping-cart"></i></div>
+          <h4>Магазин</h4>
+          <p>Каталог товаров</p>
+        </div>
+        <div class="template-card" onclick="createFromTemplate('portfolio')">
+          <div class="template-icon"><i class="fas fa-briefcase"></i></div>
+          <h4>Портфолио</h4>
+          <p>Галерея работ</p>
+        </div>
+        <div class="template-card" onclick="createFromTemplate('blog')">
+          <div class="template-icon"><i class="fas fa-newspaper"></i></div>
+          <h4>Блог</h4>
+          <p>Статьи и новости</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-header">
+      <h1>Мои проекты</h1>
+      <button class="btn btn-primary" onclick="createEmptyProject()">
+        <i class="fas fa-plus"></i> Пустой проект
+      </button>
+    </div>
+    
+    <div class="projects-grid" id="projectsGrid">
+      <div style="text-align:center; padding:3rem; grid-column:1/-1;">Загрузка проектов...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Редактор -->
 <div id="editorPage" class="page">
   <div class="editor-container">
-    <div class="editor-sidebar">
+    <!-- Левая панель - блоки -->
+    <div class="editor-sidebar" id="editorSidebar">
       <div class="editor-logo">
-        <span style="font-weight: 800; background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; background-clip: text; color: transparent;">PageCanvas</span>
+        <span style="font-weight: 800; font-size: 1.3rem; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent;">SiteCanvas Editor</span>
         <button class="back-btn" onclick="backToDashboard()">
           <i class="fas fa-arrow-left"></i> Назад
         </button>
       </div>
       
-      <div class="blocks-section">
-        <div class="section-label">Базовые блоки</div>
-        <div class="block-card" draggable="true" data-type="hero">
-          <i class="fas fa-heading"></i>
-          <h4>Герой</h4>
-          <p style="font-size: 0.75rem; color: #64748b;">Заголовок + кнопка</p>
-        </div>
-        <div class="block-card" draggable="true" data-type="text">
-          <i class="fas fa-align-left"></i>
-          <h4>Текст</h4>
-        </div>
-        <div class="block-card" draggable="true" data-type="features">
-          <i class="fas fa-th-large"></i>
-          <h4>Возможности</h4>
+      <div class="blocks-library">
+        <div class="library-section">
+          <div class="library-title">Шапка</div>
+          <div class="block-item" draggable="true" data-type="hero">
+            <i class="fas fa-heading"></i>
+            <div class="block-info"><h4>Герой</h4><p>Заголовок, описание, кнопка</p></div>
+          </div>
+          <div class="block-item" draggable="true" data-type="header">
+            <i class="fas fa-window-maximize"></i>
+            <div class="block-info"><h4>Шапка с меню</h4><p>Логотип и навигация</p></div>
+          </div>
         </div>
         
-        <div class="section-label">Медиа</div>
-        <div class="block-card" draggable="true" data-type="image">
-          <i class="fas fa-image"></i>
-          <h4>Изображение</h4>
-        </div>
-        <div class="block-card" draggable="true" data-type="video">
-          <i class="fas fa-video"></i>
-          <h4>Видео</h4>
+        <div class="library-section">
+          <div class="library-title">Контент</div>
+          <div class="block-item" draggable="true" data-type="text">
+            <i class="fas fa-align-left"></i>
+            <div class="block-info"><h4>Текст</h4><p>Абзац с форматированием</p></div>
+          </div>
+          <div class="block-item" draggable="true" data-type="features">
+            <i class="fas fa-th-large"></i>
+            <div class="block-info"><h4>Преимущества</h4><p>Сетка с иконками</p></div>
+          </div>
+          <div class="block-item" draggable="true" data-type="image">
+            <i class="fas fa-image"></i>
+            <div class="block-info"><h4>Изображение</h4><p>С подписью и настройками</p></div>
+          </div>
+          <div class="block-item" draggable="true" data-type="gallery">
+            <i class="fas fa-images"></i>
+            <div class="block-info"><h4>Галерея</h4><p>Сетка изображений</p></div>
+          </div>
+          <div class="block-item" draggable="true" data-type="video">
+            <i class="fas fa-video"></i>
+            <div class="block-info"><h4>Видео</h4><p>YouTube, Vimeo</p></div>
+          </div>
         </div>
         
-        <div class="section-label">Разработчику</div>
-        <div class="block-card" draggable="true" data-type="html">
-          <i class="fas fa-code"></i>
-          <h4>HTML-код</h4>
+        <div class="library-section">
+          <div class="library-title">Формы и кнопки</div>
+          <div class="block-item" draggable="true" data-type="button">
+            <i class="fas fa-square"></i>
+            <div class="block-info"><h4>Кнопка</h4><p>С настройкой ссылки</p></div>
+          </div>
+          <div class="block-item" draggable="true" data-type="buttons-group">
+            <i class="fas fa-grip-lines"></i>
+            <div class="block-info"><h4>Группа кнопок</h4><p>Несколько кнопок в ряд</p></div>
+          </div>
+          <div class="block-item" draggable="true" data-type="form">
+            <i class="fas fa-envelope"></i>
+            <div class="block-info"><h4>Форма обратной связи</h4><p>Имя, email, сообщение</p></div>
+          </div>
+        </div>
+        
+        <div class="library-section">
+          <div class="library-title">Коммерция</div>
+          <div class="block-item" draggable="true" data-type="pricing">
+            <i class="fas fa-tags"></i>
+            <div class="block-info"><h4>Тарифы</h4><p>Таблица с ценами</p></div>
+          </div>
+          <div class="block-item" draggable="true" data-type="product-card">
+            <i class="fas fa-shopping-bag"></i>
+            <div class="block-info"><h4>Карточка товара</h4><p>Фото, цена, кнопка</p></div>
+          </div>
+        </div>
+        
+        <div class="library-section">
+          <div class="library-title">Социальные</div>
+          <div class="block-item" draggable="true" data-type="testimonial">
+            <i class="fas fa-quote-right"></i>
+            <div class="block-info"><h4>Отзыв</h4><p>Цитата с автором</p></div>
+          </div>
+          <div class="block-item" draggable="true" data-type="team">
+            <i class="fas fa-users"></i>
+            <div class="block-info"><h4>Команда</h4><p>Фото и описание</p></div>
+          </div>
+          <div class="block-item" draggable="true" data-type="stats">
+            <i class="fas fa-chart-bar"></i>
+            <div class="block-info"><h4>Статистика</h4><p>Цифры с подписями</p></div>
+          </div>
         </div>
       </div>
       
       <div class="editor-actions">
-        <button class="btn btn-primary" style="width: 100%; margin-bottom: 8px;" onclick="saveCurrentProject()">
+        <button class="btn btn-primary" style="width: 100%;" onclick="saveProject()">
           <i class="fas fa-save"></i> Сохранить
         </button>
-        <button class="btn btn-outline" style="width: 100%;" onclick="downloadHTML()">
-          <i class="fas fa-download"></i> Скачать HTML
+        <button class="btn btn-outline" style="width: 100%;" onclick="exportHTML()">
+          <i class="fas fa-download"></i> Экспорт HTML
         </button>
       </div>
     </div>
     
+    <!-- Холст -->
     <div class="editor-workspace">
       <div class="editor-toolbar">
-        <h2 id="currentProjectName">Новый проект</h2>
-        <button class="btn btn-outline" onclick="togglePreview()">
-          <i class="fas fa-eye"></i> Предпросмотр
-        </button>
+        <h2 id="projectNameDisplay">Новый проект</h2>
+        <div style="display: flex; gap: 1rem;">
+          <div class="device-preview">
+            <button class="device-btn active" onclick="setDevice('desktop')"><i class="fas fa-desktop"></i></button>
+            <button class="device-btn" onclick="setDevice('tablet')"><i class="fas fa-tablet-alt"></i></button>
+            <button class="device-btn" onclick="setDevice('mobile')"><i class="fas fa-mobile-alt"></i></button>
+          </div>
+          <button class="btn btn-outline" onclick="toggleSettings()">
+            <i class="fas fa-cog"></i> Настройки
+          </button>
+        </div>
       </div>
       
       <div class="canvas-container">
         <div class="canvas" id="canvas">
-          <div class="empty-message">
-            <i class="fas fa-arrow-left" style="font-size: 2rem; opacity: 0.5; margin-bottom: 16px; display: block;"></i>
-            Перетащите блоки из левой панели
+          <!-- Блоки добавляются динамически -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Правая панель - настройки -->
+    <div class="editor-settings" id="editorSettings">
+      <div class="settings-header">
+        <h3>Настройки</h3>
+        <p id="settingsContext">Сайт</p>
+      </div>
+      
+      <div class="settings-content" id="settingsContent">
+        <!-- Глобальные настройки сайта -->
+        <div id="globalSettings">
+          <div class="setting-group">
+            <label class="setting-label">Основной цвет</label>
+            <input type="color" class="color-input" id="primaryColor" value="#4361ee" onchange="updateGlobalStyle('--primary', this.value)">
+          </div>
+          <div class="setting-group">
+            <label class="setting-label">Вторичный цвет</label>
+            <input type="color" class="color-input" id="secondaryColor" value="#3f37c9" onchange="updateGlobalStyle('--secondary', this.value)">
+          </div>
+          <div class="setting-group">
+            <label class="setting-label">Акцентный цвет</label>
+            <input type="color" class="color-input" id="accentColor" value="#f72585" onchange="updateGlobalStyle('--accent', this.value)">
+          </div>
+          <div class="setting-group">
+            <label class="setting-label">Цвет фона</label>
+            <input type="color" class="color-input" id="bgColor" value="#f8f9fa" onchange="updateGlobalStyle('--bg', this.value)">
+          </div>
+          <div class="setting-group">
+            <label class="setting-label">Шрифт</label>
+            <select class="select-input" id="fontFamily" onchange="updateGlobalStyle('--font-main', this.value)">
+              <option value="'Inter', sans-serif">Inter</option>
+              <option value="'Roboto', sans-serif">Roboto</option>
+              <option value="'Montserrat', sans-serif">Montserrat</option>
+              <option value="'Georgia', serif">Georgia</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Настройки выбранного блока -->
+        <div id="blockSettings" style="display: none;">
+          <div class="setting-group">
+            <label class="setting-label">Отступ сверху</label>
+            <input type="range" class="setting-input" min="0" max="100" value="20" oninput="updateBlockSpacing('paddingTop', this.value)">
+          </div>
+          <div class="setting-group">
+            <label class="setting-label">Отступ снизу</label>
+            <input type="range" class="setting-input" min="0" max="100" value="20" oninput="updateBlockSpacing('paddingBottom', this.value)">
+          </div>
+          <div class="setting-group">
+            <label class="setting-label">Цвет фона блока</label>
+            <input type="color" class="color-input" value="#ffffff" onchange="updateBlockColor(this.value)">
           </div>
         </div>
       </div>
@@ -391,501 +575,399 @@
   </div>
 </div>
 
-<!-- Модалка создания проекта -->
-<div class="modal" id="createProjectModal">
-  <div class="modal-content">
-    <h3>Новый проект</h3>
-    <input type="text" id="projectNameInput" placeholder="Название проекта" value="Мой сайт">
-    <div class="modal-actions">
-      <button class="btn btn-outline" onclick="closeModal()">Отмена</button>
-      <button class="btn btn-primary" onclick="confirmCreateProject()">Создать</button>
-    </div>
-  </div>
-</div>
-
-<script type="module">
-  // Firebase
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<script>
+  // Состояние приложения
+  let currentUser = null;
+  let currentProject = null;
+  let selectedBlock = null;
+  let isFreePlan = true; // Фри тариф по умолчанию
   
-  const firebaseConfig = {
-    apiKey: "AIzaSyBWL3XPXU2X-gsylVDQDUDelZiBQEPv5uY",
-    authDomain: "chat-397b5.firebaseapp.com",
-    databaseURL: "https://chat-397b5-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "chat-397b5",
-    storageBucket: "chat-397b5.firebasestorage.app",
-    messagingSenderId: "234060178704",
-    appId: "1:234060178704:web:4f4bfe4973dc8b44cef195",
-    measurementId: "G-EQHCQJJ2B0"
-  };
-  
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const provider = new GoogleAuthProvider();
-  
-  // Глобальные переменные
-  window.currentUser = null;
-  window.currentProject = null;
-  window.projects = [];
-  
-  // Загрузка подписки
-  function loadSubscription() {
-    const saved = localStorage.getItem('pagecanvas_pro');
-    if (saved && window.currentUser) {
-      const data = JSON.parse(saved);
-      if (data.userId === window.currentUser.uid) {
-        window.proActivated = data.activated;
-        window.proExpiryDate = data.expiryDate ? new Date(data.expiryDate) : null;
-        
-        if (window.proExpiryDate && window.proExpiryDate < new Date()) {
-          window.proActivated = false;
-          window.proExpiryDate = null;
-          localStorage.removeItem('pagecanvas_pro');
-        }
-      }
-    }
-    updateSubscriptionUI();
-  }
-  
-  function updateSubscriptionUI() {
-    const planInfo = document.getElementById('currentPlanInfo');
-    const activateBtn = document.getElementById('activateProBtn');
-    const daysLeftSpan = document.getElementById('daysLeft');
-    
-    if (window.proActivated && window.proExpiryDate) {
-      if (planInfo) planInfo.style.display = 'block';
-      if (activateBtn) activateBtn.style.display = 'none';
-      
-      const daysLeft = Math.ceil((window.proExpiryDate - new Date()) / (1000 * 60 * 60 * 24));
-      if (daysLeftSpan) daysLeftSpan.textContent = daysLeft > 0 ? daysLeft : 0;
-    } else {
-      if (planInfo) planInfo.style.display = 'none';
-      if (activateBtn) activateBtn.style.display = 'block';
-    }
-  }
-  
-  window.activatePro = function() {
-    if (!window.currentUser) {
-      alert('Войдите в аккаунт');
-      handleGoogleSignIn();
-      return;
-    }
-    
-    window.proActivated = true;
-    window.proExpiryDate = new Date();
-    window.proExpiryDate.setDate(window.proExpiryDate.getDate() + 30);
-    
-    localStorage.setItem('pagecanvas_pro', JSON.stringify({
-      userId: window.currentUser.uid,
-      activated: true,
-      expiryDate: window.proExpiryDate.toISOString()
-    }));
-    
-    updateSubscriptionUI();
-    alert('✅ Pro тариф активирован на 30 дней!');
-  };
-  
-  window.renewPro = function() {
-    if (!window.proActivated) {
-      activatePro();
-      return;
-    }
-    
-    window.proExpiryDate = new Date();
-    window.proExpiryDate.setDate(window.proExpiryDate.getDate() + 30);
-    
-    localStorage.setItem('pagecanvas_pro', JSON.stringify({
-      userId: window.currentUser.uid,
-      activated: true,
-      expiryDate: window.proExpiryDate.toISOString()
-    }));
-    
-    updateSubscriptionUI();
-    alert('🔄 Подписка продлена ещё на 30 дней!');
+  // Шаблоны контента
+  const templates = {
+    landing: [
+      { type: 'hero', content: '<h1>Создайте свой сайт</h1><p>Быстро, красиво, профессионально</p><button class="btn btn-primary">Начать</button>' },
+      { type: 'features', content: '<div class="features-grid"><div class="feature-item"><i class="fas fa-rocket"></i><h3>Быстрый старт</h3><p>Создайте сайт за 5 минут</p></div><div class="feature-item"><i class="fas fa-palette"></i><h3>Дизайн</h3><p>Настраивайте каждый элемент</p></div><div class="feature-item"><i class="fas fa-mobile-alt"></i><h3>Адаптивность</h3><p>Отлично на всех устройствах</p></div></div>' },
+      { type: 'pricing', content: '<div class="pricing-table"><div class="pricing-item"><h3>Базовый</h3><div class="price">0₽</div><ul><li>3 проекта</li><li>Базовые блоки</li></ul></div><div class="pricing-item featured"><h3>Pro</h3><div class="price">490₽</div><ul><li>Безлимит</li><li>Все блоки</li></ul></div></div>' }
+    ],
+    shop: [
+      { type: 'hero', content: '<h1>Магазин стильной одежды</h1><p>Новая коллекция уже в продаже</p><button class="btn btn-primary">Смотреть каталог</button>' },
+      { type: 'product-card', content: '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;"><div class="product-item"><div class="gallery-item"></div><h3>Товар 1</h3><p class="price">1 990₽</p><button class="btn btn-outline">В корзину</button></div><div class="product-item"><div class="gallery-item"></div><h3>Товар 2</h3><p class="price">2 490₽</p><button class="btn btn-outline">В корзину</button></div><div class="product-item"><div class="gallery-item"></div><h3>Товар 3</h3><p class="price">3 990₽</p><button class="btn btn-outline">В корзину</button></div></div>' }
+    ],
+    portfolio: [
+      { type: 'hero', content: '<h1>Анна Иванова</h1><p>Дизайнер интерьеров</p>' },
+      { type: 'gallery', content: '<div class="gallery-grid"><div class="gallery-item"></div><div class="gallery-item"></div><div class="gallery-item"></div><div class="gallery-item"></div><div class="gallery-item"></div><div class="gallery-item"></div></div>' },
+      { type: 'testimonial', content: '<div style="text-align: center; padding: 2rem;"><i class="fas fa-quote-left" style="font-size: 3rem; opacity: 0.3;"></i><p style="font-size: 1.5rem; margin: 1rem 0;">Анна создала для нас потрясающий дизайн!</p><p><strong>Мария, клиент</strong></p></div>' }
+    ],
+    blog: [
+      { type: 'hero', content: '<h1>Мой блог</h1><p>Мысли о дизайне и технологиях</p>' },
+      { type: 'text', content: '<h2>Почему важен хороший дизайн</h2><p>Дизайн — это не просто красивая картинка. Это способ коммуникации с пользователем...</p>' },
+      { type: 'image', content: '<div class="gallery-item" style="height: 300px;"></div><p style="text-align: center; margin-top: 1rem;">Подпись к изображению</p>' }
+    ]
   };
   
   // Навигация
-  window.showPage = function(pageId) {
+  function showPage(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(pageId + 'Page').classList.add('active');
     
-    if (pageId === 'dashboard' && window.currentUser) {
+    if (pageId === 'dashboard' && currentUser) {
       loadProjects();
     }
-    if (pageId === 'subscription') {
-      updateSubscriptionUI();
-      updateSubUserMenu();
-    }
-  };
+  }
   
-  window.scrollToFeatures = function() {
-    document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
-  };
+  function scrollToSection(sectionId) {
+    document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+  }
   
-  window.handleStartBuilding = function() {
-    if (!window.currentUser) {
-      handleGoogleSignIn();
+  function startBuilding() {
+    if (!currentUser) {
+      // Симуляция входа
+      simulateLogin();
     } else {
       showPage('dashboard');
     }
-  };
+  }
   
-  // Вход/выход
-  window.handleGoogleSignIn = async function() {
-    const loader = document.getElementById('loader');
-    try {
-      loader.classList.remove('hidden');
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error('Ошибка входа:', error);
-      loader.classList.add('hidden');
-      alert('Ошибка входа. Проверьте, что домен добавлен в Firebase Console.');
-    }
-  };
+  function simulateLogin() {
+    currentUser = { displayName: 'Гость', email: 'guest@sitecanvas.local', photoURL: null };
+    document.querySelectorAll('.user-avatar').forEach(av => av.textContent = 'G');
+    showPage('dashboard');
+  }
   
-  window.signOut = async function() {
-    try {
-      await signOut(auth);
-      showPage('landing');
-    } catch (error) {
-      console.error('Ошибка выхода:', error);
-    }
-  };
+  function signOut() {
+    currentUser = null;
+    showPage('landing');
+  }
   
-  function updateSubUserMenu() {
-    const container = document.getElementById('subUserMenu');
-    if (container) {
-      if (window.currentUser) {
-        const initial = window.currentUser.displayName?.[0] || window.currentUser.email?.[0] || 'U';
-        container.innerHTML = `
-          <div class="user-menu">
-            <div class="user-avatar" onclick="signOut()" style="cursor: pointer;">${initial}</div>
-          </div>
-        `;
-      } else {
-        container.innerHTML = `
-          <button class="btn btn-google" onclick="handleGoogleSignIn()" style="padding: 12px 24px;">
-            <i class="fab fa-google"></i> Войти
-          </button>
-        `;
-      }
-    }
+  function upgradeToPro() {
+    alert('Pro тариф временно недоступен. Используйте бесплатную версию.');
   }
   
   // Проекты
-  async function loadProjects() {
-    if (!window.currentUser) return;
-    
+  function loadProjects() {
     const grid = document.getElementById('projectsGrid');
-    grid.innerHTML = '<div style="text-align:center; padding:40px; grid-column:1/-1;">Загрузка...</div>';
+    const savedProjects = JSON.parse(localStorage.getItem('sitecanvas_projects') || '[]');
     
-    try {
-      const q = query(collection(db, 'projects'), where('userId', '==', window.currentUser.uid));
-      const snapshot = await getDocs(q);
-      window.projects = [];
-      
-      grid.innerHTML = '';
-      
-      // Карточка создания
-      const createCard = document.createElement('div');
-      createCard.className = 'project-card create-card';
-      createCard.onclick = () => openCreateProjectModal();
-      createCard.innerHTML = '<i class="fas fa-plus-circle"></i><h3>Новый проект</h3><p>Создать сайт</p>';
-      grid.appendChild(createCard);
-      
-      snapshot.forEach(doc => {
-        const project = { id: doc.id, ...doc.data() };
-        window.projects.push(project);
-        
-        const card = document.createElement('div');
-        card.className = 'project-card';
-        card.onclick = (e) => {
-          if (!e.target.closest('button')) {
-            openProject(project);
-          }
-        };
-        
-        const date = project.updatedAt ? new Date(project.updatedAt.toDate()).toLocaleDateString('ru-RU') : 'Новый';
-        
-        card.innerHTML = `
-          <h3>${project.name || 'Без названия'}</h3>
-          <p>Изменён: ${date}</p>
-          <div class="project-actions">
-            <button onclick="event.stopPropagation(); deleteProject('${project.id}')" title="Удалить">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    } catch (error) {
-      console.error('Ошибка загрузки:', error);
-      grid.innerHTML = '<div style="text-align:center; padding:40px; grid-column:1/-1; color:#ef4444;">Ошибка загрузки</div>';
+    grid.innerHTML = '';
+    
+    savedProjects.forEach(project => {
+      const card = document.createElement('div');
+      card.className = 'project-card';
+      card.innerHTML = `
+        <span class="project-badge ${project.plan || 'free'}">${project.plan === 'pro' ? 'PRO' : 'FREE'}</span>
+        <h3>${project.name}</h3>
+        <p>Изменён: ${new Date(project.updatedAt).toLocaleDateString('ru-RU')}</p>
+        <div class="project-actions">
+          <button onclick="deleteProject('${project.id}')"><i class="fas fa-trash"></i></button>
+        </div>
+      `;
+      card.onclick = (e) => { if (!e.target.closest('button')) openProject(project); };
+      grid.appendChild(card);
+    });
+    
+    if (savedProjects.length === 0) {
+      grid.innerHTML = '<div style="text-align:center; padding:3rem; grid-column:1/-1; color:#6c757d;">Нет проектов. Создайте новый или выберите шаблон.</div>';
     }
   }
   
-  window.deleteProject = async function(projectId) {
-    if (!confirm('Удалить проект?')) return;
-    try {
-      await deleteDoc(doc(db, 'projects', projectId));
-      loadProjects();
-    } catch (error) {
-      alert('Ошибка удаления');
+  function createEmptyProject() {
+    const project = {
+      id: Date.now().toString(),
+      name: 'Новый проект',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      plan: 'free',
+      blocks: []
+    };
+    
+    saveProjectToStorage(project);
+    openProject(project);
+  }
+  
+  function createFromTemplate(templateName) {
+    const project = {
+      id: Date.now().toString(),
+      name: `Шаблон ${templateName}`,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      plan: 'free',
+      blocks: templates[templateName] || []
+    };
+    
+    saveProjectToStorage(project);
+    openProject(project);
+  }
+  
+  function saveProjectToStorage(project) {
+    const projects = JSON.parse(localStorage.getItem('sitecanvas_projects') || '[]');
+    const index = projects.findIndex(p => p.id === project.id);
+    
+    if (index >= 0) {
+      projects[index] = project;
+    } else {
+      projects.push(project);
     }
-  };
+    
+    localStorage.setItem('sitecanvas_projects', JSON.stringify(projects));
+  }
   
   function openProject(project) {
-    window.currentProject = project;
-    document.getElementById('currentProjectName').textContent = project.name || 'Проект';
-    showPage('editor');
+    currentProject = project;
+    document.getElementById('projectNameDisplay').textContent = project.name;
     
-    setTimeout(() => {
-      if (project.content) {
-        document.getElementById('canvas').innerHTML = project.content;
-      } else {
-        document.getElementById('canvas').innerHTML = '<div class="empty-message"><i class="fas fa-arrow-left" style="font-size: 2rem; opacity: 0.5; margin-bottom: 16px; display: block;"></i>Перетащите блоки из левой панели</div>';
-      }
-      attachEventsToBlocks();
-      setupDragDrop();
-    }, 100);
+    const canvas = document.getElementById('canvas');
+    canvas.innerHTML = '';
+    
+    // Добавляем блоки
+    project.blocks.forEach(block => {
+      addBlockToCanvas(block.type, block.content);
+    });
+    
+    // Добавляем фирменный блок на фри тарифе
+    if (project.plan === 'free') {
+      addBrandingBlock();
+    }
+    
+    showPage('editor');
+    setupDragAndDrop();
   }
   
-  window.openCreateProjectModal = function() {
-    if (!window.currentUser) {
-      handleGoogleSignIn();
-      return;
-    }
-    document.getElementById('projectNameInput').value = 'Мой сайт';
-    document.getElementById('createProjectModal').classList.add('active');
-  };
-  
-  window.closeModal = function() {
-    document.getElementById('createProjectModal').classList.remove('active');
-  };
-  
-  window.confirmCreateProject = async function() {
-    const name = document.getElementById('projectNameInput').value || 'Мой сайт';
-    closeModal();
+  function deleteProject(projectId) {
+    if (!confirm('Удалить проект?')) return;
     
-    try {
-      const docRef = await addDoc(collection(db, 'projects'), {
-        name: name,
-        userId: window.currentUser.uid,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        content: ''
-      });
-      
-      window.currentProject = { id: docRef.id, name: name, content: '' };
-      document.getElementById('currentProjectName').textContent = name;
-      showPage('editor');
-      setTimeout(() => {
-        document.getElementById('canvas').innerHTML = '<div class="empty-message"><i class="fas fa-arrow-left" style="font-size: 2rem; opacity: 0.5; margin-bottom: 16px; display: block;"></i>Перетащите блоки из левой панели</div>';
-        setupDragDrop();
-      }, 100);
-    } catch (error) {
-      alert('Ошибка создания проекта');
-    }
-  };
+    const projects = JSON.parse(localStorage.getItem('sitecanvas_projects') || '[]');
+    const filtered = projects.filter(p => p.id !== projectId);
+    localStorage.setItem('sitecanvas_projects', JSON.stringify(filtered));
+    
+    loadProjects();
+  }
   
-  window.backToDashboard = async function() {
-    await saveCurrentProject();
+  function saveProject() {
+    if (!currentProject) return;
+    
+    const blocks = [];
+    document.querySelectorAll('.site-block:not(.branding)').forEach(block => {
+      blocks.push({
+        type: block.dataset.type,
+        content: block.querySelector('.block-content').innerHTML
+      });
+    });
+    
+    currentProject.blocks = blocks;
+    currentProject.updatedAt = new Date().toISOString();
+    
+    saveProjectToStorage(currentProject);
+    alert('✅ Проект сохранён');
+  }
+  
+  function backToDashboard() {
+    saveProject();
     showPage('dashboard');
-  };
-  
-  window.saveCurrentProject = async function() {
-    if (!window.currentProject?.id) return;
-    
-    try {
-      await updateDoc(doc(db, 'projects', window.currentProject.id), {
-        content: document.getElementById('canvas').innerHTML,
-        updatedAt: new Date()
-      });
-      console.log('✅ Сохранено');
-    } catch (error) {
-      console.error('Ошибка сохранения:', error);
-    }
-  };
+  }
   
   // Редактор
-  function attachEventsToBlocks() {
-    document.querySelectorAll('.canvas-block').forEach(block => {
-      block.querySelector('.move-up-btn')?.addEventListener('click', () => {
-        const prev = block.previousElementSibling;
-        if (prev?.classList.contains('canvas-block')) {
-          block.parentNode.insertBefore(block, prev);
-        }
-      });
-      
-      block.querySelector('.move-down-btn')?.addEventListener('click', () => {
-        const next = block.nextElementSibling;
-        if (next?.classList.contains('canvas-block')) {
-          block.parentNode.insertBefore(next, block);
-        }
-      });
-      
-      block.querySelector('.delete-btn')?.addEventListener('click', () => {
-        block.remove();
-        if (!document.querySelector('.canvas-block')) {
-          document.getElementById('canvas').innerHTML = '<div class="empty-message"><i class="fas fa-arrow-left" style="font-size: 2rem; opacity: 0.5; margin-bottom: 16px; display: block;"></i>Перетащите блоки из левой панели</div>';
-        }
-      });
-      
-      block.addEventListener('dragstart', (e) => {
-        block.classList.add('dragging');
-        e.dataTransfer.setData('text/plain', '');
-      });
-      
-      block.addEventListener('dragend', () => {
-        block.classList.remove('dragging');
-      });
-    });
-  }
-  
-  function setupDragDrop() {
+  function addBlockToCanvas(type, content) {
     const canvas = document.getElementById('canvas');
+    const block = document.createElement('div');
+    block.className = 'site-block';
+    block.dataset.type = type;
     
-    document.querySelectorAll('.block-card[draggable="true"]').forEach(card => {
-      card.addEventListener('dragstart', (e) => {
-        e.dataTransfer.setData('text/plain', card.dataset.type);
-      });
-    });
-    
-    canvas.addEventListener('dragover', (e) => e.preventDefault());
-    
-    canvas.addEventListener('drop', (e) => {
-      e.preventDefault();
-      const type = e.dataTransfer.getData('text/plain');
-      
-      if (type && ['hero', 'text', 'features', 'image', 'video', 'html'].includes(type)) {
-        addBlock(type);
-        return;
+    let defaultContent = '';
+    if (!content) {
+      switch(type) {
+        case 'hero': defaultContent = '<h1>Заголовок</h1><p>Описание</p><button class="btn btn-primary">Кнопка</button>'; break;
+        case 'text': defaultContent = '<h2>Текстовый блок</h2><p>Редактируемый текст</p>'; break;
+        case 'image': defaultContent = '<div class="gallery-item" style="height: 300px;"></div><p style="text-align:center;">Подпись</p>'; break;
+        default: defaultContent = '<p>Новый блок</p>';
       }
-      
-      const target = e.target.closest('.canvas-block');
-      const dragging = document.querySelector('.dragging');
-      
-      if (dragging && target && dragging !== target) {
-        const blocks = [...canvas.querySelectorAll('.canvas-block')];
-        const dragIndex = blocks.indexOf(dragging);
-        const targetIndex = blocks.indexOf(target);
-        
-        if (dragIndex < targetIndex) {
-          target.parentNode.insertBefore(dragging, target.nextSibling);
-        } else {
-          target.parentNode.insertBefore(dragging, target);
-        }
-      }
-    });
-  }
-  
-  function addBlock(type) {
-    const canvas = document.getElementById('canvas');
-    const emptyMsg = canvas.querySelector('.empty-message');
-    if (emptyMsg) emptyMsg.remove();
-    
-    let content = '';
-    switch(type) {
-      case 'hero': content = '<h1 class="text-editable" contenteditable="true">Заголовок</h1><p class="text-editable" contenteditable="true">Описание</p><button style="padding:12px 24px; background:#1e293b; color:white; border:none; border-radius:40px; margin-top:16px;">Кнопка</button>'; break;
-      case 'text': content = '<h2 class="text-editable" contenteditable="true">Текст</h2><p class="text-editable" contenteditable="true">Редактируемый абзац</p>'; break;
-      case 'features': content = '<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px;"><div><i class="fas fa-star"></i><h3 class="text-editable" contenteditable="true">Фича 1</h3></div><div><i class="fas fa-bolt"></i><h3 class="text-editable" contenteditable="true">Фича 2</h3></div><div><i class="fas fa-heart"></i><h3 class="text-editable" contenteditable="true">Фича 3</h3></div></div>'; break;
-      case 'image': content = '<div style="min-height:200px; background:#eef2ff; border-radius:16px; display:flex; align-items:center; justify-content:center; border:2px dashed #cbd5e1;"><i class="fas fa-image"></i> Изображение</div>'; break;
-      case 'video': content = '<div style="position:relative; padding-bottom:56.25%;"><iframe style="position:absolute; width:100%; height:100%; border-radius:16px;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe></div>'; break;
-      case 'html': content = '<div style="padding:20px; background:#f1f5f9; border-radius:16px; text-align:center;"><i class="fas fa-code"></i> Произвольный HTML</div>'; break;
     }
     
-    const block = document.createElement('div');
-    block.className = 'canvas-block';
-    block.draggable = true;
     block.innerHTML = `
+      <div class="block-toolbar">
+        <button onclick="moveBlockUp(this)"><i class="fas fa-arrow-up"></i></button>
+        <button onclick="moveBlockDown(this)"><i class="fas fa-arrow-down"></i></button>
+        <button onclick="duplicateBlock(this)"><i class="fas fa-copy"></i></button>
+        <button onclick="deleteBlock(this)"><i class="fas fa-trash"></i></button>
+      </div>
       <div class="block-header">
-        <span class="block-badge">${type.toUpperCase()}</span>
+        <span class="block-type">${type}</span>
         <div class="block-controls">
-          <button class="move-up-btn"><i class="fas fa-arrow-up"></i></button>
-          <button class="move-down-btn"><i class="fas fa-arrow-down"></i></button>
-          <button class="delete-btn"><i class="fas fa-trash"></i></button>
+          <button onclick="selectBlock(this)"><i class="fas fa-cog"></i></button>
         </div>
       </div>
-      <div class="block-content">${content}</div>
+      <div class="block-content" contenteditable="true">${content || defaultContent}</div>
     `;
     
+    block.onclick = () => selectBlock(block);
     canvas.appendChild(block);
-    attachEventsToBlocks();
-    block.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
   
-  let previewMode = false;
-  window.togglePreview = function() {
-    previewMode = !previewMode;
-    document.querySelectorAll('.canvas-block .block-header').forEach(h => {
-      h.style.opacity = previewMode ? '0.2' : '1';
-      h.style.pointerEvents = previewMode ? 'none' : 'auto';
-    });
-  };
+  function addBrandingBlock() {
+    const canvas = document.getElementById('canvas');
+    const branding = document.createElement('div');
+    branding.className = 'site-block branding';
+    branding.dataset.type = 'branding';
+    branding.innerHTML = `
+      <div class="branding-block">
+        <i class="fas fa-paint-brush"></i> Создано на <a href="#">SiteCanvas</a> <i class="fas fa-paint-brush"></i>
+      </div>
+    `;
+    branding.querySelector('.block-toolbar')?.remove();
+    canvas.appendChild(branding);
+  }
   
-  window.downloadHTML = function() {
-    const blocks = [...document.querySelectorAll('.canvas-block')].map(b => {
-      const clone = b.cloneNode(true);
-      clone.querySelector('.block-controls')?.remove();
-      return clone.outerHTML;
-    }).join('');
+  function selectBlock(block) {
+    document.querySelectorAll('.site-block').forEach(b => b.classList.remove('selected'));
     
+    if (block.classList) {
+      block.classList.add('selected');
+    } else {
+      block.closest('.site-block').classList.add('selected');
+    }
+    
+    selectedBlock = block.classList ? block : block.closest('.site-block');
+    
+    document.getElementById('globalSettings').style.display = 'none';
+    document.getElementById('blockSettings').style.display = 'block';
+    document.getElementById('settingsContext').textContent = `Блок: ${selectedBlock.dataset.type}`;
+  }
+  
+  function moveBlockUp(btn) {
+    const block = btn.closest('.site-block');
+    const prev = block.previousElementSibling;
+    if (prev) block.parentNode.insertBefore(block, prev);
+  }
+  
+  function moveBlockDown(btn) {
+    const block = btn.closest('.site-block');
+    const next = block.nextElementSibling;
+    if (next) block.parentNode.insertBefore(next, block);
+  }
+  
+  function duplicateBlock(btn) {
+    const block = btn.closest('.site-block');
+    const clone = block.cloneNode(true);
+    block.parentNode.insertBefore(clone, block.nextSibling);
+  }
+  
+  function deleteBlock(btn) {
+    const block = btn.closest('.site-block');
+    if (block.classList.contains('branding')) {
+      alert('Фирменный блок нельзя удалить на бесплатном тарифе. Обновите до Pro.');
+      return;
+    }
+    block.remove();
+  }
+  
+  // Drag & Drop
+  function setupDragAndDrop() {
+    const canvas = document.getElementById('canvas');
+    
+    document.querySelectorAll('.block-item[draggable="true"]').forEach(item => {
+      item.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('type', item.dataset.type);
+      });
+    });
+    
+    canvas.addEventListener('dragover', e => e.preventDefault());
+    
+    canvas.addEventListener('drop', e => {
+      e.preventDefault();
+      const type = e.dataTransfer.getData('type');
+      if (type) {
+        addBlockToCanvas(type);
+      }
+    });
+  }
+  
+  // Настройки
+  function updateGlobalStyle(variable, value) {
+    document.documentElement.style.setProperty(variable, value);
+  }
+  
+  function updateBlockSpacing(property, value) {
+    if (selectedBlock) {
+      selectedBlock.style[property] = value + 'px';
+    }
+  }
+  
+  function updateBlockColor(color) {
+    if (selectedBlock) {
+      selectedBlock.style.backgroundColor = color;
+    }
+  }
+  
+  function setDevice(device) {
+    const canvas = document.getElementById('canvas');
+    canvas.className = 'canvas';
+    if (device === 'mobile') canvas.classList.add('mobile');
+    if (device === 'tablet') canvas.classList.add('tablet');
+    
+    document.querySelectorAll('.device-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+  
+  function toggleSettings() {
+    const settings = document.getElementById('editorSettings');
+    settings.classList.toggle('open');
+  }
+  
+  function useTemplate(templateName) {
+    if (!currentUser) simulateLogin();
+    setTimeout(() => createFromTemplate(templateName), 100);
+  }
+  
+  function exportHTML() {
+    const canvas = document.getElementById('canvas');
+    const styles = document.querySelector('style').innerHTML;
     const html = `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>PageCanvas</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+<html>
+<head><meta charset="UTF-8"><title>SiteCanvas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter&family=Montserrat&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<style>body{font-family:Inter; padding:30px; background:#f5f7fb;} .canvas-block{background:white; border-radius:24px; padding:24px; margin-bottom:24px;}</style>
-</head><body><div style="max-width:1200px; margin:0 auto;">${blocks}</div></body></html>`;
+<style>${styles}</style>
+</head>
+<body>${canvas.outerHTML}</body>
+</html>`;
     
     const blob = new Blob([html], { type: 'text/html' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'pagecanvas-site.html';
+    a.download = 'sitecanvas-export.html';
     a.click();
-  };
+  }
   
   // Инициализация
   document.addEventListener('DOMContentLoaded', () => {
-    const loader = document.getElementById('loader');
+    document.getElementById('loader').classList.add('hidden');
     
-    onAuthStateChanged(auth, (user) => {
-      loader.classList.add('hidden');
-      window.currentUser = user;
-      
-      if (user) {
-        const initial = user.displayName?.[0] || user.email?.[0] || 'U';
-        document.querySelectorAll('.user-avatar').forEach(av => {
-          av.textContent = initial;
-          if (user.photoURL) {
-            av.style.backgroundImage = `url(${user.photoURL})`;
-            av.style.backgroundSize = 'cover';
-            av.textContent = '';
-          }
-        });
-        
-        loadSubscription();
-        
-        // Если пользователь уже на дашборде или подписках - обновить
-        const activePage = document.querySelector('.page.active');
-        if (activePage.id === 'dashboardPage') {
-          loadProjects();
-        }
-        if (activePage.id === 'subscriptionPage') {
-          updateSubUserMenu();
-        }
-      } else {
-        // Не авторизован - показываем лендинг
-        if (!document.querySelector('.page.active') || document.querySelector('.page.active').id === 'dashboardPage') {
-          showPage('landing');
-        }
-        updateSubUserMenu();
-      }
-    });
-    
-    document.getElementById('landingGoogleSignIn').addEventListener('click', handleGoogleSignIn);
+    document.getElementById('landingSignIn').addEventListener('click', simulateLogin);
+    document.getElementById('pricingSignIn')?.addEventListener('click', simulateLogin);
   });
+  
+  // Глобальные функции
+  window.showPage = showPage;
+  window.scrollToSection = scrollToSection;
+  window.startBuilding = startBuilding;
+  window.signOut = signOut;
+  window.upgradeToPro = upgradeToPro;
+  window.createEmptyProject = createEmptyProject;
+  window.createFromTemplate = createFromTemplate;
+  window.deleteProject = deleteProject;
+  window.saveProject = saveProject;
+  window.backToDashboard = backToDashboard;
+  window.selectBlock = selectBlock;
+  window.moveBlockUp = moveBlockUp;
+  window.moveBlockDown = moveBlockDown;
+  window.duplicateBlock = duplicateBlock;
+  window.deleteBlock = deleteBlock;
+  window.updateGlobalStyle = updateGlobalStyle;
+  window.updateBlockSpacing = updateBlockSpacing;
+  window.updateBlockColor = updateBlockColor;
+  window.setDevice = setDevice;
+  window.toggleSettings = toggleSettings;
+  window.useTemplate = useTemplate;
+  window.exportHTML = exportHTML;
 </script>
 
 </body>
