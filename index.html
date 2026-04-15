@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PageCanvas · Конструктор сайтов</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f5f7fb; color: #1e293b; line-height: 1.5; }
+    
+    /* Страницы */
+    .page { display: none; }
+    .page.active { display: block; }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 26px; }
+    
+    /* Главная страница (без регистрации) */
+    .landing-header { background: white; border-bottom: 1px solid #e2e8f0; padding: 18px 0; }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-weight: 800; font-size: 2rem; background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .landing-nav { display: flex; gap: 34px; align-items: center; }
+    .landing-nav a { text-decoration: none; color: #475569; font-weight: 500; cursor: pointer; }
+    .landing-nav a:hover { color: #2563eb; }
+    
+    .hero { padding: 82px 0; }
+    .hero h1 { font-size: 4rem; font-weight: 800; letter-spacing: -1.5px; line-height: 1.2; margin-bottom: 26px; background: linear-gradient(135deg, #1e293b, #3b82f6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero p { font-size: 1.3rem; color: #64748b; max-width: 700px; margin-bottom: 34px; }
+    .cta-buttons { display: flex; gap: 18px; flex-wrap: wrap; }
+    .btn { padding: 16px 34px; border-radius: 62px; font-weight: 600; font-size: 1.1rem; border: none; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+    .btn-primary { background: #1e293b; color: white; box-shadow: 0 6px 16px rgba(30,41,59,0.2); }
+    .btn-primary:hover { background: #0f172a; transform: translateY(-2px); }
+    .btn-outline { background: white; color: #1e293b; border: 1px solid #e2e8f0; }
+    .btn-outline:hover { background: #f8fafc; }
+    .btn-google { background: white; border: 1px solid #e2e8f0; }
+    .btn-google i { color: #ea4335; }
+    
+    .features { padding: 62px 0; background: white; border-radius: 42px; margin: 42px 0; }
+    .section-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 42px; text-align: center; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 34px; }
+    .feature-card { padding: 34px; background: #fafcff; border-radius: 26px; border: 1px solid #eef2f6; }
+    .feature-card i { font-size: 2.5rem; color: #2563eb; margin-bottom: 22px; }
+    .feature-card h3 { font-size: 1.4rem; margin-bottom: 14px; }
+    
+    .demo-section { padding: 42px 0 82px; }
+    .demo-preview { background: white; border-radius: 34px; padding: 34px; border: 1px solid #e2e8f0; }
+    
+    /* Дашборд (после входа) */
+    .dashboard-header { background: white; border-bottom: 1px solid #e2e8f0; padding: 16px 0; }
+    .user-menu { display: flex; align-items: center; gap: 16px; }
+    .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #7c3aed); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; cursor: pointer; background-size: cover; }
+    
+    .dashboard { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+    .dashboard-header-content { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .dashboard-header-content h1 { font-size: 2rem; }
+    
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+    .project-card { background: white; border-radius: 20px; padding: 24px; border: 1px solid #e2e8f0; transition: all 0.2s; cursor: pointer; }
+    .project-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-color: #cbd5e1; }
+    .project-card h3 { font-size: 1.3rem; margin-bottom: 8px; }
+    .project-card p { color: #64748b; font-size: 0.9rem; margin-bottom: 16px; }
+    .project-actions { display: flex; gap: 8px; }
+    .project-actions button { background: none; border: none; color: #64748b; cursor: pointer; padding: 8px; border-radius: 8px; }
+    .project-actions button:hover { background: #f1f5f9; color: #ef4444; }
+    
+    .create-card { background: #f8fafc; border: 2px dashed #cbd5e1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 200px; }
+    .create-card:hover { background: #f1f5f9; }
+    .create-card i { font-size: 2.5rem; color: #64748b; margin-bottom: 16px; }
+    
+    /* Подписки */
+    .subscription-container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 40px; }
+    .pricing-card { background: white; border-radius: 32px; padding: 40px 32px; border: 1px solid #e2e8f0; position: relative; }
+    .pricing-card.pro { border: 2px solid #7c3aed; }
+    .pricing-badge { position: absolute; top: -12px; right: 32px; background: linear-gradient(135deg, #2563eb, #7c3aed); color: white; padding: 6px 18px; border-radius: 30px; font-size: 0.9rem; font-weight: 600; }
+    .pricing-name { font-size: 1.8rem; font-weight: 700; margin-bottom: 12px; }
+    .pricing-price { font-size: 3rem; font-weight: 800; margin-bottom: 8px; }
+    .pricing-price small { font-size: 1rem; font-weight: 400; color: #64748b; }
+    .pricing-features { list-style: none; margin: 32px 0; }
+    .pricing-features li { padding: 10px 0; display: flex; align-items: center; gap: 12px; }
+    .pricing-features i.fa-check { color: #22c55e; }
+    .pricing-features i.fa-times { color: #ef4444; }
+    
+    .current-plan { background: #f0fdf4; border-radius: 20px; padding: 24px; margin-top: 30px; border: 1px solid #bbf7d0; }
+    .current-plan h3 { color: #166534; margin-bottom: 16px; }
+    .plan-info { display: flex; justify-content: space-between; align-items: center; }
+    .plan-days { font-size: 2rem; font-weight: 700; color: #166534; }
+    
+    /* Редактор */
+    .editor-container { display: flex; height: 100vh; overflow: hidden; }
+    .editor-sidebar { width: 320px; background: white; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; }
+    .editor-logo { padding: 20px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; }
+    .back-btn { background: none; border: none; color: #64748b; cursor: pointer; font-size: 1.2rem; padding: 8px; border-radius: 8px; }
+    .back-btn:hover { background: #f1f5f9; }
+    
+    .blocks-section { padding: 20px; flex: 1; overflow-y: auto; }
+    .section-label { font-size: 0.75rem; text-transform: uppercase; color: #64748b; margin: 20px 0 12px; font-weight: 600; }
+    .block-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; margin-bottom: 12px; cursor: grab; }
+    .block-card:hover { background: white; border-color: #cbd5e1; }
+    .block-card i { font-size: 1.3rem; color: #2563eb; margin-bottom: 8px; }
+    
+    .editor-actions { padding: 20px; border-top: 1px solid #e2e8f0; }
+    
+    .editor-workspace { flex: 1; display: flex; flex-direction: column; background: #f1f5f9; }
+    .editor-toolbar { padding: 16px 24px; background: white; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+    
+    .canvas-container { flex: 1; padding: 30px; overflow-y: auto; }
+    .canvas { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+    
+    .canvas-block { background: white; border-radius: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #eef2f6; }
+    .block-header { padding: 12px 20px; background: #fafcff; border-bottom: 1px solid #edf2f7; border-radius: 24px 24px 0 0; display: flex; justify-content: space-between; }
+    .block-badge { font-size: 0.7rem; background: #e6edfb; padding: 4px 12px; border-radius: 30px; color: #2563eb; font-weight: 600; }
+    .block-controls { display: flex; gap: 4px; }
+    .block-controls button { background: none; border: none; color: #64748b; cursor: pointer; padding: 6px 8px; border-radius: 6px; }
+    .block-controls button:hover { background: #e2e8f0; }
+    .block-content { padding: 24px; }
+    .text-editable { outline: none; }
+    .text-editable:focus { background: #fffbeb; border-radius: 8px; padding: 4px 8px; }
+    
+    .empty-message { text-align: center; color: #94a3b8; padding: 60px; }
+    
+    .dragging { opacity: 0.5; }
+    
+    /* Модалки */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; }
+    .modal.active { display: flex; }
+    .modal-content { background: white; border-radius: 24px; padding: 32px; max-width: 500px; width: 90%; }
+    .modal-content input { width: 100%; padding: 14px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 1rem; margin: 20px 0; }
+    .modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
+    
+    /* Загрузчик */
+    .loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+    .loader.hidden { display: none; }
+    .spinner { width: 50px; height: 50px; border: 4px solid #e2e8f0; border-top-color: #2563eb; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<!-- Загрузчик -->
+<div class="loader" id="loader">
+  <div class="spinner"></div>
+</div>
+
+<!-- ГЛАВНАЯ СТРАНИЦА (БЕЗ РЕГИСТРАЦИИ) -->
+<div id="landingPage" class="page active">
+  <header class="landing-header">
+    <div class="container header-inner">
+      <div class="logo"><i class="fas fa-paint-brush"></i> PageCanvas</div>
+      <div class="landing-nav">
+        <a onclick="scrollToFeatures()">Возможности</a>
+        <a onclick="showPage('subscription')">Тарифы</a>
+        <button class="btn btn-google" id="landingGoogleSignIn" style="padding: 12px 24px;">
+          <i class="fab fa-google"></i> Войти
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Создавайте сайты<br>на чистом холсте</h1>
+        <p>PageCanvas — визуальный конструктор с экспортом HTML. Перетаскивайте блоки, редактируйте текст и скачивайте результат.</p>
+        <div class="cta-buttons">
+          <button class="btn btn-primary" onclick="handleStartBuilding()">
+            <i class="fas fa-pen-fancy"></i> Начать создавать
+          </button>
+          <button class="btn btn-outline" onclick="showPage('subscription')">
+            <i class="fas fa-crown"></i> Тарифы
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="features">
+      <div class="container">
+        <h2 class="section-title">Всё для создания сайта</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <i class="fas fa-cubes"></i>
+            <h3>Библиотека блоков</h3>
+            <p>Hero, галереи, текст, видео, кнопки, якоря и произвольный HTML</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-edit"></i>
+            <h3>Визуальный редактор</h3>
+            <p>Редактируйте текст прямо на странице, перетаскивайте блоки</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-download"></i>
+            <h3>Скачивание HTML</h3>
+            <p>Экспортируйте готовый сайт одним кликом</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <div class="container">
+        <div class="demo-preview">
+          <div style="display: flex; align-items: center; gap: 22px; margin-bottom: 22px;">
+            <i class="fas fa-arrow-right" style="color: #2563eb;"></i>
+            <span style="font-weight: 600;">Так выглядит редактор — перетаскивайте блоки и редактируйте</span>
+          </div>
+          <div style="background: #f1f5f9; border-radius: 22px; padding: 26px;">
+            <div style="background: white; border-radius: 20px; padding: 24px;">
+              <span style="background: #e6edfb; padding: 6px 14px; border-radius: 30px; font-size: 0.8rem;">HERO</span>
+              <h3 style="margin-top: 18px; font-size: 2rem;">Ваш заголовок</h3>
+              <p style="color: #64748b;">Описание, которое можно редактировать</p>
+              <button style="margin-top: 18px; padding: 12px 28px; background: #1e293b; color: white; border: none; border-radius: 40px;">Кнопка</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ДАШБОРД (ПОСЛЕ ВХОДА) -->
+<div id="dashboardPage" class="page">
+  <header class="dashboard-header">
+    <div class="container header-inner">
+      <div class="logo" onclick="showPage('dashboard')" style="cursor: pointer;"><i class="fas fa-paint-brush"></i> PageCanvas</div>
+      <div class="landing-nav">
+        <a onclick="showPage('dashboard')">Мои проекты</a>
+        <a onclick="showPage('subscription')">Подписка</a>
+        <div class="user-menu">
+          <div class="user-avatar" id="dashboardAvatar" onclick="signOut()" style="cursor: pointer;">U</div>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  <div class="dashboard">
+    <div class="dashboard-header-content">
+      <h1>Мои проекты</h1>
+      <button class="btn btn-primary" onclick="openCreateProjectModal()">
+        <i class="fas fa-plus"></i> Новый проект
+      </button>
+    </div>
+    
+    <div class="projects-grid" id="projectsGrid">
+      <div style="text-align:center; padding:40px; grid-column:1/-1;">Загрузка проектов...</div>
+    </div>
+  </div>
+</div>
+
+<!-- СТРАНИЦА ПОДПИСОК -->
+<div id="subscriptionPage" class="page">
+  <header class="dashboard-header">
+    <div class="container header-inner">
+      <div class="logo" onclick="showPage('dashboard')" style="cursor: pointer;"><i class="fas fa-paint-brush"></i> PageCanvas</div>
+      <div class="landing-nav">
+        <a onclick="showPage('dashboard')">Мои проекты</a>
+        <a onclick="showPage('subscription')">Подписка</a>
+        <div class="user-menu" id="subUserMenu">
+          <button class="btn btn-google" onclick="handleGoogleSignIn()" style="padding: 12px 24px;">
+            <i class="fab fa-google"></i> Войти
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  <div class="subscription-container">
+    <h1 style="text-align: center; margin-bottom: 20px;">Выберите тариф</h1>
+    <p style="text-align: center; color: #64748b;">Pro-тариф доступен бесплатно на 30 дней</p>
+    
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-name">Free</div>
+        <div class="pricing-price">0₽ <small>навсегда</small></div>
+        <ul class="pricing-features">
+          <li><i class="fas fa-check"></i> До 3 проектов</li>
+          <li><i class="fas fa-check"></i> Базовые блоки</li>
+          <li><i class="fas fa-check"></i> Экспорт HTML</li>
+          <li><i class="fas fa-times"></i> Произвольный HTML</li>
+          <li><i class="fas fa-times"></i> Видео и галереи</li>
+        </ul>
+        <button class="btn btn-outline" style="width: 100%; justify-content: center;" onclick="handleStartBuilding()">
+          Текущий тариф
+        </button>
+      </div>
+      
+      <div class="pricing-card pro">
+        <div class="pricing-badge">ПОПУЛЯРНЫЙ</div>
+        <div class="pricing-name">Pro</div>
+        <div class="pricing-price">0₽ <small>30 дней</small></div>
+        <ul class="pricing-features">
+          <li><i class="fas fa-check"></i> Неограниченные проекты</li>
+          <li><i class="fas fa-check"></i> Все блоки и шаблоны</li>
+          <li><i class="fas fa-check"></i> Экспорт HTML</li>
+          <li><i class="fas fa-check"></i> Произвольный HTML</li>
+          <li><i class="fas fa-check"></i> Видео, галереи, якоря</li>
+        </ul>
+        <button class="btn btn-primary" style="width: 100%; justify-content: center; background: linear-gradient(135deg, #2563eb, #7c3aed);" id="activateProBtn" onclick="activatePro()">
+          <i class="fas fa-gift"></i> Активировать Pro
+        </button>
+      </div>
+    </div>
+    
+    <div class="current-plan" id="currentPlanInfo" style="display: none;">
+      <h3><i class="fas fa-crown" style="color: #eab308;"></i> Активный тариф: Pro</h3>
+      <div class="plan-info">
+        <div>
+          <p style="color: #166534; margin-bottom: 4px;">Осталось дней:</p>
+          <div class="plan-days" id="daysLeft">30</div>
+        </div>
+        <button class="btn btn-primary" onclick="renewPro()">
+          <i class="fas fa-sync-alt"></i> Продлить подписку
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- РЕДАКТОР -->
+<div id="editorPage" class="page">
+  <div class="editor-container">
+    <div class="editor-sidebar">
+      <div class="editor-logo">
+        <span style="font-weight: 800; background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; background-clip: text; color: transparent;">PageCanvas</span>
+        <button class="back-btn" onclick="backToDashboard()">
+          <i class="fas fa-arrow-left"></i> Назад
+        </button>
+      </div>
+      
+      <div class="blocks-section">
+        <div class="section-label">Базовые блоки</div>
+        <div class="block-card" draggable="true" data-type="hero">
+          <i class="fas fa-heading"></i>
+          <h4>Герой</h4>
+          <p style="font-size: 0.75rem; color: #64748b;">Заголовок + кнопка</p>
+        </div>
+        <div class="block-card" draggable="true" data-type="text">
+          <i class="fas fa-align-left"></i>
+          <h4>Текст</h4>
+        </div>
+        <div class="block-card" draggable="true" data-type="features">
+          <i class="fas fa-th-large"></i>
+          <h4>Возможности</h4>
+        </div>
+        
+        <div class="section-label">Медиа</div>
+        <div class="block-card" draggable="true" data-type="image">
+          <i class="fas fa-image"></i>
+          <h4>Изображение</h4>
+        </div>
+        <div class="block-card" draggable="true" data-type="video">
+          <i class="fas fa-video"></i>
+          <h4>Видео</h4>
+        </div>
+        
+        <div class="section-label">Разработчику</div>
+        <div class="block-card" draggable="true" data-type="html">
+          <i class="fas fa-code"></i>
+          <h4>HTML-код</h4>
+        </div>
+      </div>
+      
+      <div class="editor-actions">
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 8px;" onclick="saveCurrentProject()">
+          <i class="fas fa-save"></i> Сохранить
+        </button>
+        <button class="btn btn-outline" style="width: 100%;" onclick="downloadHTML()">
+          <i class="fas fa-download"></i> Скачать HTML
+        </button>
+      </div>
+    </div>
+    
+    <div class="editor-workspace">
+      <div class="editor-toolbar">
+        <h2 id="currentProjectName">Новый проект</h2>
+        <button class="btn btn-outline" onclick="togglePreview()">
+          <i class="fas fa-eye"></i> Предпросмотр
+        </button>
+      </div>
+      
+      <div class="canvas-container">
+        <div class="canvas" id="canvas">
+          <div class="empty-message">
+            <i class="fas fa-arrow-left" style="font-size: 2rem; opacity: 0.5; margin-bottom: 16px; display: block;"></i>
+            Перетащите блоки из левой панели
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Модалка создания проекта -->
+<div class="modal" id="createProjectModal">
+  <div class="modal-content">
+    <h3>Новый проект</h3>
+    <input type="text" id="projectNameInput" placeholder="Название проекта" value="Мой сайт">
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Отмена</button>
+      <button class="btn btn-primary" onclick="confirmCreateProject()">Создать</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  // Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyBWL3XPXU2X-gsylVDQDUDelZiBQEPv5uY",
+    authDomain: "chat-397b5.firebaseapp.com",
+    databaseURL: "https://chat-397b5-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "chat-397b5",
+    storageBucket: "chat-397b5.firebasestorage.app",
+    messagingSenderId: "234060178704",
+    appId: "1:234060178704:web:4f4bfe4973dc8b44cef195",
+    measurementId: "G-EQHCQJJ2B0"
+  };
+  
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+  
+  // Глобальные переменные
+  window.currentUser = null;
+  window.currentProject = null;
+  window.projects = [];
+  
+  // Загрузка подписки
+  function loadSubscription() {
+    const saved = localStorage.getItem('pagecanvas_pro');
+    if (saved && window.currentUser) {
+      const data = JSON.parse(saved);
+      if (data.userId === window.currentUser.uid) {
+        window.proActivated = data.activated;
+        window.proExpiryDate = data.expiryDate ? new Date(data.expiryDate) : null;
+        
+        if (window.proExpiryDate && window.proExpiryDate < new Date()) {
+          window.proActivated = false;
+          window.proExpiryDate = null;
+          localStorage.removeItem('pagecanvas_pro');
+        }
+      }
+    }
+    updateSubscriptionUI();
+  }
+  
+  function updateSubscriptionUI() {
+    const planInfo = document.getElementById('currentPlanInfo');
+    const activateBtn = document.getElementById('activateProBtn');
+    const daysLeftSpan = document.getElementById('daysLeft');
+    
+    if (window.proActivated && window.proExpiryDate) {
+      if (planInfo) planInfo.style.display = 'block';
+      if (activateBtn) activateBtn.style.display = 'none';
+      
+      const daysLeft = Math.ceil((window.proExpiryDate - new Date()) / (1000 * 60 * 60 * 24));
+      if (daysLeftSpan) daysLeftSpan.textContent = daysLeft > 0 ? daysLeft : 0;
+    } else {
+      if (planInfo) planInfo.style.display = 'none';
+      if (activateBtn) activateBtn.style.display = 'block';
+    }
+  }
+  
+  window.activatePro = function() {
+    if (!window.currentUser) {
+      alert('Войдите в аккаунт');
+      handleGoogleSignIn();
+      return;
+    }
+    
+    window.proActivated = true;
+    window.proExpiryDate = new Date();
+    window.proExpiryDate.setDate(window.proExpiryDate.getDate() + 30);
+    
+    localStorage.setItem('pagecanvas_pro', JSON.stringify({
+      userId: window.currentUser.uid,
+      activated: true,
+      expiryDate: window.proExpiryDate.toISOString()
+    }));
+    
+    updateSubscriptionUI();
+    alert('✅ Pro тариф активирован на 30 дней!');
+  };
+  
+  window.renewPro = function() {
+    if (!window.proActivated) {
+      activatePro();
+      return;
+    }
+    
+    window.proExpiryDate = new Date();
+    window.proExpiryDate.setDate(window.proExpiryDate.getDate() + 30);
+    
+    localStorage.setItem('pagecanvas_pro', JSON.stringify({
+      userId: window.currentUser.uid,
+      activated: true,
+      expiryDate: window.proExpiryDate.toISOString()
+    }));
+    
+    updateSubscriptionUI();
+    alert('🔄 Подписка продлена ещё на 30 дней!');
+  };
+  
+  // Навигация
+  window.showPage = function(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId + 'Page').classList.add('active');
+    
+    if (pageId === 'dashboard' && window.currentUser) {
+      loadProjects();
+    }
+    if (pageId === 'subscription') {
+      updateSubscriptionUI();
+      updateSubUserMenu();
+    }
+  };
+  
+  window.scrollToFeatures = function() {
+    document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+  };
+  
+  window.handleStartBuilding = function() {
+    if (!window.currentUser) {
+      handleGoogleSignIn();
+    } else {
+      showPage('dashboard');
+    }
+  };
+  
+  // Вход/выход
+  window.handleGoogleSignIn = async function() {
+    const loader = document.getElementById('loader');
+    try {
+      loader.classList.remove('hidden');
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error('Ошибка входа:', error);
+      loader.classList.add('hidden');
+      alert('Ошибка входа. Проверьте, что домен добавлен в Firebase Console.');
+    }
+  };
+  
+  window.signOut = async function() {
+    try {
+      await signOut(auth);
+      showPage('landing');
+    } catch (error) {
+      console.error('Ошибка выхода:', error);
+    }
+  };
+  
+  function updateSubUserMenu() {
+    const container = document.getElementById('subUserMenu');
+    if (container) {
+      if (window.currentUser) {
+        const initial = window.currentUser.displayName?.[0] || window.currentUser.email?.[0] || 'U';
+        container.innerHTML = `
+          <div class="user-menu">
+            <div class="user-avatar" onclick="signOut()" style="cursor: pointer;">${initial}</div>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <button class="btn btn-google" onclick="handleGoogleSignIn()" style="padding: 12px 24px;">
+            <i class="fab fa-google"></i> Войти
+          </button>
+        `;
+      }
+    }
+  }
+  
+  // Проекты
+  async function loadProjects() {
+    if (!window.currentUser) return;
+    
+    const grid = document.getElementById('projectsGrid');
+    grid.innerHTML = '<div style="text-align:center; padding:40px; grid-column:1/-1;">Загрузка...</div>';
+    
+    try {
+      const q = query(collection(db, 'projects'), where('userId', '==', window.currentUser.uid));
+      const snapshot = await getDocs(q);
+      window.projects = [];
+      
+      grid.innerHTML = '';
+      
+      // Карточка создания
+      const createCard = document.createElement('div');
+      createCard.className = 'project-card create-card';
+      createCard.onclick = () => openCreateProjectModal();
+      createCard.innerHTML = '<i class="fas fa-plus-circle"></i><h3>Новый проект</h3><p>Создать сайт</p>';
+      grid.appendChild(createCard);
+      
+      snapshot.forEach(doc => {
+        const project = { id: doc.id, ...doc.data() };
+        window.projects.push(project);
+        
+        const card = document.createElement('div');
+        card.className = 'project-card';
+        card.onclick = (e) => {
+          if (!e.target.closest('button')) {
+            openProject(project);
+          }
+        };
+        
+        const date = project.updatedAt ? new Date(project.updatedAt.toDate()).toLocaleDateString('ru-RU') : 'Новый';
+        
+        card.innerHTML = `
+          <h3>${project.name || 'Без названия'}</h3>
+          <p>Изменён: ${date}</p>
+          <div class="project-actions">
+            <button onclick="event.stopPropagation(); deleteProject('${project.id}')" title="Удалить">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    } catch (error) {
+      console.error('Ошибка загрузки:', error);
+      grid.innerHTML = '<div style="text-align:center; padding:40px; grid-column:1/-1; color:#ef4444;">Ошибка загрузки</div>';
+    }
+  }
+  
+  window.deleteProject = async function(projectId) {
+    if (!confirm('Удалить проект?')) return;
+    try {
+      await deleteDoc(doc(db, 'projects', projectId));
+      loadProjects();
+    } catch (error) {
+      alert('Ошибка удаления');
+    }
+  };
+  
+  function openProject(project) {
+    window.currentProject = project;
+    document.getElementById('currentProjectName').textContent = project.name || 'Проект';
+    showPage('editor');
+    
+    setTimeout(() => {
+      if (project.content) {
+        document.getElementById('canvas').innerHTML = project.content;
+      } else {
+        document.getElementById('canvas').innerHTML = '<div class="empty-message"><i class="fas fa-arrow-left" style="font-size: 2rem; opacity: 0.5; margin-bottom: 16px; display: block;"></i>Перетащите блоки из левой панели</div>';
+      }
+      attachEventsToBlocks();
+      setupDragDrop();
+    }, 100);
+  }
+  
+  window.openCreateProjectModal = function() {
+    if (!window.currentUser) {
+      handleGoogleSignIn();
+      return;
+    }
+    document.getElementById('projectNameInput').value = 'Мой сайт';
+    document.getElementById('createProjectModal').classList.add('active');
+  };
+  
+  window.closeModal = function() {
+    document.getElementById('createProjectModal').classList.remove('active');
+  };
+  
+  window.confirmCreateProject = async function() {
+    const name = document.getElementById('projectNameInput').value || 'Мой сайт';
+    closeModal();
+    
+    try {
+      const docRef = await addDoc(collection(db, 'projects'), {
+        name: name,
+        userId: window.currentUser.uid,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        content: ''
+      });
+      
+      window.currentProject = { id: docRef.id, name: name, content: '' };
+      document.getElementById('currentProjectName').textContent = name;
+      showPage('editor');
+      setTimeout(() => {
+        document.getElementById('canvas').innerHTML = '<div class="empty-message"><i class="fas fa-arrow-left" style="font-size: 2rem; opacity: 0.5; margin-bottom: 16px; display: block;"></i>Перетащите блоки из левой панели</div>';
+        setupDragDrop();
+      }, 100);
+    } catch (error) {
+      alert('Ошибка создания проекта');
+    }
+  };
+  
+  window.backToDashboard = async function() {
+    await saveCurrentProject();
+    showPage('dashboard');
+  };
+  
+  window.saveCurrentProject = async function() {
+    if (!window.currentProject?.id) return;
+    
+    try {
+      await updateDoc(doc(db, 'projects', window.currentProject.id), {
+        content: document.getElementById('canvas').innerHTML,
+        updatedAt: new Date()
+      });
+      console.log('✅ Сохранено');
+    } catch (error) {
+      console.error('Ошибка сохранения:', error);
+    }
+  };
+  
+  // Редактор
+  function attachEventsToBlocks() {
+    document.querySelectorAll('.canvas-block').forEach(block => {
+      block.querySelector('.move-up-btn')?.addEventListener('click', () => {
+        const prev = block.previousElementSibling;
+        if (prev?.classList.contains('canvas-block')) {
+          block.parentNode.insertBefore(block, prev);
+        }
+      });
+      
+      block.querySelector('.move-down-btn')?.addEventListener('click', () => {
+        const next = block.nextElementSibling;
+        if (next?.classList.contains('canvas-block')) {
+          block.parentNode.insertBefore(next, block);
+        }
+      });
+      
+      block.querySelector('.delete-btn')?.addEventListener('click', () => {
+        block.remove();
+        if (!document.querySelector('.canvas-block')) {
+          document.getElementById('canvas').innerHTML = '<div class="empty-message"><i class="fas fa-arrow-left" style="font-size: 2rem; opacity: 0.5; margin-bottom: 16px; display: block;"></i>Перетащите блоки из левой панели</div>';
+        }
+      });
+      
+      block.addEventListener('dragstart', (e) => {
+        block.classList.add('dragging');
+        e.dataTransfer.setData('text/plain', '');
+      });
+      
+      block.addEventListener('dragend', () => {
+        block.classList.remove('dragging');
+      });
+    });
+  }
+  
+  function setupDragDrop() {
+    const canvas = document.getElementById('canvas');
+    
+    document.querySelectorAll('.block-card[draggable="true"]').forEach(card => {
+      card.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', card.dataset.type);
+      });
+    });
+    
+    canvas.addEventListener('dragover', (e) => e.preventDefault());
+    
+    canvas.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const type = e.dataTransfer.getData('text/plain');
+      
+      if (type && ['hero', 'text', 'features', 'image', 'video', 'html'].includes(type)) {
+        addBlock(type);
+        return;
+      }
+      
+      const target = e.target.closest('.canvas-block');
+      const dragging = document.querySelector('.dragging');
+      
+      if (dragging && target && dragging !== target) {
+        const blocks = [...canvas.querySelectorAll('.canvas-block')];
+        const dragIndex = blocks.indexOf(dragging);
+        const targetIndex = blocks.indexOf(target);
+        
+        if (dragIndex < targetIndex) {
+          target.parentNode.insertBefore(dragging, target.nextSibling);
+        } else {
+          target.parentNode.insertBefore(dragging, target);
+        }
+      }
+    });
+  }
+  
+  function addBlock(type) {
+    const canvas = document.getElementById('canvas');
+    const emptyMsg = canvas.querySelector('.empty-message');
+    if (emptyMsg) emptyMsg.remove();
+    
+    let content = '';
+    switch(type) {
+      case 'hero': content = '<h1 class="text-editable" contenteditable="true">Заголовок</h1><p class="text-editable" contenteditable="true">Описание</p><button style="padding:12px 24px; background:#1e293b; color:white; border:none; border-radius:40px; margin-top:16px;">Кнопка</button>'; break;
+      case 'text': content = '<h2 class="text-editable" contenteditable="true">Текст</h2><p class="text-editable" contenteditable="true">Редактируемый абзац</p>'; break;
+      case 'features': content = '<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px;"><div><i class="fas fa-star"></i><h3 class="text-editable" contenteditable="true">Фича 1</h3></div><div><i class="fas fa-bolt"></i><h3 class="text-editable" contenteditable="true">Фича 2</h3></div><div><i class="fas fa-heart"></i><h3 class="text-editable" contenteditable="true">Фича 3</h3></div></div>'; break;
+      case 'image': content = '<div style="min-height:200px; background:#eef2ff; border-radius:16px; display:flex; align-items:center; justify-content:center; border:2px dashed #cbd5e1;"><i class="fas fa-image"></i> Изображение</div>'; break;
+      case 'video': content = '<div style="position:relative; padding-bottom:56.25%;"><iframe style="position:absolute; width:100%; height:100%; border-radius:16px;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe></div>'; break;
+      case 'html': content = '<div style="padding:20px; background:#f1f5f9; border-radius:16px; text-align:center;"><i class="fas fa-code"></i> Произвольный HTML</div>'; break;
+    }
+    
+    const block = document.createElement('div');
+    block.className = 'canvas-block';
+    block.draggable = true;
+    block.innerHTML = `
+      <div class="block-header">
+        <span class="block-badge">${type.toUpperCase()}</span>
+        <div class="block-controls">
+          <button class="move-up-btn"><i class="fas fa-arrow-up"></i></button>
+          <button class="move-down-btn"><i class="fas fa-arrow-down"></i></button>
+          <button class="delete-btn"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+      <div class="block-content">${content}</div>
+    `;
+    
+    canvas.appendChild(block);
+    attachEventsToBlocks();
+    block.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  
+  let previewMode = false;
+  window.togglePreview = function() {
+    previewMode = !previewMode;
+    document.querySelectorAll('.canvas-block .block-header').forEach(h => {
+      h.style.opacity = previewMode ? '0.2' : '1';
+      h.style.pointerEvents = previewMode ? 'none' : 'auto';
+    });
+  };
+  
+  window.downloadHTML = function() {
+    const blocks = [...document.querySelectorAll('.canvas-block')].map(b => {
+      const clone = b.cloneNode(true);
+      clone.querySelector('.block-controls')?.remove();
+      return clone.outerHTML;
+    }).join('');
+    
+    const html = `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>PageCanvas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>body{font-family:Inter; padding:30px; background:#f5f7fb;} .canvas-block{background:white; border-radius:24px; padding:24px; margin-bottom:24px;}</style>
+</head><body><div style="max-width:1200px; margin:0 auto;">${blocks}</div></body></html>`;
+    
+    const blob = new Blob([html], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'pagecanvas-site.html';
+    a.click();
+  };
+  
+  // Инициализация
+  document.addEventListener('DOMContentLoaded', () => {
+    const loader = document.getElementById('loader');
+    
+    onAuthStateChanged(auth, (user) => {
+      loader.classList.add('hidden');
+      window.currentUser = user;
+      
+      if (user) {
+        const initial = user.displayName?.[0] || user.email?.[0] || 'U';
+        document.querySelectorAll('.user-avatar').forEach(av => {
+          av.textContent = initial;
+          if (user.photoURL) {
+            av.style.backgroundImage = `url(${user.photoURL})`;
+            av.style.backgroundSize = 'cover';
+            av.textContent = '';
+          }
+        });
+        
+        loadSubscription();
+        
+        // Если пользователь уже на дашборде или подписках - обновить
+        const activePage = document.querySelector('.page.active');
+        if (activePage.id === 'dashboardPage') {
+          loadProjects();
+        }
+        if (activePage.id === 'subscriptionPage') {
+          updateSubUserMenu();
+        }
+      } else {
+        // Не авторизован - показываем лендинг
+        if (!document.querySelector('.page.active') || document.querySelector('.page.active').id === 'dashboardPage') {
+          showPage('landing');
+        }
+        updateSubUserMenu();
+      }
+    });
+    
+    document.getElementById('landingGoogleSignIn').addEventListener('click', handleGoogleSignIn);
+  });
+</script>
+
+</body>
+</html>
