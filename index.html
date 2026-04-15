@@ -7,32 +7,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyBWL3XPXU2X-gsylVDQDUDelZiBQEPv5uY",
-      authDomain: "chat-397b5.firebaseapp.com",
-      projectId: "chat-397b5",
-      storageBucket: "chat-397b5.firebasestorage.app",
-      messagingSenderId: "234060178704",
-      appId: "1:234060178704:web:4f4bfe4973dc8b44cef195"
-    };
-    
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-    
-    window.firebaseAuth = auth;
-    window.firebaseProvider = provider;
-    window.firebaseSignOut = signOut;
-    window.firebaseOnAuthStateChanged = onAuthStateChanged;
-    
-    console.log('✅ Firebase инициализирован');
-  </script>
-  
   <style>
     :root {
       --primary: #4361ee;
@@ -57,30 +31,24 @@
     .page { display: none; }
     .page.active { display: block; }
     
-    /* Лендинг */
     .landing-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.25rem 0; }
     .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
     .header-inner { display: flex; align-items: center; justify-content: space-between; }
     .logo { font-size: 2rem; font-weight: 800; font-family: var(--font-heading); background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; cursor: pointer; }
     .nav { display: flex; gap: 2rem; align-items: center; }
     .nav a { text-decoration: none; color: var(--text); font-weight: 500; cursor: pointer; }
-    .nav a:hover { color: var(--primary); }
     
     .hero { padding: 5rem 0; text-align: center; }
     .hero h1 { font-size: 4rem; font-weight: 800; font-family: var(--font-heading); margin-bottom: 1.5rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .hero p { font-size: 1.3rem; color: var(--text-light); max-width: 700px; margin: 0 auto 2rem; }
     
     .btn { padding: 0.875rem 2rem; border-radius: 50px; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.75rem; }
     .btn-primary { background: var(--primary); color: white; }
     .btn-primary:hover { background: var(--secondary); transform: translateY(-2px); }
     .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
-    .btn-outline:hover { background: var(--bg); border-color: var(--primary); }
     .btn-google { background: white; border: 1px solid var(--border); color: var(--text); }
     .btn-google i { color: #ea4335; }
     .btn-success { background: var(--success); color: white; }
-    .btn-sm { padding: 0.5rem 1.25rem; font-size: 0.875rem; }
     
-    /* Дашборд */
     .dashboard { max-width: 1280px; margin: 0 auto; padding: 3rem 2rem; }
     .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
     .user-menu { display: flex; align-items: center; gap: 1rem; }
@@ -90,12 +58,6 @@
     .project-card { background: var(--surface); border-radius: var(--border-radius); padding: 2rem; border: 1px solid var(--border); cursor: pointer; transition: all 0.3s; }
     .project-card:hover { box-shadow: var(--shadow); border-color: var(--primary); transform: translateY(-4px); }
     
-    .templates-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1.5rem 0; }
-    .template-card { background: var(--surface); border-radius: var(--border-radius); padding: 1.5rem; border: 1px solid var(--border); cursor: pointer; text-align: center; transition: all 0.3s; }
-    .template-card:hover { box-shadow: var(--shadow); border-color: var(--primary); transform: translateY(-4px); }
-    .template-icon { font-size: 2rem; margin-bottom: 0.75rem; color: var(--primary); }
-    
-    /* Редактор */
     .editor-container { display: flex; height: 100vh; overflow: hidden; }
     .editor-sidebar { width: 340px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
     .editor-logo { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
@@ -156,7 +118,6 @@
       <div class="logo" onclick="showPage('landing')"><i class="fas fa-paint-brush"></i> SiteCanvas</div>
       <div class="nav">
         <a onclick="scrollToSection('features')">Возможности</a>
-        <a onclick="scrollToSection('templates')">Шаблоны</a>
         <button class="btn btn-google" id="landingSignIn">
           <i class="fab fa-google"></i> Войти через Google
         </button>
@@ -168,12 +129,10 @@
     <section class="hero">
       <div class="container">
         <h1>Создавайте сайты<br>без ограничений</h1>
-        <p>Бесплатный конструктор с экспортом HTML. 40+ блоков, настройка дизайна.</p>
-        <div>
-          <button class="btn btn-primary btn-lg" id="heroStartBtn">
-            <i class="fab fa-google"></i> Войти и начать
-          </button>
-        </div>
+        <p style="font-size: 1.3rem; color: var(--text-light); max-width: 700px; margin: 0 auto 2rem;">Бесплатный конструктор с экспортом HTML</p>
+        <button class="btn btn-primary btn-lg" id="heroStartBtn">
+          <i class="fab fa-google"></i> Войти и начать
+        </button>
       </div>
     </section>
 
@@ -181,21 +140,9 @@
       <div class="container">
         <h2 style="text-align: center; margin-bottom: 3rem;">Всё бесплатно навсегда</h2>
         <div class="features-grid">
-          <div class="feature-card"><i class="fas fa-cubes"></i><h3>40+ блоков</h3><p>Герои, галереи, формы, отзывы</p></div>
-          <div class="feature-card"><i class="fas fa-palette"></i><h3>Кастомизация</h3><p>Цвета, шрифты, отступы</p></div>
-          <div class="feature-card"><i class="fas fa-code"></i><h3>Чистый экспорт</h3><p>Скачивайте HTML/CSS</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="templates" style="padding: 5rem 0;">
-      <div class="container">
-        <h2 style="text-align: center; margin-bottom: 3rem;">Готовые шаблоны</h2>
-        <div class="templates-grid">
-          <div class="template-card" onclick="createFromTemplate('landing')"><div class="template-icon"><i class="fas fa-rocket"></i></div><h4>Лендинг</h4></div>
-          <div class="template-card" onclick="createFromTemplate('shop')"><div class="template-icon"><i class="fas fa-shopping-cart"></i></div><h4>Магазин</h4></div>
-          <div class="template-card" onclick="createFromTemplate('portfolio')"><div class="template-icon"><i class="fas fa-briefcase"></i></div><h4>Портфолио</h4></div>
-          <div class="template-card" onclick="createFromTemplate('blog')"><div class="template-icon"><i class="fas fa-newspaper"></i></div><h4>Блог</h4></div>
+          <div class="feature-card"><i class="fas fa-cubes"></i><h3>40+ блоков</h3></div>
+          <div class="feature-card"><i class="fas fa-palette"></i><h3>Кастомизация</h3></div>
+          <div class="feature-card"><i class="fas fa-code"></i><h3>Чистый экспорт</h3></div>
         </div>
       </div>
     </section>
@@ -209,7 +156,6 @@
       <div class="logo" onclick="showPage('dashboard')"><i class="fas fa-paint-brush"></i> SiteCanvas</div>
       <div class="nav">
         <a onclick="showPage('dashboard')">Проекты</a>
-        <a onclick="showPage('landing')">Шаблоны</a>
         <div class="user-menu">
           <span id="dashboardUserName">Пользователь</span>
           <div class="user-avatar" id="dashboardAvatar" onclick="handleSignOut()">U</div>
@@ -221,14 +167,11 @@
   <div class="dashboard">
     <div class="dashboard-header">
       <h1>Мои проекты</h1>
-      <div style="display: flex; gap: 1rem;">
-        <button class="btn btn-outline" onclick="showPage('landing')"><i class="fas fa-th-large"></i> Шаблоны</button>
-        <button class="btn btn-primary" onclick="createEmptyProject()"><i class="fas fa-plus"></i> Пустой проект</button>
-      </div>
+      <button class="btn btn-primary" onclick="createEmptyProject()"><i class="fas fa-plus"></i> Новый проект</button>
     </div>
     
     <div class="projects-grid" id="projectsGrid">
-      <div style="text-align:center; padding:3rem; grid-column:1/-1;">Загрузка проектов...</div>
+      <div style="text-align:center; padding:3rem;">Загрузка...</div>
     </div>
   </div>
 </div>
@@ -238,7 +181,7 @@
   <div class="editor-container">
     <div class="editor-sidebar">
       <div class="editor-logo">
-        <span style="font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent;">SiteCanvas Editor</span>
+        <span style="font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent;">SiteCanvas</span>
         <button class="back-btn" onclick="backToDashboard()"><i class="fas fa-arrow-left"></i> Назад</button>
       </div>
       
@@ -263,7 +206,6 @@
           <div class="library-title">Секции</div>
           <div class="block-grid">
             <div class="block-item" draggable="true" data-type="features"><i class="fas fa-star"></i><span>Преимущества</span></div>
-            <div class="block-item" draggable="true" data-type="stats"><i class="fas fa-chart-bar"></i><span>Статистика</span></div>
             <div class="block-item" draggable="true" data-type="cta"><i class="fas fa-bullhorn"></i><span>CTA</span></div>
           </div>
         </div>
@@ -273,33 +215,19 @@
           <div class="block-grid">
             <div class="block-item" draggable="true" data-type="image"><i class="fas fa-image"></i><span>Изображение</span></div>
             <div class="block-item" draggable="true" data-type="gallery"><i class="fas fa-images"></i><span>Галерея</span></div>
-            <div class="block-item" draggable="true" data-type="video"><i class="fas fa-video"></i><span>Видео</span></div>
-          </div>
-        </div>
-        
-        <div class="library-section">
-          <div class="library-title">Магазин</div>
-          <div class="block-grid">
-            <div class="block-item" draggable="true" data-type="product"><i class="fas fa-shopping-bag"></i><span>Товар</span></div>
-            <div class="block-item" draggable="true" data-type="pricing"><i class="fas fa-tags"></i><span>Тарифы</span></div>
           </div>
         </div>
       </div>
       
       <div class="editor-actions">
         <button class="btn btn-primary" onclick="saveProject()"><i class="fas fa-save"></i> Сохранить</button>
-        <button class="btn btn-success" onclick="exportHTML()"><i class="fas fa-download"></i> Экспорт HTML</button>
+        <button class="btn btn-success" onclick="exportHTML()"><i class="fas fa-download"></i> Экспорт</button>
       </div>
     </div>
     
     <div class="editor-workspace">
       <div class="editor-toolbar">
         <h2 id="projectNameDisplay">Новый проект</h2>
-        <div>
-          <button class="device-btn" onclick="setDevice('desktop')"><i class="fas fa-desktop"></i></button>
-          <button class="device-btn" onclick="setDevice('tablet')"><i class="fas fa-tablet-alt"></i></button>
-          <button class="device-btn" onclick="setDevice('mobile')"><i class="fas fa-mobile-alt"></i></button>
-        </div>
       </div>
       
       <div class="canvas-container">
@@ -309,30 +237,32 @@
   </div>
 </div>
 
-<script>
+<script type="module">
+  // Импортируем Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyBWL3XPXU2X-gsylVDQDUDelZiBQEPv5uY",
+    authDomain: "chat-397b5.firebaseapp.com",
+    projectId: "chat-397b5",
+    storageBucket: "chat-397b5.firebasestorage.app",
+    messagingSenderId: "234060178704",
+    appId: "1:234060178704:web:4f4bfe4973dc8b44cef195"
+  };
+  
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+  
   // Глобальные переменные
   let currentUser = null;
   let currentProject = null;
   
-  // Шаблоны
-  const templates = {
-    landing: [
-      { type: 'hero', content: '<div class="hero-content"><h1>Создайте свой сайт</h1><p>Быстро, красиво, профессионально</p><button class="btn btn-primary">Начать</button></div>' },
-      { type: 'features', content: '<div class="features-grid"><div class="feature-card"><i class="fas fa-rocket"></i><h3>Быстрый старт</h3><p>Создайте сайт за 5 минут</p></div><div class="feature-card"><i class="fas fa-palette"></i><h3>Дизайн</h3><p>Настраивайте каждый элемент</p></div><div class="feature-card"><i class="fas fa-mobile-alt"></i><h3>Адаптивность</h3><p>Отлично на всех устройствах</p></div></div>' }
-    ],
-    shop: [
-      { type: 'hero', content: '<div class="hero-content"><h1>Магазин</h1><p>Лучшие товары</p></div>' },
-      { type: 'product', content: '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;"><div style="text-align: center;"><div style="aspect-ratio: 1; background: linear-gradient(135deg, #4361ee, #3f37c9); border-radius: 16px;"></div><h3>Товар 1</h3><p>1 990₽</p></div><div style="text-align: center;"><div style="aspect-ratio: 1; background: linear-gradient(135deg, #3f37c9, #f72585); border-radius: 16px;"></div><h3>Товар 2</h3><p>2 490₽</p></div><div style="text-align: center;"><div style="aspect-ratio: 1; background: linear-gradient(135deg, #f72585, #4361ee); border-radius: 16px;"></div><h3>Товар 3</h3><p>3 990₽</p></div></div>' }
-    ],
-    portfolio: [
-      { type: 'hero', content: '<div class="hero-content"><h1>Портфолио</h1><p>Мои работы</p></div>' },
-      { type: 'gallery', content: '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;"><div style="aspect-ratio: 1; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 16px;"></div><div style="aspect-ratio: 1; background: linear-gradient(135deg, #f093fb, #f5576c); border-radius: 16px;"></div><div style="aspect-ratio: 1; background: linear-gradient(135deg, #4facfe, #00f2fe); border-radius: 16px;"></div></div>' }
-    ],
-    blog: [
-      { type: 'hero', content: '<div class="hero-content"><h1>Блог</h1><p>Интересные статьи</p></div>' },
-      { type: 'text', content: '<h2>Первая статья</h2><p>Текст статьи...</p>' }
-    ]
-  };
+  // Делаем функции доступными глобально
+  window.signInWithPopup = signInWithPopup;
+  window.auth = auth;
+  window.provider = provider;
   
   // Утилиты
   function showToast(message, type = 'success') {
@@ -356,7 +286,7 @@
     const loader = document.getElementById('loader');
     try {
       loader.classList.remove('hidden');
-      const result = await signInWithPopup(window.firebaseAuth, window.firebaseProvider);
+      const result = await signInWithPopup(auth, provider);
       currentUser = result.user;
       updateUserUI();
       showPage('dashboard');
@@ -371,7 +301,7 @@
   
   window.handleSignOut = async () => {
     try {
-      await window.firebaseSignOut(window.firebaseAuth);
+      await signOut(auth);
       currentUser = null;
       showPage('landing');
       showToast('Вы вышли из аккаунта');
@@ -402,21 +332,20 @@
     const saved = JSON.parse(localStorage.getItem(key) || '[]');
     
     if (saved.length === 0) {
-      grid.innerHTML = '<div style="text-align:center; padding:3rem; grid-column:1/-1;"><i class="fas fa-folder-open" style="font-size: 3rem; opacity: 0.3; margin-bottom: 1rem;"></i><p>Нет проектов. Создайте новый.</p></div>';
+      grid.innerHTML = '<div style="text-align:center; padding:3rem;">Нет проектов. Создайте новый.</div>';
       return;
     }
     
     grid.innerHTML = '';
-    saved.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)).forEach(p => {
+    saved.forEach(p => {
       const card = document.createElement('div');
       card.className = 'project-card';
       card.innerHTML = `
         <h3>${p.name}</h3>
-        <p><i class="far fa-clock"></i> ${new Date(p.updatedAt).toLocaleDateString('ru-RU')}</p>
-        <p style="font-size: 0.8rem; margin-top: 0.5rem;"><i class="fas fa-cubes"></i> ${p.blocks?.length || 0} блоков</p>
+        <p>${new Date(p.updatedAt).toLocaleDateString('ru-RU')}</p>
+        <p style="font-size: 0.8rem;">${p.blocks?.length || 0} блоков</p>
         <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); duplicateProject('${p.id}')"><i class="fas fa-copy"></i></button>
-          <button class="btn btn-outline btn-sm" style="color: var(--danger);" onclick="event.stopPropagation(); deleteProject('${p.id}')"><i class="fas fa-trash"></i></button>
+          <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); deleteProject('${p.id}')" style="color: var(--danger);"><i class="fas fa-trash"></i></button>
         </div>
       `;
       card.onclick = () => openProject(p);
@@ -431,18 +360,6 @@
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       blocks: []
-    };
-    saveProjectToStorage(project);
-    openProject(project);
-  };
-  
-  window.createFromTemplate = (name) => {
-    const project = {
-      id: Date.now().toString(),
-      name: `Шаблон ${name}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      blocks: templates[name] || []
     };
     saveProjectToStorage(project);
     openProject(project);
@@ -479,26 +396,6 @@
     showToast('Проект удалён');
   };
   
-  window.duplicateProject = (id) => {
-    const key = 'sitecanvas_projects_' + (currentUser?.uid || 'guest');
-    const projects = JSON.parse(localStorage.getItem(key) || '[]');
-    const original = projects.find(p => p.id === id);
-    if (!original) return;
-    
-    const duplicate = {
-      ...original,
-      id: Date.now().toString(),
-      name: original.name + ' (копия)',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-    
-    projects.push(duplicate);
-    localStorage.setItem(key, JSON.stringify(projects));
-    loadProjects();
-    showToast('Проект дублирован');
-  };
-  
   // Редактор
   function addBlockToCanvas(type, content) {
     const canvas = document.getElementById('canvas');
@@ -506,7 +403,16 @@
     block.className = 'site-block';
     block.dataset.type = type;
     
-    let defaultContent = content || getDefaultContent(type);
+    const defaults = {
+      hero: '<div class="hero-content"><h1>Заголовок</h1><p>Описание</p><button class="btn btn-primary">Кнопка</button></div>',
+      heading: '<h2>Заголовок</h2>',
+      text: '<p>Текстовый блок. Редактируйте этот текст.</p>',
+      image: '<div style="aspect-ratio: 16/9; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px;"></div>',
+      features: '<div class="features-grid"><div class="feature-card"><i class="fas fa-star"></i><h3>Преимущество 1</h3></div><div class="feature-card"><i class="fas fa-star"></i><h3>Преимущество 2</h3></div><div class="feature-card"><i class="fas fa-star"></i><h3>Преимущество 3</h3></div></div>',
+      cta: '<div style="text-align: center; padding: 3rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px; color: white;"><h2>Готовы начать?</h2><button class="btn btn-primary" style="background: white; color: var(--primary);">Начать</button></div>'
+    };
+    
+    let defaultContent = content || defaults[type] || '<p>Новый блок</p>';
     
     block.innerHTML = `
       <div class="block-toolbar">
@@ -516,37 +422,12 @@
         <button onclick="window.deleteBlock(this)"><i class="fas fa-trash"></i></button>
       </div>
       <div class="block-header">
-        <span class="block-type">${getBlockTypeName(type)}</span>
+        <span class="block-type">${type}</span>
       </div>
       <div class="block-content" contenteditable="true">${defaultContent}</div>
     `;
     
     canvas.appendChild(block);
-  }
-  
-  function getDefaultContent(type) {
-    const defaults = {
-      hero: '<div class="hero-content"><h1>Заголовок</h1><p>Описание</p><button class="btn btn-primary">Кнопка</button></div>',
-      heading: '<h2>Заголовок</h2>',
-      text: '<p>Текстовый блок. Редактируйте этот текст.</p>',
-      image: '<div style="aspect-ratio: 16/9; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px;"></div><p style="text-align: center; margin-top: 0.5rem;">Подпись</p>',
-      features: '<div class="features-grid"><div class="feature-card"><i class="fas fa-star"></i><h3>Преимущество 1</h3><p>Описание</p></div><div class="feature-card"><i class="fas fa-star"></i><h3>Преимущество 2</h3><p>Описание</p></div><div class="feature-card"><i class="fas fa-star"></i><h3>Преимущество 3</h3><p>Описание</p></div></div>',
-      stats: '<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; text-align: center;"><div><h3>100+</h3><p>Клиентов</p></div><div><h3>10+</h3><p>Лет опыта</p></div><div><h3>24/7</h3><p>Поддержка</p></div><div><h3>100%</h3><p>Качество</p></div></div>',
-      cta: '<div style="text-align: center; padding: 3rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px; color: white;"><h2>Готовы начать?</h2><p style="margin: 1rem 0;">Присоединяйтесь к нам сегодня</p><button class="btn btn-primary" style="background: white; color: var(--primary);">Начать</button></div>',
-      product: '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;"><div style="text-align: center;"><div style="aspect-ratio: 1; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 16px;"></div><h3>Товар</h3><p>1 000₽</p></div></div>',
-      pricing: '<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;"><div style="text-align: center; padding: 2rem; border: 1px solid var(--border); border-radius: 16px;"><h3>Базовый</h3><div style="font-size: 2.5rem; color: var(--primary);">0₽</div></div><div style="text-align: center; padding: 2rem; border: 2px solid var(--primary); border-radius: 16px;"><h3>Pro</h3><div style="font-size: 2.5rem; color: var(--primary);">990₽</div></div><div style="text-align: center; padding: 2rem; border: 1px solid var(--border); border-radius: 16px;"><h3>Бизнес</h3><div style="font-size: 2.5rem; color: var(--primary);">2990₽</div></div></div>'
-    };
-    return defaults[type] || '<p>Новый блок</p>';
-  }
-  
-  function getBlockTypeName(type) {
-    const names = {
-      hero: 'Герой', header: 'Шапка', heading: 'Заголовок', text: 'Текст',
-      features: 'Преимущества', stats: 'Статистика', cta: 'Призыв',
-      image: 'Изображение', gallery: 'Галерея', video: 'Видео',
-      product: 'Товар', pricing: 'Тарифы'
-    };
-    return names[type] || type.toUpperCase();
   }
   
   window.moveBlockUp = (btn) => {
@@ -610,27 +491,17 @@
     });
   }
   
-  window.setDevice = (device) => {
-    const canvas = document.getElementById('canvas');
-    canvas.className = 'canvas' + (device === 'mobile' ? ' mobile' : device === 'tablet' ? ' tablet' : '');
-  };
-  
   window.exportHTML = () => {
     const canvas = document.getElementById('canvas');
     const styles = document.querySelector('style').innerHTML;
     const html = `<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${currentProject?.name || 'SiteCanvas'}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>${styles}</style>
+<head><meta charset="UTF-8"><title>${currentProject?.name || 'SiteCanvas'}</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter&family=Montserrat&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>${styles}</style>
 </head>
-<body style="background: var(--bg); padding: 2rem;">
-  ${canvas.outerHTML}
-</body>
+<body style="padding:2rem;">${canvas.outerHTML}</body>
 </html>`;
     
     const blob = new Blob([html], { type: 'text/html' });
@@ -641,17 +512,13 @@
     showToast('HTML экспортирован');
   };
   
-  // Инициализация
+  // Привязываем обработчики
   document.addEventListener('DOMContentLoaded', () => {
-    const auth = window.firebaseAuth;
-    
-    window.firebaseOnAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, (user) => {
       if (user) {
         currentUser = user;
         updateUserUI();
-        if (window.location.hash !== '#editor') {
-          showPage('dashboard');
-        }
+        showPage('dashboard');
       } else {
         currentUser = null;
         showPage('landing');
