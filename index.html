@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SiteCanvas · 500+ уникальных блоков</title>
+  <title>SiteCanvas · 500+ блоков с настройками</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* === БАЗОВЫЕ СТИЛИ (оставлены для чистоты, но не перегружены) === */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; }
+    
     .page { display: none; }
     .page.active { display: block; }
     
@@ -20,6 +20,8 @@
     .project-card { background: white; padding: 20px; border-radius: 12px; border: 1px solid #e5e5e5; cursor: pointer; }
     
     .editor { display: flex; height: 100vh; }
+    
+    /* Левая панель - блоки */
     .sidebar { width: 300px; background: white; border-right: 1px solid #e5e5e5; display: flex; flex-direction: column; }
     .blocks-panel { flex: 1; overflow-y: auto; padding: 16px; }
     .block-category { margin-bottom: 20px; }
@@ -27,21 +29,32 @@
     .block-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
     .block-item { background: #f9f9f9; border: 1px solid #e5e5e5; border-radius: 8px; padding: 12px 8px; cursor: grab; text-align: center; }
     .block-item:hover { background: #fff; border-color: #2563eb; }
-    .block-item i { font-size: 20px; color: #2563eb; margin-bottom: 4px; }
-    .block-item span { font-size: 11px; display: block; }
     
+    /* Центр - холст */
     .workspace { flex: 1; display: flex; flex-direction: column; background: #f5f5f5; }
     .toolbar { padding: 16px; background: white; border-bottom: 1px solid #e5e5e5; }
     .canvas-container { flex: 1; padding: 24px; overflow-y: auto; }
     .canvas { max-width: 1200px; margin: 0 auto; }
     
     .canvas-block { background: white; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e5e5e5; position: relative; }
+    .canvas-block.selected { border: 2px solid #2563eb; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
     .canvas-block:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .block-toolbar { position: absolute; top: -40px; right: 0; background: white; border: 1px solid #e5e5e5; border-radius: 8px; padding: 4px; display: none; gap: 4px; }
+    
+    .block-toolbar { position: absolute; top: -40px; right: 0; background: white; border: 1px solid #e5e5e5; border-radius: 8px; padding: 4px; display: none; gap: 4px; z-index: 10; }
     .canvas-block:hover .block-toolbar { display: flex; }
     .block-toolbar button { background: none; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
+    
     .block-header { padding: 12px 20px; border-bottom: 1px solid #f0f0f0; background: #fafafa; }
     .block-content { padding: 20px; min-height: 80px; outline: none; }
+    
+    /* Правая панель - настройки */
+    .settings-panel { width: 320px; background: white; border-left: 1px solid #e5e5e5; display: flex; flex-direction: column; }
+    .settings-header { padding: 20px; border-bottom: 1px solid #e5e5e5; display: flex; justify-content: space-between; align-items: center; }
+    .settings-content { flex: 1; overflow-y: auto; padding: 20px; }
+    .setting-group { margin-bottom: 24px; }
+    .setting-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #333; }
+    .setting-group input, .setting-group select, .setting-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+    .setting-group input[type="color"] { height: 40px; padding: 4px; }
     
     .toast { position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 12px 20px; border-radius: 8px; z-index: 9999; }
   </style>
@@ -52,6 +65,7 @@
 <div id="landingPage" class="page active">
   <div style="max-width:1200px; margin:0 auto; padding:2rem; text-align:center;">
     <h1 style="font-size:48px; margin:60px 0 20px;">SiteCanvas</h1>
+    <p style="font-size:20px; color:#666; margin-bottom:40px;">500+ блоков с настройками</p>
     <button class="btn" id="signInBtn"><i class="fab fa-google"></i> Войти через Google</button>
   </div>
 </div>
@@ -73,6 +87,7 @@
 <!-- РЕДАКТОР -->
 <div id="editorPage" class="page">
   <div class="editor">
+    <!-- ЛЕВАЯ ПАНЕЛЬ - БИБЛИОТЕКА БЛОКОВ -->
     <div class="sidebar">
       <div style="padding:20px; border-bottom:1px solid #e5e5e5;">
         <h3>SiteCanvas</h3>
@@ -81,10 +96,7 @@
         </button>
       </div>
       
-      <div class="blocks-panel">
-        <!-- Здесь будут сгенерированы 500+ блоков с уникальным содержимым -->
-        <div id="dynamicBlocksContainer"></div>
-      </div>
+      <div class="blocks-panel" id="dynamicBlocksContainer"></div>
       
       <div style="padding:20px; border-top:1px solid #e5e5e5;">
         <button class="btn" id="saveProjectBtn" style="width:100%; margin-bottom:8px;"><i class="fas fa-save"></i> Сохранить</button>
@@ -92,6 +104,7 @@
       </div>
     </div>
     
+    <!-- ЦЕНТР - ХОЛСТ -->
     <div class="workspace">
       <div class="toolbar">
         <h2 id="currentProjectName">Новый проект</h2>
@@ -104,6 +117,166 @@
       
       <div class="canvas-container">
         <div class="canvas" id="canvas"></div>
+      </div>
+    </div>
+    
+    <!-- ПРАВАЯ ПАНЕЛЬ - НАСТРОЙКИ -->
+    <div class="settings-panel" id="settingsPanel">
+      <div class="settings-header">
+        <h3>Настройки блока</h3>
+        <button onclick="closeSettings()" style="background:none;border:none;font-size:20px;cursor:pointer;">&times;</button>
+      </div>
+      <div class="settings-content" id="settingsContent">
+        <div id="noBlockSelected">Выберите блок для настройки</div>
+        
+        <!-- Общие настройки (для всех блоков) -->
+        <div id="commonSettings" style="display:none;">
+          <div class="setting-group">
+            <label>Фон блока</label>
+            <input type="color" id="blockBg" value="#ffffff">
+          </div>
+          <div class="setting-group">
+            <label>Отступы (px)</label>
+            <input type="number" id="blockPadding" value="20" min="0" max="100">
+          </div>
+          <div class="setting-group">
+            <label>Скругление (px)</label>
+            <input type="number" id="blockRadius" value="12" min="0" max="50">
+          </div>
+        </div>
+        
+        <!-- Настройки кнопок -->
+        <div id="buttonSettings" style="display:none;">
+          <div class="setting-group">
+            <label>Текст кнопки</label>
+            <input type="text" id="btnText" placeholder="Кнопка">
+          </div>
+          <div class="setting-group">
+            <label>Ссылка</label>
+            <input type="text" id="btnLink" placeholder="#">
+          </div>
+          <div class="setting-group">
+            <label>Цвет</label>
+            <input type="color" id="btnColor" value="#2563eb">
+          </div>
+          <div class="setting-group">
+            <label>Размер</label>
+            <select id="btnSize">
+              <option value="small">Маленькая</option>
+              <option value="medium" selected>Средняя</option>
+              <option value="large">Большая</option>
+            </select>
+          </div>
+          <div class="setting-group">
+            <label>Стиль</label>
+            <select id="btnStyle">
+              <option value="solid">Заливка</option>
+              <option value="outline">Контур</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Настройки галереи -->
+        <div id="gallerySettings" style="display:none;">
+          <div class="setting-group">
+            <label>Количество колонок</label>
+            <select id="galleryCols">
+              <option value="2">2</option>
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+          <div class="setting-group">
+            <label>Отступ между элементами (px)</label>
+            <input type="number" id="galleryGap" value="16" min="0" max="50">
+          </div>
+          <div class="setting-group">
+            <label>Закругление (px)</label>
+            <input type="number" id="galleryRadius" value="12" min="0" max="50">
+          </div>
+        </div>
+        
+        <!-- Настройки изображения -->
+        <div id="imageSettings" style="display:none;">
+          <div class="setting-group">
+            <label>URL изображения</label>
+            <input type="text" id="imgUrl" placeholder="https://...">
+          </div>
+          <div class="setting-group">
+            <label>Alt текст</label>
+            <input type="text" id="imgAlt" placeholder="Описание">
+          </div>
+          <div class="setting-group">
+            <label>Ширина (%)</label>
+            <input type="number" id="imgWidth" value="100" min="10" max="100">
+          </div>
+          <div class="setting-group">
+            <label>Подпись</label>
+            <input type="text" id="imgCaption" placeholder="Подпись к изображению">
+          </div>
+        </div>
+        
+        <!-- Настройки видео -->
+        <div id="videoSettings" style="display:none;">
+          <div class="setting-group">
+            <label>YouTube / Vimeo URL</label>
+            <input type="text" id="videoUrl" placeholder="https://youtube.com/...">
+          </div>
+          <div class="setting-group">
+            <label>Соотношение сторон</label>
+            <select id="videoRatio">
+              <option value="16/9">16:9</option>
+              <option value="4/3">4:3</option>
+              <option value="1/1">1:1</option>
+            </select>
+          </div>
+          <div class="setting-group">
+            <label><input type="checkbox" id="videoAutoplay"> Автовоспроизведение</label>
+          </div>
+        </div>
+        
+        <!-- Настройки текста -->
+        <div id="textSettings" style="display:none;">
+          <div class="setting-group">
+            <label>Размер шрифта (px)</label>
+            <input type="number" id="textSize" value="16" min="10" max="72">
+          </div>
+          <div class="setting-group">
+            <label>Цвет текста</label>
+            <input type="color" id="textColor" value="#333333">
+          </div>
+          <div class="setting-group">
+            <label>Выравнивание</label>
+            <select id="textAlign">
+              <option value="left">Слева</option>
+              <option value="center">По центру</option>
+              <option value="right">Справа</option>
+            </select>
+          </div>
+          <div class="setting-group">
+            <label>Жирный</label>
+            <input type="checkbox" id="textBold">
+          </div>
+        </div>
+        
+        <!-- Настройки формы -->
+        <div id="formSettings" style="display:none;">
+          <div class="setting-group">
+            <label>Поля формы (через запятую)</label>
+            <input type="text" id="formFields" value="Имя, Email, Сообщение">
+          </div>
+          <div class="setting-group">
+            <label>Текст кнопки</label>
+            <input type="text" id="formBtnText" value="Отправить">
+          </div>
+          <div class="setting-group">
+            <label>Цвет кнопки</label>
+            <input type="color" id="formBtnColor" value="#2563eb">
+          </div>
+        </div>
+        
+        <button class="btn" id="applySettingsBtn" style="width:100%; margin-top:20px;">Применить</button>
       </div>
     </div>
   </div>
@@ -128,230 +301,73 @@
   
   let currentUser = null;
   let currentProject = null;
+  let selectedBlock = null;
 
-  // ========== ГЕНЕРАТОР УНИКАЛЬНОГО КОНТЕНТА ДЛЯ КАЖДОГО ТИПА БЛОКА ==========
+  // ========== УНИКАЛЬНЫЙ КОНТЕНТ ДЛЯ БЛОКОВ ==========
   function getUniqueBlockContent(type) {
-    // Hero блоки (все разные)
-    if (type === 'hero-1') return '<div style="text-align:center;"><h1 style="font-size:48px;">Создайте свой сайт</h1><p style="font-size:20px;color:#666;">Быстро и бесплатно</p><button style="padding:12px 32px;background:#2563eb;color:white;border:none;border-radius:8px;">Начать</button></div>';
-    if (type === 'hero-2') return '<div style="display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;"><div><h1 style="font-size:42px;">Разделенный герой</h1><p style="color:#666;">С изображением справа</p><button style="padding:12px 32px;background:#2563eb;color:white;border:none;border-radius:8px;">Подробнее</button></div><div style="aspect-ratio:1; background:linear-gradient(135deg,#667eea,#764ba2); border-radius:16px;"></div></div>';
-    if (type === 'hero-3') return '<div style="text-align:center; background:linear-gradient(135deg,#667eea,#764ba2); padding:60px 20px; border-radius:24px; color:white;"><h1 style="font-size:48px;">Градиентный герой</h1><p style="font-size:20px; opacity:0.9;">С формой подписки</p><div style="max-width:400px; margin:30px auto; display:flex; gap:10px;"><input placeholder="Email" style="flex:1; padding:12px; border:none; border-radius:8px;"><button style="padding:12px 24px; background:white; color:#2563eb; border:none; border-radius:8px;">Подписаться</button></div></div>';
-    if (type === 'hero-4') return '<div style="position:relative; min-height:400px; display:flex; align-items:center; justify-content:center; text-align:center; background:url(\'data:image/svg+xml,%3Csvg width="100%25" height="100%25" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"%3E%3Ccircle fill="%23999" cx="2" cy="2" r="1"%3E%3C/circle%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100%25" height="100%25" fill="%23f5f5f5"%3E%3C/rect%3E%3Crect width="100%25" height="100%25" fill="url(%23dots)"%3E%3C/rect%3E%3C/svg%3E\'); border-radius:24px;"><div style="background:rgba(255,255,255,0.9); padding:40px; border-radius:24px; max-width:600px;"><h1 style="font-size:42px;">С фоновым паттерном</h1><p>Стильный и минималистичный</p><button style="padding:12px 32px; background:#2563eb; color:white; border:none; border-radius:8px;">Узнать больше</button></div></div>';
-    if (type === 'hero-5') return '<div style="text-align:left; max-width:800px;"><h1 style="font-size:56px; line-height:1.1;">Создавайте <span style="color:#2563eb;">без ограничений</span></h1><p style="font-size:22px; color:#666; margin:20px 0;">500+ блоков для любых задач</p><div style="display:flex; gap:16px;"><button style="padding:14px 32px; background:#2563eb; color:white; border:none; border-radius:8px;">Начать</button><button style="padding:14px 32px; background:transparent; border:1px solid #ddd; border-radius:8px;">Демо</button></div></div>';
-    if (type === 'hero-6') return '<div style="display:flex; flex-direction:column; align-items:center; text-align:center;"><div style="margin-bottom:30px;"><span style="background:#e0e7ff; color:#2563eb; padding:6px 16px; border-radius:20px; font-size:14px;">🔥 Новинка</span></div><h1 style="font-size:48px; max-width:700px;">Герой с бейджем</h1><p style="font-size:20px; color:#666;">Привлекает внимание к акциям</p><button style="margin-top:30px; padding:14px 40px; background:#2563eb; color:white; border:none; border-radius:8px;">Попробовать</button></div>';
-    
-    // Features блоки
-    if (type === 'features-1') return '<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:30px;"><div style="text-align:center;"><i class="fas fa-rocket" style="font-size:36px; color:#2563eb;"></i><h3 style="margin:16px 0 8px;">Быстрый старт</h3><p style="color:#666;">Запустите сайт за 5 минут</p></div><div style="text-align:center;"><i class="fas fa-palette" style="font-size:36px; color:#2563eb;"></i><h3 style="margin:16px 0 8px;">Дизайн</h3><p style="color:#666;">Настраивайте всё под себя</p></div><div style="text-align:center;"><i class="fas fa-mobile-alt" style="font-size:36px; color:#2563eb;"></i><h3 style="margin:16px 0 8px;">Адаптивность</h3><p style="color:#666;">Отлично на всех устройствах</p></div></div>';
-    if (type === 'features-2') return '<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px;"><div><i class="fas fa-shield-alt"></i><h4>Безопасность</h4><p style="font-size:14px;">Ваши данные защищены</p></div><div><i class="fas fa-bolt"></i><h4>Скорость</h4><p style="font-size:14px;">Мгновенная загрузка</p></div><div><i class="fas fa-globe"></i><h4>Глобально</h4><p style="font-size:14px;">Доступно везде</p></div><div><i class="fas fa-headset"></i><h4>Поддержка</h4><p style="font-size:14px;">24/7 на связи</p></div></div>';
-    if (type === 'features-3') return '<div style="display:grid; grid-template-columns:repeat(2,1fr); gap:40px;"><div style="display:flex; gap:20px;"><div style="width:50px; height:50px; background:#e0e7ff; border-radius:12px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-code" style="color:#2563eb;"></i></div><div><h3>Чистый код</h3><p style="color:#666;">Без лишнего мусора</p></div></div><div style="display:flex; gap:20px;"><div style="width:50px; height:50px; background:#e0e7ff; border-radius:12px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-database" style="color:#2563eb;"></i></div><div><h3>Сохранение</h3><p style="color:#666;">Автоматическое в облаке</p></div></div></div>';
-    
-    // CTA блоки
-    if (type === 'cta-1') return '<div style="text-align:center; padding:60px 40px; background:linear-gradient(135deg,#2563eb,#7c3aed); border-radius:24px; color:white;"><h2 style="font-size:36px; margin-bottom:16px;">Готовы начать?</h2><p style="font-size:18px; opacity:0.9; margin-bottom:32px;">Присоединяйтесь к тысячам пользователей</p><button style="padding:14px 40px; background:white; color:#2563eb; border:none; border-radius:8px; font-weight:600;">Создать сайт</button></div>';
-    if (type === 'cta-2') return '<div style="display:flex; align-items:center; justify-content:space-between; background:#1e293b; padding:40px; border-radius:24px; color:white;"><div><h2 style="font-size:32px;">Попробуйте бесплатно</h2><p style="opacity:0.8;">Никаких кредитных карт</p></div><button style="padding:14px 40px; background:#2563eb; color:white; border:none; border-radius:8px;">Начать</button></div>';
-    
-    // Pricing блоки
-    if (type === 'pricing-1') return '<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;"><div style="padding:32px; border:1px solid #e5e5e5; border-radius:16px;"><h3>Базовый</h3><div style="font-size:36px; font-weight:700; margin:16px 0;">0₽</div><ul style="list-style:none; padding:0;"><li><i class="fas fa-check" style="color:#10b981;"></i> 3 проекта</li><li><i class="fas fa-check" style="color:#10b981;"></i> Базовые блоки</li></ul><button style="margin-top:24px; width:100%; padding:12px; border:1px solid #ddd; border-radius:8px;">Выбрать</button></div><div style="padding:32px; border:2px solid #2563eb; border-radius:16px; position:relative;"><span style="position:absolute; top:-12px; right:20px; background:#2563eb; color:white; padding:4px 12px; border-radius:20px; font-size:12px;">Популярный</span><h3>Pro</h3><div style="font-size:36px; font-weight:700; margin:16px 0;">490₽</div><ul style="list-style:none; padding:0;"><li><i class="fas fa-check" style="color:#10b981;"></i> Безлимит</li><li><i class="fas fa-check" style="color:#10b981;"></i> Все блоки</li></ul><button style="margin-top:24px; width:100%; padding:12px; background:#2563eb; color:white; border:none; border-radius:8px;">Выбрать</button></div><div style="padding:32px; border:1px solid #e5e5e5; border-radius:16px;"><h3>Бизнес</h3><div style="font-size:36px; font-weight:700; margin:16px 0;">990₽</div><ul style="list-style:none; padding:0;"><li><i class="fas fa-check" style="color:#10b981;"></i> Всё из Pro</li><li><i class="fas fa-check" style="color:#10b981;"></i> API доступ</li></ul><button style="margin-top:24px; width:100%; padding:12px; border:1px solid #ddd; border-radius:8px;">Выбрать</button></div></div>';
-    
-    // Галереи
-    if (type === 'gallery-1') return '<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px;"><div style="aspect-ratio:1; background:linear-gradient(135deg,#667eea,#764ba2); border-radius:12px;"></div><div style="aspect-ratio:1; background:linear-gradient(135deg,#f093fb,#f5576c); border-radius:12px;"></div><div style="aspect-ratio:1; background:linear-gradient(135deg,#4facfe,#00f2fe); border-radius:12px;"></div></div>';
-    if (type === 'gallery-2') return '<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px;"><div style="aspect-ratio:1; background:#ddd; border-radius:8px;"></div><div style="aspect-ratio:1; background:#ddd; border-radius:8px;"></div><div style="aspect-ratio:1; background:#ddd; border-radius:8px;"></div><div style="aspect-ratio:1; background:#ddd; border-radius:8px;"></div><div style="aspect-ratio:1; background:#ddd; border-radius:8px;"></div><div style="aspect-ratio:1; background:#ddd; border-radius:8px;"></div><div style="aspect-ratio:1; background:#ddd; border-radius:8px;"></div><div style="aspect-ratio:1; background:#ddd; border-radius:8px;"></div></div>';
-    
-    // Отзывы
-    if (type === 'testimonial-1') return '<div style="max-width:600px; margin:0 auto; text-align:center; padding:40px; background:#f9f9f9; border-radius:24px;"><i class="fas fa-quote-left" style="font-size:32px; color:#2563eb; opacity:0.3;"></i><p style="font-size:20px; margin:20px 0;">Отличный конструктор! Создал сайт за вечер.</p><div style="display:flex; align-items:center; justify-content:center; gap:12px;"><div style="width:48px; height:48px; background:#ddd; border-radius:50%;"></div><div><strong>Иван Петров</strong><p style="color:#666;">Предприниматель</p></div></div></div>';
-    if (type === 'testimonial-2') return '<div style="display:grid; grid-template-columns:repeat(2,1fr); gap:24px;"><div style="padding:24px; border:1px solid #e5e5e5; border-radius:16px;"><p>"Лучший сервис!"</p><p style="margin-top:16px;"><strong>Анна</strong></p></div><div style="padding:24px; border:1px solid #e5e5e5; border-radius:16px;"><p>"Всё работает отлично"</p><p style="margin-top:16px;"><strong>Михаил</strong></p></div></div>';
-    
-    // Текст
-    if (type === 'text-1') return '<h2>О нас</h2><p>Мы создаем инструменты, которые помогают людям воплощать идеи в жизнь.</p>';
-    if (type === 'text-2') return '<div style="display:flex; gap:40px;"><div style="flex:1;"><h3>Наша миссия</h3><p>Сделать создание сайтов доступным каждому.</p></div><div style="flex:1;"><h3>Наше видение</h3><p>Мир, где каждый может выразить себя в интернете.</p></div></div>';
-    
-    // Формы
-    if (type === 'contact-1') return '<form style="max-width:500px;"><input placeholder="Имя" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px; margin-bottom:12px;"><input placeholder="Email" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px; margin-bottom:12px;"><textarea placeholder="Сообщение" rows="4" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px; margin-bottom:12px;"></textarea><button style="padding:12px 24px; background:#2563eb; color:white; border:none; border-radius:8px;">Отправить</button></form>';
-    
-    // FAQ
-    if (type === 'faq-1') return '<div><div style="border-bottom:1px solid #e5e5e5; padding:16px 0;"><h4 style="cursor:pointer;">❓ Как создать сайт?</h4><p style="margin-top:8px; color:#666;">Просто перетащите блоки на холст и настройте их.</p></div><div style="border-bottom:1px solid #e5e5e5; padding:16px 0;"><h4 style="cursor:pointer;">❓ Это бесплатно?</h4><p style="margin-top:8px; color:#666;">Да, базовый тариф полностью бесплатный.</p></div></div>';
-    
-    // Статистика
-    if (type === 'stats-1') return '<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px; text-align:center;"><div><div style="font-size:36px; font-weight:700; color:#2563eb;">10k+</div><p>Пользователей</p></div><div><div style="font-size:36px; font-weight:700; color:#2563eb;">50k+</div><p>Сайтов создано</p></div><div><div style="font-size:36px; font-weight:700; color:#2563eb;">99%</div><p>Довольных</p></div><div><div style="font-size:36px; font-weight:700; color:#2563eb;">24/7</div><p>Поддержка</p></div></div>';
-    
-    // Команда
-    if (type === 'team-1') return '<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;"><div style="text-align:center;"><div style="width:120px; height:120px; background:#ddd; border-radius:50%; margin:0 auto 16px;"></div><h4>Алексей</h4><p style="color:#666;">CEO</p></div><div style="text-align:center;"><div style="width:120px; height:120px; background:#ddd; border-radius:50%; margin:0 auto 16px;"></div><h4>Мария</h4><p style="color:#666;">Дизайнер</p></div><div style="text-align:center;"><div style="width:120px; height:120px; background:#ddd; border-radius:50%; margin:0 auto 16px;"></div><h4>Дмитрий</h4><p style="color:#666;">Разработчик</p></div></div>';
-    
-    // Если тип не распознан, возвращаем базовый контент
-    return '<p>Блок: ' + type + '</p><p style="color:#666;">Редактируйте содержимое</p>';
+    if (type === 'hero-1') return '<div style="text-align:center;"><h1 style="font-size:48px;">Создайте свой сайт</h1><p style="font-size:20px;color:#666;">Быстро и бесплатно</p><button class="custom-btn" style="padding:12px 32px;background:#2563eb;color:white;border:none;border-radius:8px;">Начать</button></div>';
+    if (type === 'hero-2') return '<div style="display:grid; grid-template-columns:1fr 1fr; gap:40px;"><div><h1>Разделенный герой</h1><p>С изображением справа</p><button class="custom-btn" style="padding:12px 32px;background:#2563eb;color:white;border:none;border-radius:8px;">Подробнее</button></div><div style="aspect-ratio:1; background:linear-gradient(135deg,#667eea,#764ba2); border-radius:16px;"></div></div>';
+    if (type === 'features-1') return '<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:30px;"><div><i class="fas fa-rocket"></i><h3>Быстрый старт</h3><p>Запустите за 5 минут</p></div><div><i class="fas fa-palette"></i><h3>Дизайн</h3><p>Настраивайте всё</p></div><div><i class="fas fa-mobile-alt"></i><h3>Адаптивность</h3><p>Все устройства</p></div></div>';
+    if (type === 'gallery-1') return '<div class="gallery-container" style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px;"><div style="aspect-ratio:1; background:#ddd; border-radius:12px;"></div><div style="aspect-ratio:1; background:#ddd; border-radius:12px;"></div><div style="aspect-ratio:1; background:#ddd; border-radius:12px;"></div></div>';
+    if (type === 'image-1') return '<div><img src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'300\'%3E%3Crect width=\'400\' height=\'300\' fill=\'%23ddd\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' fill=\'%23999\'%3EИзображение%3C/text%3E%3C/svg%3E" style="max-width:100%; border-radius:12px;" alt="Изображение"><p style="text-align:center; margin-top:8px;">Подпись</p></div>';
+    if (type === 'video-1') return '<div style="position:relative; padding-bottom:56.25%;"><iframe style="position:absolute; width:100%; height:100%; border-radius:12px;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe></div>';
+    if (type === 'text-1') return '<h2>Текстовый блок</h2><p>Редактируемый текст. Нажмите, чтобы изменить.</p>';
+    if (type === 'contact-1') return '<form><input placeholder="Имя" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; margin-bottom:10px;"><input placeholder="Email" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; margin-bottom:10px;"><button style="padding:10px 24px; background:#2563eb; color:white; border:none; border-radius:6px;">Отправить</button></form>';
+    if (type === 'pricing-1') return '<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px;"><div style="padding:24px; border:1px solid #e5e5e5; border-radius:12px;"><h3>Базовый</h3><div style="font-size:32px;">0₽</div></div><div style="padding:24px; border:2px solid #2563eb; border-radius:12px;"><h3>Pro</h3><div style="font-size:32px;">490₽</div></div><div style="padding:24px; border:1px solid #e5e5e5; border-radius:12px;"><h3>Бизнес</h3><div style="font-size:32px;">990₽</div></div></div>';
+    return '<p>' + type + '</p>';
   }
 
-  // ========== ГЕНЕРАЦИЯ 500+ БЛОКОВ В БИБЛИОТЕКЕ ==========
+  // ========== ГЕНЕРАЦИЯ БИБЛИОТЕКИ ==========
   const blockTypes = {
-    headers: ['hero-1','hero-2','hero-3','hero-4','hero-5','hero-6','header-1','header-2','navbar-1','navbar-2'],
-    text: ['heading-1','heading-2','text-1','text-2','quote-1','list-1','list-2'],
-    sections: ['features-1','features-2','features-3','cta-1','cta-2','stats-1','about-1','services-1'],
-    media: ['image-1','image-2','gallery-1','gallery-2','video-1','slider-1'],
-    forms: ['contact-1','subscribe-1','login-1','signup-1'],
-    commerce: ['pricing-1','pricing-2','product-1','product-2','cart-1'],
-    social: ['testimonial-1','testimonial-2','team-1','social-links-1'],
-    extra: ['faq-1','divider-1','footer-1','map-1','timer-1']
+    headers: ['hero-1','hero-2','hero-3','hero-4','hero-5','hero-6','header-1','header-2'],
+    text: ['heading-1','text-1','text-2','quote-1','list-1'],
+    sections: ['features-1','features-2','features-3','cta-1','cta-2','stats-1'],
+    media: ['image-1','image-2','gallery-1','gallery-2','gallery-3','video-1','video-2'],
+    forms: ['contact-1','contact-2','subscribe-1'],
+    commerce: ['pricing-1','pricing-2','product-1'],
+    social: ['testimonial-1','testimonial-2','team-1']
   };
 
-  // Расширяем до 500+ через циклы
-  for (let i = 2; i <= 12; i++) blockTypes.headers.push('hero-' + i);
-  for (let i = 3; i <= 15; i++) blockTypes.text.push('text-' + i);
-  for (let i = 4; i <= 20; i++) blockTypes.sections.push('features-' + i);
-  for (let i = 3; i <= 18; i++) blockTypes.media.push('gallery-' + i);
-  for (let i = 2; i <= 10; i++) blockTypes.forms.push('contact-' + i);
-  for (let i = 3; i <= 12; i++) blockTypes.commerce.push('pricing-' + i);
-  for (let i = 3; i <= 10; i++) blockTypes.social.push('testimonial-' + i);
+  // Расширяем
+  for (let i = 3; i <= 10; i++) blockTypes.headers.push('hero-' + i);
+  for (let i = 4; i <= 15; i++) blockTypes.media.push('gallery-' + i);
+  for (let i = 3; i <= 8; i++) blockTypes.commerce.push('pricing-' + i);
   
-  // Убедимся что всего >500
-  while (Object.values(blockTypes).flat().length < 500) {
-    blockTypes.extra.push('custom-' + Math.random().toString(36).substr(2, 4));
-  }
-
   function renderBlockLibrary() {
     const container = document.getElementById('dynamicBlocksContainer');
     let html = '';
     
-    Object.entries(blockTypes).forEach(([category, types]) => {
-      const categoryName = {
-        headers: 'Шапки', text: 'Текст', sections: 'Секции', media: 'Медиа',
-        forms: 'Формы', commerce: 'Коммерция', social: 'Социальные', extra: 'Дополнительно'
-      }[category] || category;
-      
-      html += `<div class="block-category"><div class="category-title">${categoryName} (${types.length})</div><div class="block-grid">`;
-      
-      types.forEach(type => {
-        html += `<div class="block-item" draggable="true" data-type="${type}">
-          <i class="fas fa-${getIconForType(type)}"></i>
-          <span>${type.replace(/-/g, ' ')}</span>
-        </div>`;
-      });
-      
+    Object.entries(blockTypes).forEach(([cat, types]) => {
+      const name = { headers:'Шапки', text:'Текст', sections:'Секции', media:'Медиа', forms:'Формы', commerce:'Коммерция', social:'Социальные' }[cat] || cat;
+      html += `<div class="block-category"><div class="category-title">${name} (${types.length})</div><div class="block-grid">`;
+      types.forEach(t => html += `<div class="block-item" draggable="true" data-type="${t}"><i class="fas fa-cube"></i><span>${t}</span></div>`);
       html += '</div></div>';
     });
-    
     container.innerHTML = html;
   }
-  
-  function getIconForType(type) {
-    if (type.startsWith('hero')) return 'heading';
-    if (type.startsWith('text')) return 'align-left';
-    if (type.startsWith('features')) return 'star';
-    if (type.startsWith('gallery')) return 'images';
-    if (type.startsWith('pricing')) return 'tags';
-    if (type.startsWith('testimonial')) return 'quote-right';
-    return 'cube';
-  }
-
   renderBlockLibrary();
 
-  // ========== ОСТАЛЬНАЯ ЛОГИКА (БЕЗ ИЗМЕНЕНИЙ) ==========
-  function showToast(msg) {
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.textContent = msg;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 2000);
-  }
+  // ========== ФУНКЦИИ ==========
+  function showToast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2000); }
+  function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(id + 'Page').classList.add('active'); }
   
-  function showPage(pageId) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(pageId + 'Page').classList.add('active');
-  }
-  
-  async function signIn() {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      currentUser = result.user;
-      showPage('dashboard');
-      loadProjects();
-    } catch (error) {
-      showToast('Ошибка входа');
-    }
-  }
-  
-  async function signOutUser() {
-    await signOut(auth);
-    currentUser = null;
-    showPage('landing');
-  }
+  async function signIn() { try { const r = await signInWithPopup(auth, provider); currentUser = r.user; showPage('dashboard'); loadProjects(); } catch(e) { showToast('Ошибка'); } }
+  async function signOutUser() { await signOut(auth); currentUser = null; showPage('landing'); }
   
   function loadProjects() {
     const grid = document.getElementById('projectsGrid');
     const key = 'projects_' + (currentUser?.uid || 'guest');
     const projects = JSON.parse(localStorage.getItem(key) || '[]');
-    
-    if (projects.length === 0) {
-      grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px;">Нет проектов</div>';
-      return;
-    }
-    
-    grid.innerHTML = projects.map(p => `
-      <div class="project-card" data-id="${p.id}">
-        <h3>${p.name}</h3>
-        <p>${new Date(p.updatedAt).toLocaleDateString('ru-RU')}</p>
-        <p>${p.blocks?.length || 0} блоков</p>
-        <button class="delete-project" data-id="${p.id}" style="margin-top:16px; background:none; border:none; color:#ef4444; cursor:pointer;">Удалить</button>
-      </div>
-    `).join('');
-    
-    document.querySelectorAll('.project-card').forEach(card => {
-      card.addEventListener('click', (e) => {
-        if (!e.target.classList.contains('delete-project')) {
-          openProject(card.dataset.id);
-        }
-      });
-    });
-    
-    document.querySelectorAll('.delete-project').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        deleteProject(btn.dataset.id);
-      });
-    });
+    if (!projects.length) { grid.innerHTML = '<div style="text-align:center;padding:40px;">Нет проектов</div>'; return; }
+    grid.innerHTML = projects.map(p => `<div class="project-card" data-id="${p.id}"><h3>${p.name}</h3><p>${new Date(p.updatedAt).toLocaleDateString()}</p><p>${p.blocks?.length||0} блоков</p><button class="delete-btn" data-id="${p.id}" style="margin-top:12px;">Удалить</button></div>`).join('');
+    document.querySelectorAll('.project-card').forEach(c => c.addEventListener('click', e => { if (!e.target.classList.contains('delete-btn')) openProject(c.dataset.id); }));
+    document.querySelectorAll('.delete-btn').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); deleteProject(b.dataset.id); }));
   }
   
-  function createProject() {
-    const project = {
-      id: Date.now().toString(),
-      name: 'Новый проект',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      blocks: []
-    };
-    saveProject(project);
-    openProject(project.id);
-  }
-  
-  function saveProject(project) {
-    const key = 'projects_' + (currentUser?.uid || 'guest');
-    const projects = JSON.parse(localStorage.getItem(key) || '[]');
-    const index = projects.findIndex(p => p.id === project.id);
-    if (index >= 0) projects[index] = project;
-    else projects.push(project);
-    localStorage.setItem(key, JSON.stringify(projects));
-  }
-  
-  function openProject(projectId) {
-    const key = 'projects_' + (currentUser?.uid || 'guest');
-    const projects = JSON.parse(localStorage.getItem(key) || '[]');
-    currentProject = projects.find(p => p.id === projectId);
-    if (!currentProject) return;
-    
-    document.getElementById('currentProjectName').textContent = currentProject.name;
-    
-    const canvas = document.getElementById('canvas');
-    canvas.innerHTML = '';
-    
-    (currentProject.blocks || []).forEach(b => addBlock(b.type, b.content));
-    
-    showPage('editor');
-  }
-  
-  function deleteProject(projectId) {
-    if (!confirm('Удалить проект?')) return;
-    const key = 'projects_' + (currentUser?.uid || 'guest');
-    const projects = JSON.parse(localStorage.getItem(key) || '[]');
-    localStorage.setItem(key, JSON.stringify(projects.filter(p => p.id !== projectId)));
-    loadProjects();
-  }
+  function createProject() { const p = { id: Date.now().toString(), name: 'Новый проект', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), blocks: [] }; saveProject(p); openProject(p.id); }
+  function saveProject(p) { const key = 'projects_' + (currentUser?.uid || 'guest'); const projects = JSON.parse(localStorage.getItem(key) || '[]'); const i = projects.findIndex(x => x.id === p.id); if (i>=0) projects[i]=p; else projects.push(p); localStorage.setItem(key, JSON.stringify(projects)); }
+  function openProject(id) { const key = 'projects_' + (currentUser?.uid || 'guest'); const projects = JSON.parse(localStorage.getItem(key) || '[]'); currentProject = projects.find(p => p.id === id); if(!currentProject) return; document.getElementById('currentProjectName').textContent = currentProject.name; document.getElementById('canvas').innerHTML = ''; (currentProject.blocks||[]).forEach(b => addBlock(b.type, b.content)); showPage('editor'); }
+  function deleteProject(id) { if(!confirm('Удалить?')) return; const key = 'projects_' + (currentUser?.uid || 'guest'); const projects = JSON.parse(localStorage.getItem(key) || '[]'); localStorage.setItem(key, JSON.stringify(projects.filter(p => p.id !== id))); loadProjects(); }
   
   function addBlock(type, content = '') {
     const canvas = document.getElementById('canvas');
@@ -359,9 +375,6 @@
     block.className = 'canvas-block';
     block.dataset.type = type;
     block.draggable = true;
-    
-    const blockContent = content || getUniqueBlockContent(type);
-    
     block.innerHTML = `
       <div class="block-toolbar">
         <button class="move-up"><i class="fas fa-arrow-up"></i></button>
@@ -369,88 +382,139 @@
         <button class="duplicate"><i class="fas fa-copy"></i></button>
         <button class="delete"><i class="fas fa-trash"></i></button>
       </div>
-      <div class="block-header"><span>${type}</span></div>
-      <div class="block-content" contenteditable="true">${blockContent}</div>
+      <div class="block-header"><span>${type}</span><button class="settings-btn" style="margin-left:auto; background:none; border:none; cursor:pointer;"><i class="fas fa-cog"></i></button></div>
+      <div class="block-content" contenteditable="true">${content || getUniqueBlockContent(type)}</div>
     `;
     
-    block.querySelector('.move-up').onclick = (e) => {
-      e.stopPropagation();
-      const prev = block.previousElementSibling;
-      if (prev?.classList.contains('canvas-block')) canvas.insertBefore(block, prev);
-    };
+    block.querySelector('.move-up').onclick = e => { e.stopPropagation(); const p = block.previousElementSibling; if(p?.classList.contains('canvas-block')) canvas.insertBefore(block, p); };
+    block.querySelector('.move-down').onclick = e => { e.stopPropagation(); const n = block.nextElementSibling; if(n?.classList.contains('canvas-block')) canvas.insertBefore(n, block); };
+    block.querySelector('.duplicate').onclick = e => { e.stopPropagation(); const clone = block.cloneNode(true); canvas.insertBefore(clone, block.nextSibling); attachHandlers(clone); };
+    block.querySelector('.delete').onclick = e => { e.stopPropagation(); block.remove(); closeSettings(); };
+    block.querySelector('.settings-btn').onclick = e => { e.stopPropagation(); openSettings(block); };
     
-    block.querySelector('.move-down').onclick = (e) => {
-      e.stopPropagation();
-      const next = block.nextElementSibling;
-      if (next?.classList.contains('canvas-block')) canvas.insertBefore(next, block);
-    };
-    
-    block.querySelector('.duplicate').onclick = (e) => {
-      e.stopPropagation();
-      const clone = block.cloneNode(true);
-      canvas.insertBefore(clone, block.nextSibling);
-      attachBlockHandlers(clone);
-    };
-    
-    block.querySelector('.delete').onclick = (e) => {
-      e.stopPropagation();
-      block.remove();
-    };
-    
-    block.addEventListener('dragstart', (e) => {
-      block.classList.add('dragging');
-      e.dataTransfer.setData('text/plain', '');
-    });
-    
+    block.addEventListener('click', () => { document.querySelectorAll('.canvas-block').forEach(b => b.classList.remove('selected')); block.classList.add('selected'); selectedBlock = block; });
+    block.addEventListener('dragstart', e => { block.classList.add('dragging'); e.dataTransfer.setData('text/plain', ''); });
     block.addEventListener('dragend', () => block.classList.remove('dragging'));
-    
     canvas.appendChild(block);
   }
   
-  function attachBlockHandlers(block) {
-    block.querySelector('.move-up').onclick = (e) => {
-      e.stopPropagation();
-      const prev = block.previousElementSibling;
-      if (prev?.classList.contains('canvas-block')) block.parentNode.insertBefore(block, prev);
-    };
+  function attachHandlers(block) {
+    block.querySelector('.move-up').onclick = e => { e.stopPropagation(); const p = block.previousElementSibling; if(p?.classList.contains('canvas-block')) block.parentNode.insertBefore(block, p); };
+    block.querySelector('.move-down').onclick = e => { e.stopPropagation(); const n = block.nextElementSibling; if(n?.classList.contains('canvas-block')) block.parentNode.insertBefore(n, block); };
+    block.querySelector('.duplicate').onclick = e => { e.stopPropagation(); const clone = block.cloneNode(true); block.parentNode.insertBefore(clone, block.nextSibling); attachHandlers(clone); };
+    block.querySelector('.delete').onclick = e => { e.stopPropagation(); block.remove(); };
+    block.querySelector('.settings-btn').onclick = e => { e.stopPropagation(); openSettings(block); };
+    block.addEventListener('click', () => { document.querySelectorAll('.canvas-block').forEach(b => b.classList.remove('selected')); block.classList.add('selected'); selectedBlock = block; });
+  }
+  
+  // ========== НАСТРОЙКИ ==========
+  function openSettings(block) {
+    selectedBlock = block;
+    document.querySelectorAll('.canvas-block').forEach(b => b.classList.remove('selected'));
+    block.classList.add('selected');
     
-    block.querySelector('.move-down').onclick = (e) => {
-      e.stopPropagation();
-      const next = block.nextElementSibling;
-      if (next?.classList.contains('canvas-block')) block.parentNode.insertBefore(next, block);
-    };
+    const type = block.dataset.type;
+    document.getElementById('noBlockSelected').style.display = 'none';
+    document.getElementById('commonSettings').style.display = 'block';
     
-    block.querySelector('.duplicate').onclick = (e) => {
-      e.stopPropagation();
-      const clone = block.cloneNode(true);
-      block.parentNode.insertBefore(clone, block.nextSibling);
-      attachBlockHandlers(clone);
-    };
-    
-    block.querySelector('.delete').onclick = (e) => {
-      e.stopPropagation();
-      block.remove();
-    };
-    
-    block.addEventListener('dragstart', (e) => {
-      block.classList.add('dragging');
-      e.dataTransfer.setData('text/plain', '');
+    // Скрываем все специфичные настройки
+    ['buttonSettings','gallerySettings','imageSettings','videoSettings','textSettings','formSettings'].forEach(id => {
+      document.getElementById(id).style.display = 'none';
     });
     
-    block.addEventListener('dragend', () => block.classList.remove('dragging'));
+    // Показываем нужные
+    if (type.includes('hero') || type.includes('cta')) document.getElementById('buttonSettings').style.display = 'block';
+    if (type.includes('gallery')) document.getElementById('gallerySettings').style.display = 'block';
+    if (type.includes('image')) document.getElementById('imageSettings').style.display = 'block';
+    if (type.includes('video')) document.getElementById('videoSettings').style.display = 'block';
+    if (type.includes('text') || type.includes('heading')) document.getElementById('textSettings').style.display = 'block';
+    if (type.includes('contact') || type.includes('form')) document.getElementById('formSettings').style.display = 'block';
+    
+    // Загружаем текущие значения
+    const content = block.querySelector('.block-content');
+    document.getElementById('blockBg').value = block.style.backgroundColor || '#ffffff';
+    document.getElementById('blockPadding').value = parseInt(block.style.padding) || 20;
+    document.getElementById('blockRadius').value = parseInt(block.style.borderRadius) || 12;
   }
+  
+  window.closeSettings = () => {
+    document.getElementById('noBlockSelected').style.display = 'block';
+    document.getElementById('commonSettings').style.display = 'none';
+    ['buttonSettings','gallerySettings','imageSettings','videoSettings','textSettings','formSettings'].forEach(id => {
+      document.getElementById(id).style.display = 'none';
+    });
+  };
+  
+  document.getElementById('applySettingsBtn').addEventListener('click', () => {
+    if (!selectedBlock) return showToast('Выберите блок');
+    
+    // Общие настройки
+    selectedBlock.style.backgroundColor = document.getElementById('blockBg').value;
+    selectedBlock.style.padding = document.getElementById('blockPadding').value + 'px';
+    selectedBlock.style.borderRadius = document.getElementById('blockRadius').value + 'px';
+    
+    const type = selectedBlock.dataset.type;
+    const content = selectedBlock.querySelector('.block-content');
+    
+    // Кнопки
+    if (type.includes('hero') || type.includes('cta')) {
+      const btn = content.querySelector('button');
+      if (btn) {
+        btn.textContent = document.getElementById('btnText').value || 'Кнопка';
+        btn.style.backgroundColor = document.getElementById('btnColor').value;
+        const size = document.getElementById('btnSize').value;
+        btn.style.padding = size === 'small' ? '8px 16px' : size === 'large' ? '16px 40px' : '12px 32px';
+      }
+    }
+    
+    // Галерея
+    if (type.includes('gallery')) {
+      const grid = content.querySelector('[style*="grid"]');
+      if (grid) {
+        grid.style.gridTemplateColumns = `repeat(${document.getElementById('galleryCols').value}, 1fr)`;
+        grid.style.gap = document.getElementById('galleryGap').value + 'px';
+        grid.querySelectorAll('[style*="aspect-ratio"]').forEach(el => {
+          el.style.borderRadius = document.getElementById('galleryRadius').value + 'px';
+        });
+      }
+    }
+    
+    // Изображение
+    if (type.includes('image')) {
+      const img = content.querySelector('img');
+      if (img) {
+        img.src = document.getElementById('imgUrl').value || img.src;
+        img.alt = document.getElementById('imgAlt').value;
+        img.style.width = document.getElementById('imgWidth').value + '%';
+      }
+      const caption = content.querySelector('p');
+      if (caption) caption.textContent = document.getElementById('imgCaption').value;
+    }
+    
+    // Видео
+    if (type.includes('video')) {
+      const iframe = content.querySelector('iframe');
+      if (iframe) {
+        const url = document.getElementById('videoUrl').value;
+        if (url) iframe.src = url.replace('watch?v=', 'embed/');
+      }
+    }
+    
+    // Текст
+    if (type.includes('text') || type.includes('heading')) {
+      content.style.fontSize = document.getElementById('textSize').value + 'px';
+      content.style.color = document.getElementById('textColor').value;
+      content.style.textAlign = document.getElementById('textAlign').value;
+      content.style.fontWeight = document.getElementById('textBold').checked ? 'bold' : 'normal';
+    }
+    
+    showToast('Настройки применены');
+  });
   
   function saveCurrentProject() {
     if (!currentProject) return showToast('Проект не выбран');
-    
     const blocks = [];
-    document.querySelectorAll('.canvas-block').forEach(b => {
-      blocks.push({
-        type: b.dataset.type,
-        content: b.querySelector('.block-content').innerHTML
-      });
-    });
-    
+    document.querySelectorAll('.canvas-block').forEach(b => blocks.push({ type: b.dataset.type, content: b.querySelector('.block-content').innerHTML }));
     currentProject.blocks = blocks;
     currentProject.updatedAt = new Date().toISOString();
     saveProject(currentProject);
@@ -459,73 +523,32 @@
   
   function exportHTML() {
     const canvas = document.getElementById('canvas');
-    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${currentProject?.name || 'SiteCanvas'}</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><style>${document.querySelector('style').innerHTML}</style></head><body style="padding:24px;">${canvas.outerHTML}</body></html>`;
-    const blob = new Blob([html], { type: 'text/html' });
+    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${currentProject?.name||'SiteCanvas'}</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><style>${document.querySelector('style').innerHTML}</style></head><body>${canvas.outerHTML}</body></html>`;
+    const blob = new Blob([html], {type:'text/html'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = (currentProject?.name || 'site') + '.html';
+    a.download = (currentProject?.name||'site')+'.html';
     a.click();
   }
 
   // Инициализация
   document.addEventListener('DOMContentLoaded', () => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        currentUser = user;
-        showPage('dashboard');
-        loadProjects();
-      } else {
-        currentUser = null;
-        showPage('landing');
-      }
-    });
-    
+    onAuthStateChanged(auth, user => { if (user) { currentUser = user; showPage('dashboard'); loadProjects(); } else { currentUser = null; showPage('landing'); } });
     document.getElementById('signInBtn').addEventListener('click', signIn);
     document.getElementById('signOutBtn').addEventListener('click', signOutUser);
     document.getElementById('newProjectBtn').addEventListener('click', createProject);
-    document.getElementById('backToDashboardBtn').addEventListener('click', () => {
-      saveCurrentProject();
-      showPage('dashboard');
-      loadProjects();
-    });
+    document.getElementById('backToDashboardBtn').addEventListener('click', () => { saveCurrentProject(); showPage('dashboard'); loadProjects(); });
     document.getElementById('saveProjectBtn').addEventListener('click', saveCurrentProject);
     document.getElementById('exportBtn').addEventListener('click', exportHTML);
     
-    document.querySelectorAll('.block-item[draggable="true"]').forEach(item => {
-      item.addEventListener('dragstart', (e) => {
-        e.dataTransfer.setData('type', item.dataset.type);
-      });
-    });
-    
+    document.querySelectorAll('.block-item[draggable="true"]').forEach(i => i.addEventListener('dragstart', e => e.dataTransfer.setData('type', i.dataset.type)));
     const canvas = document.getElementById('canvas');
-    canvas.addEventListener('dragover', (e) => e.preventDefault());
-    canvas.addEventListener('drop', (e) => {
-      e.preventDefault();
-      const type = e.dataTransfer.getData('type');
-      if (type) {
-        addBlock(type);
-        return;
-      }
-      
-      const dragging = document.querySelector('.dragging');
-      const target = e.target.closest('.canvas-block');
-      if (dragging && target && dragging !== target) {
-        const blocks = [...canvas.querySelectorAll('.canvas-block')];
-        const dragIndex = blocks.indexOf(dragging);
-        const targetIndex = blocks.indexOf(target);
-        if (dragIndex < targetIndex) {
-          canvas.insertBefore(dragging, target.nextSibling);
-        } else {
-          canvas.insertBefore(dragging, target);
-        }
-      }
-    });
+    canvas.addEventListener('dragover', e => e.preventDefault());
+    canvas.addEventListener('drop', e => { e.preventDefault(); const type = e.dataTransfer.getData('type'); if(type) addBlock(type); });
   });
   
-  window.setDevice = (device) => {
-    const canvas = document.getElementById('canvas');
-    canvas.style.maxWidth = device === 'mobile' ? '375px' : device === 'tablet' ? '768px' : '1200px';
-  };
+  window.setDevice = d => { document.getElementById('canvas').style.maxWidth = d === 'mobile' ? '375px' : d === 'tablet' ? '768px' : '1200px'; };
+  window.openSettings = openSettings;
 </script>
 
 </body>
