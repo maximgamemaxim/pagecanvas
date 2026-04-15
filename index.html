@@ -3,9 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SiteCanvas · Бесплатный конструктор сайтов</title>
+  <title>SiteCanvas · Конструктор сайтов</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyBWL3XPXU2X-gsylVDQDUDelZiBQEPv5uY",
+      authDomain: "chat-397b5.firebaseapp.com",
+      projectId: "chat-397b5",
+      storageBucket: "chat-397b5.firebasestorage.app",
+      messagingSenderId: "234060178704",
+      appId: "1:234060178704:web:4f4bfe4973dc8b44cef195"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    
+    window.firebaseAuth = auth;
+    window.firebaseProvider = provider;
+    window.firebaseSignOut = signOut;
+    window.firebaseOnAuthStateChanged = onAuthStateChanged;
+    
+    console.log('✅ Firebase инициализирован');
+  </script>
   
   <style>
     :root {
@@ -13,10 +39,7 @@
       --secondary: #3f37c9;
       --accent: #f72585;
       --success: #06d6a0;
-      --warning: #ffd166;
       --danger: #ef476f;
-      --dark: #1a1a2e;
-      --light: #f8f9fa;
       --text: #2b2d42;
       --text-light: #6c757d;
       --bg: #f8f9fa;
@@ -52,21 +75,20 @@
     .btn-primary:hover { background: var(--secondary); transform: translateY(-2px); }
     .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
     .btn-outline:hover { background: var(--bg); border-color: var(--primary); }
+    .btn-google { background: white; border: 1px solid var(--border); color: var(--text); }
+    .btn-google i { color: #ea4335; }
     .btn-success { background: var(--success); color: white; }
     .btn-sm { padding: 0.5rem 1.25rem; font-size: 0.875rem; }
-    
-    /* Карточки */
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
-    .feature-card { padding: 2rem; background: var(--surface); border-radius: var(--border-radius); text-align: center; box-shadow: var(--shadow); border: 1px solid var(--border); }
-    .feature-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
     
     /* Дашборд */
     .dashboard { max-width: 1280px; margin: 0 auto; padding: 3rem 2rem; }
     .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
+    .user-menu { display: flex; align-items: center; gap: 1rem; }
+    .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; cursor: pointer; background-size: cover; }
+    
     .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
     .project-card { background: var(--surface); border-radius: var(--border-radius); padding: 2rem; border: 1px solid var(--border); cursor: pointer; transition: all 0.3s; }
     .project-card:hover { box-shadow: var(--shadow); border-color: var(--primary); transform: translateY(-4px); }
-    .project-card h3 { font-size: 1.4rem; margin-bottom: 0.5rem; }
     
     .templates-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1.5rem 0; }
     .template-card { background: var(--surface); border-radius: var(--border-radius); padding: 1.5rem; border: 1px solid var(--border); cursor: pointer; text-align: center; transition: all 0.3s; }
@@ -78,14 +100,13 @@
     .editor-sidebar { width: 340px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
     .editor-logo { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
     .back-btn { background: none; border: none; color: var(--text-light); cursor: pointer; font-size: 1.2rem; padding: 0.5rem; border-radius: 8px; }
-    .back-btn:hover { background: var(--bg); color: var(--text); }
     
     .blocks-library { padding: 1.5rem; flex: 1; overflow-y: auto; }
     .library-section { margin-bottom: 1.5rem; }
-    .library-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); margin-bottom: 0.75rem; font-weight: 600; }
+    .library-title { font-size: 0.8rem; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.75rem; font-weight: 600; }
     .block-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
-    .block-item { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem; cursor: grab; transition: all 0.2s; text-align: center; }
-    .block-item:hover { background: var(--surface); border-color: var(--primary); transform: translateY(-2px); }
+    .block-item { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem; cursor: grab; text-align: center; }
+    .block-item:hover { background: var(--surface); border-color: var(--primary); }
     .block-item i { font-size: 1.25rem; color: var(--primary); margin-bottom: 0.25rem; }
     .block-item span { font-size: 0.7rem; display: block; }
     
@@ -97,27 +118,36 @@
     .canvas-container { flex: 1; padding: 2rem; overflow-y: auto; }
     .canvas { max-width: 1200px; margin: 0 auto; min-height: 100%; }
     
-    .site-block { background: var(--surface); border-radius: var(--border-radius); margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid var(--border); position: relative; }
+    .site-block { background: var(--surface); border-radius: var(--border-radius); margin-bottom: 1.5rem; border: 1px solid var(--border); position: relative; }
     .site-block:hover { box-shadow: var(--shadow); border-color: var(--primary); }
     
     .block-toolbar { position: absolute; top: -45px; right: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.375rem; display: none; gap: 0.25rem; box-shadow: var(--shadow); z-index: 10; }
     .site-block:hover .block-toolbar { display: flex; }
-    .block-toolbar button { background: none; border: none; padding: 0.5rem 0.75rem; border-radius: 6px; cursor: pointer; color: var(--text); }
-    .block-toolbar button:hover { background: var(--bg); color: var(--primary); }
+    .block-toolbar button { background: none; border: none; padding: 0.5rem 0.75rem; border-radius: 6px; cursor: pointer; }
     
-    .block-header { padding: 0.875rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--bg); border-radius: var(--border-radius) var(--border-radius) 0 0; }
-    .block-type { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); font-weight: 600; }
+    .block-header { padding: 0.875rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; background: var(--bg); border-radius: var(--border-radius) var(--border-radius) 0 0; }
+    .block-type { font-size: 0.7rem; text-transform: uppercase; color: var(--primary); font-weight: 600; }
     .block-content { padding: 2rem; }
     .block-content[contenteditable="true"] { outline: none; min-height: 100px; }
     
     .hero-content { text-align: center; }
-    .hero-content h1 { font-size: 3rem; margin-bottom: 1rem; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+    .feature-card { padding: 2rem; background: var(--bg); border-radius: var(--border-radius); text-align: center; }
     
-    .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--surface); border-radius: var(--border-radius); padding: 1rem 1.5rem; box-shadow: var(--shadow); display: flex; align-items: center; gap: 0.75rem; z-index: 3000; border-left: 4px solid var(--success); }
+    .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--surface); border-radius: var(--border-radius); padding: 1rem 1.5rem; box-shadow: var(--shadow); z-index: 3000; border-left: 4px solid var(--success); }
     .toast.error { border-left-color: var(--danger); }
+    
+    .loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+    .loader.hidden { display: none; }
+    .spinner { width: 50px; height: 50px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
+
+<div class="loader hidden" id="loader">
+  <div class="spinner"></div>
+</div>
 
 <!-- ГЛАВНАЯ -->
 <div id="landingPage" class="page active">
@@ -127,8 +157,8 @@
       <div class="nav">
         <a onclick="scrollToSection('features')">Возможности</a>
         <a onclick="scrollToSection('templates')">Шаблоны</a>
-        <button class="btn btn-primary btn-sm" onclick="loginAsGuest()">
-          <i class="fas fa-user"></i> Начать бесплатно
+        <button class="btn btn-google" id="landingSignIn">
+          <i class="fab fa-google"></i> Войти через Google
         </button>
       </div>
     </div>
@@ -138,10 +168,10 @@
     <section class="hero">
       <div class="container">
         <h1>Создавайте сайты<br>без ограничений</h1>
-        <p>Бесплатный конструктор с экспортом HTML. 40+ блоков, настройка дизайна, без регистрации.</p>
+        <p>Бесплатный конструктор с экспортом HTML. 40+ блоков, настройка дизайна.</p>
         <div>
-          <button class="btn btn-primary btn-lg" onclick="loginAsGuest()">
-            <i class="fas fa-pen-fancy"></i> Начать бесплатно
+          <button class="btn btn-primary btn-lg" id="heroStartBtn">
+            <i class="fab fa-google"></i> Войти и начать
           </button>
         </div>
       </div>
@@ -149,11 +179,10 @@
 
     <section id="features" style="padding: 5rem 0; background: var(--surface);">
       <div class="container">
-        <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2.5rem;">Всё бесплатно навсегда</h2>
+        <h2 style="text-align: center; margin-bottom: 3rem;">Всё бесплатно навсегда</h2>
         <div class="features-grid">
-          <div class="feature-card"><i class="fas fa-cubes"></i><h3>40+ блоков</h3><p>Герои, галереи, формы, отзывы, FAQ, CTA</p></div>
+          <div class="feature-card"><i class="fas fa-cubes"></i><h3>40+ блоков</h3><p>Герои, галереи, формы, отзывы</p></div>
           <div class="feature-card"><i class="fas fa-palette"></i><h3>Кастомизация</h3><p>Цвета, шрифты, отступы</p></div>
-          <div class="feature-card"><i class="fas fa-mobile-alt"></i><h3>Адаптивность</h3><p>Отлично на всех устройствах</p></div>
           <div class="feature-card"><i class="fas fa-code"></i><h3>Чистый экспорт</h3><p>Скачивайте HTML/CSS</p></div>
         </div>
       </div>
@@ -161,7 +190,7 @@
 
     <section id="templates" style="padding: 5rem 0;">
       <div class="container">
-        <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2.5rem;">Готовые шаблоны</h2>
+        <h2 style="text-align: center; margin-bottom: 3rem;">Готовые шаблоны</h2>
         <div class="templates-grid">
           <div class="template-card" onclick="createFromTemplate('landing')"><div class="template-icon"><i class="fas fa-rocket"></i></div><h4>Лендинг</h4></div>
           <div class="template-card" onclick="createFromTemplate('shop')"><div class="template-icon"><i class="fas fa-shopping-cart"></i></div><h4>Магазин</h4></div>
@@ -181,7 +210,10 @@
       <div class="nav">
         <a onclick="showPage('dashboard')">Проекты</a>
         <a onclick="showPage('landing')">Шаблоны</a>
-        <button class="btn btn-outline btn-sm" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Выйти</button>
+        <div class="user-menu">
+          <span id="dashboardUserName">Пользователь</span>
+          <div class="user-avatar" id="dashboardAvatar" onclick="handleSignOut()">U</div>
+        </div>
       </div>
     </div>
   </header>
@@ -196,7 +228,7 @@
     </div>
     
     <div class="projects-grid" id="projectsGrid">
-      <div style="text-align:center; padding:3rem; grid-column:1/-1;">Нет проектов. Создайте новый.</div>
+      <div style="text-align:center; padding:3rem; grid-column:1/-1;">Загрузка проектов...</div>
     </div>
   </div>
 </div>
@@ -252,14 +284,6 @@
             <div class="block-item" draggable="true" data-type="pricing"><i class="fas fa-tags"></i><span>Тарифы</span></div>
           </div>
         </div>
-        
-        <div class="library-section">
-          <div class="library-title">Формы</div>
-          <div class="block-grid">
-            <div class="block-item" draggable="true" data-type="contact"><i class="fas fa-envelope"></i><span>Контакты</span></div>
-            <div class="block-item" draggable="true" data-type="subscribe"><i class="fas fa-bell"></i><span>Подписка</span></div>
-          </div>
-        </div>
       </div>
       
       <div class="editor-actions">
@@ -272,7 +296,7 @@
       <div class="editor-toolbar">
         <h2 id="projectNameDisplay">Новый проект</h2>
         <div>
-          <button class="device-btn active" onclick="setDevice('desktop')"><i class="fas fa-desktop"></i></button>
+          <button class="device-btn" onclick="setDevice('desktop')"><i class="fas fa-desktop"></i></button>
           <button class="device-btn" onclick="setDevice('tablet')"><i class="fas fa-tablet-alt"></i></button>
           <button class="device-btn" onclick="setDevice('mobile')"><i class="fas fa-mobile-alt"></i></button>
         </div>
@@ -286,10 +310,9 @@
 </div>
 
 <script>
-  // Состояние
+  // Глобальные переменные
   let currentUser = null;
   let currentProject = null;
-  let selectedBlock = null;
   
   // Шаблоны
   const templates = {
@@ -323,21 +346,54 @@
   window.showPage = (pageId) => {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(pageId + 'Page').classList.add('active');
-    if (pageId === 'dashboard') loadProjects();
+    if (pageId === 'dashboard' && currentUser) loadProjects();
   };
   
   window.scrollToSection = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   
-  window.loginAsGuest = () => {
-    currentUser = { displayName: 'Гость', email: 'guest@sitecanvas.local', uid: 'guest' };
-    showPage('dashboard');
-    showToast('Добро пожаловать!');
+  // Авторизация
+  async function handleSignIn() {
+    const loader = document.getElementById('loader');
+    try {
+      loader.classList.remove('hidden');
+      const result = await signInWithPopup(window.firebaseAuth, window.firebaseProvider);
+      currentUser = result.user;
+      updateUserUI();
+      showPage('dashboard');
+      showToast(`Добро пожаловать, ${currentUser.displayName || currentUser.email}!`);
+    } catch (error) {
+      console.error('Ошибка входа:', error);
+      showToast('Ошибка входа: ' + error.message, 'error');
+    } finally {
+      loader.classList.add('hidden');
+    }
+  }
+  
+  window.handleSignOut = async () => {
+    try {
+      await window.firebaseSignOut(window.firebaseAuth);
+      currentUser = null;
+      showPage('landing');
+      showToast('Вы вышли из аккаунта');
+    } catch (error) {
+      console.error('Ошибка выхода:', error);
+    }
   };
   
-  window.logout = () => {
-    currentUser = null;
-    showPage('landing');
-  };
+  function updateUserUI() {
+    if (!currentUser) return;
+    
+    const name = currentUser.displayName || currentUser.email?.split('@')[0] || 'Пользователь';
+    document.getElementById('dashboardUserName').textContent = name;
+    
+    const avatar = document.getElementById('dashboardAvatar');
+    avatar.textContent = name[0].toUpperCase();
+    if (currentUser.photoURL) {
+      avatar.style.backgroundImage = `url(${currentUser.photoURL})`;
+      avatar.style.backgroundSize = 'cover';
+      avatar.textContent = '';
+    }
+  }
   
   // Проекты
   function loadProjects() {
@@ -461,7 +517,6 @@
       </div>
       <div class="block-header">
         <span class="block-type">${getBlockTypeName(type)}</span>
-        <button onclick="window.selectBlock(this.closest('.site-block'))" style="background:none;border:none;cursor:pointer;"><i class="fas fa-cog"></i></button>
       </div>
       <div class="block-content" contenteditable="true">${defaultContent}</div>
     `;
@@ -489,16 +544,10 @@
       hero: 'Герой', header: 'Шапка', heading: 'Заголовок', text: 'Текст',
       features: 'Преимущества', stats: 'Статистика', cta: 'Призыв',
       image: 'Изображение', gallery: 'Галерея', video: 'Видео',
-      product: 'Товар', pricing: 'Тарифы', contact: 'Контакты', subscribe: 'Подписка'
+      product: 'Товар', pricing: 'Тарифы'
     };
     return names[type] || type.toUpperCase();
   }
-  
-  window.selectBlock = (block) => {
-    document.querySelectorAll('.site-block').forEach(b => b.classList.remove('selected'));
-    block.classList.add('selected');
-    selectedBlock = block;
-  };
   
   window.moveBlockUp = (btn) => {
     const block = btn.closest('.site-block');
@@ -594,7 +643,23 @@
   
   // Инициализация
   document.addEventListener('DOMContentLoaded', () => {
-    // Всё готово, загрузчика нет
+    const auth = window.firebaseAuth;
+    
+    window.firebaseOnAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        updateUserUI();
+        if (window.location.hash !== '#editor') {
+          showPage('dashboard');
+        }
+      } else {
+        currentUser = null;
+        showPage('landing');
+      }
+    });
+    
+    document.getElementById('landingSignIn').addEventListener('click', handleSignIn);
+    document.getElementById('heroStartBtn').addEventListener('click', handleSignIn);
   });
 </script>
 
